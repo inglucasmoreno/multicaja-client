@@ -1,0 +1,13 @@
+<div class="px-4 pt-2 pb-1">
+    <h1 class="flex items-center text-gray-700">
+        <button [routerLink]="dirRegresar" title="Regresar" class="border border-gray-300 focus:outline-none p-2 rounded bg-gray-100 shadow hover:text-secondary-800">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </button>
+        <div class="flex flex-col ml-2">
+            <span class="ml-2 text-xl text-gray-600"> {{ titulo }} </span>
+            <span class="text-xs mt-1 ml-1 w-max font-semibold border border-gray-200 py-1 px-2 rounded text-white bg-secondary-600"> 
+                {{ subTitulo }}
+            </span>
+        </div>
+    </h1>
+</div>
