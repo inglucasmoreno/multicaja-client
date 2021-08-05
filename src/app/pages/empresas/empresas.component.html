@@ -1,6 +1,7 @@
-<app-modal [showModal]="showModalCreacion">
+<app-modal [showModal]="showModal">
     <div class="bg-white p-4">
-        <h1 class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Creando nueva empresa </h1>
+        <h1 *ngIf="!flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Creando nueva empresa </h1>
+        <h1 *ngIf="flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Editando empresa </h1>
         <form [formGroup]="empresaForm" class="mt-2">
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
@@ -12,7 +13,7 @@
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm">
-                        <span class="text-red-500"> * </span> CUIT
+                        CUIT
                     </div>
                     <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                         <input formControlName="cuit" type="text" placeholder="Ej. 24340603989" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
@@ -50,8 +51,9 @@
             </div>
         </form>
         <div class="lg:flex lg:items-center mt-6">
-            <button class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
-            <button (click)="showModalCreacion = !showModalCreacion" class="w-full lg:w-1/2 bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
+            <button *ngIf="!flagEditando" (click)="nuevaEmpresa()" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
+            <button *ngIf="flagEditando" (click)="editarEmpresa(idEmpresa)" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Editar </button>
+            <button (click)="showModal= !showModal" class="w-full lg:w-1/2 bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
         </div>
     </div>
 </app-modal>
@@ -94,7 +96,7 @@
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <app-boton-generico (click)="showModalCreacion = true"> Nueva empresa </app-boton-generico>
+                    <app-boton-generico (click)="abrirModal('crear')"> Nueva empresa </app-boton-generico>
                 </div>
             </div>
             <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
@@ -162,7 +164,7 @@
                             <tr class="animate__animated animate__fadeIn" *ngFor="let empresa of empresas | filtroEmpresas:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        <img class="rounded-full bg-orange-100 shadow w-10 h-10" src="assets/img/usuarios/usuario_estandar.png" alt="Avatar">
+                                        <img class="rounded-full bg-orange-100 shadow w-10 h-10" src="assets/img/empresas/empresa_avatar.png" alt="Avatar">
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
@@ -185,7 +187,7 @@
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                                     <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
-                                        <app-boton-tabla title="Editar empresa">
+                                        <app-boton-tabla (click)="abrirModal('editar', empresa._id)" title="Editar empresa">
                                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                                         </app-boton-tabla>
                                     </p>

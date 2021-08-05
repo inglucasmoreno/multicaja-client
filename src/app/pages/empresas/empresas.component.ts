@@ -11,10 +11,12 @@ import { EmpresasService } from '../../services/empresas.service';
 })
 export class EmpresasComponent implements OnInit {
 
-  public showModalCreacion = false;
-  public showModalEdicion = true;
+  // Modal
+  public showModal = false;
+  public flagEditando = false;
 
   // Empresas
+  public idEmpresa = '';
   public empresas: any[] = [];
   public total = 0;
 
@@ -37,9 +39,9 @@ export class EmpresasComponent implements OnInit {
   // Modelo reactivo
   public empresaForm = this.fb.group({
     razon_social: ['', Validators.required],
-    cuit: ['', Validators.required],
-    telefono: ['', Validators.required],
-    direccion: ['', Validators.required],
+    cuit: '',
+    telefono: '',
+    direccion: '',
     activo: [true, Validators.required],
   });
 
@@ -51,39 +53,124 @@ export class EmpresasComponent implements OnInit {
     this.listarEmpresas();
   }
 
-  // Listar usuarios
+  // Listar empresas
   listarEmpresas(): void {
     this.empresasService.listarEmpresas( 
       this.ordenar.direccion,
       this.ordenar.columna
       )
-    .subscribe( resp => {
-      const { empresas, total } = resp;
+    .subscribe( ({ empresas, total })=> {
       this.empresas = empresas;
       this.total = total;
       this.alertService.close();
     }, (({error}) => {
-      this.alertService.close();
       this.alertService.errorApi(error.msg);
     }));
   }
 
-   // Actualizar estado Activo/Inactivo
-   actualizarEstado(empresa: any): void {
-    // const { uid, activo } = empresa;
-    //   this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
-    //       .then(({isConfirmed}) => {  
-    //         if (isConfirmed) {
-    //           this.alertService.loading();
-    //           this.usuariosService.actualizarUsuario(uid, {activo: !activo}).subscribe(() => {
-    //             this.alertService.loading();
-    //             this.listarUsuarios();
-    //           }, ({error}) => {
-    //             this.alertService.close();
-    //             this.alertService.errorApi(error.msg);
-    //           });
-    //         }
-    //       });
+  // Crear nueva empresa
+  nuevaEmpresa(): void {
+
+    const { status } = this.empresaForm;
+    const { razon_social } = this.empresaForm.value;
+    
+    // Se verifica si los campos son invalidos
+    if(status === 'INVALID' || razon_social.trim() === ''){
+      this.alertService.formularioInvalido();
+      return;
+    }
+
+    this.alertService.loading();  // Comienzo de loading
+
+    this.empresasService.nuevaEmpresa(this.empresaForm.value).subscribe(() => {
+      this.listarEmpresas();
+      this.reiniciarFormulario();
+      this.showModal = false;
+    },( ({error}) => {
+      this.alertService.errorApi(error.msg);
+      return;  
+    }));
+
+  }
+
+  // Empresa por ID
+  getEmpresa(id: string): void {
+    this.alertService.loading();
+    this.empresasService.getEmpresa(id).subscribe(({ empresa }) => {
+      this.idEmpresa = empresa._id;
+      this.empresaForm.setValue({
+        razon_social: empresa.razon_social,
+        cuit: empresa.cuit,
+        telefono: empresa.telefono,
+        direccion: empresa.direccion,
+        activo: empresa.activo,     
+      });
+      this.alertService.close();       
+    },({error})=>{
+      this.alertService.errorApi(error.msg);
+    });  
+  }
+
+  // Editar empresa
+  editarEmpresa(id: string): void {
+    const { status } = this.empresaForm;
+    const { razon_social } = this.empresaForm.value;
+    
+    // Se verifica si los campos son invalidos
+    if(status === 'INVALID' || razon_social.trim() === ''){
+      this.alertService.formularioInvalido();
+      return;
+    }
+
+    this.alertService.loading();  // Comienzo de loading
+
+    this.empresasService.actualizarEmpresa(id, this.empresaForm.value).subscribe(() => {
+      this.listarEmpresas();
+      this.reiniciarFormulario();
+      this.showModal = false;
+    },({error})=>{
+      this.alertService.errorApi(error.msg);
+    });
+  }
+
+  // Actualizar estado Activo/Inactivo
+  actualizarEstado(empresa: any): void {
+  const { _id, activo } = empresa;
+    this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            this.alertService.loading();
+            this.empresasService.actualizarEmpresa(_id, { activo: !activo }).subscribe(() => {
+              this.alertService.loading();
+              this.listarEmpresas();
+            }, ({error}) => {
+              this.alertService.errorApi(error.msg);
+            });
+          }
+        });
+  }
+  
+  // Reiniciar formulario
+  reiniciarFormulario(): void {
+    this.empresaForm.setValue({
+      razon_social: '',
+      cuit: '',
+      telefono: '',
+      direccion: '',
+      activo: true,     
+    })    
+  }
+
+  // Abrir modal
+  abrirModal(tipo: string, id: string = null): void {
+    if(tipo === "crear"){          // Modal: Nueva empresa
+      this.reiniciarFormulario();
+      this.flagEditando = false;
+    }else{                         // Modal: Editar empresa
+      this.getEmpresa(id);
+      this.flagEditando = true;
+    }
+    this.showModal = true;
   }
 
   // Filtrar Activo/Inactivo
