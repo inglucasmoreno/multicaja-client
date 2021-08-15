@@ -12,6 +12,8 @@ import { NuevoUsuarioComponent } from './usuarios/nuevo-usuario.component';
 import { EditarUsuarioComponent } from './usuarios/editar/editar-usuario.component';
 import { EditarPasswordComponent } from './usuarios/editar/editar-password.component';
 import { EmpresasComponent } from './empresas/empresas.component';
+import { ExternosComponent } from './externos/externos.component';
+import { SaldosComponent } from './empresas/saldos.component';
 
 const routes: Routes = [
     {
@@ -31,7 +33,11 @@ const routes: Routes = [
             
             // Empresas
             { path: 'empresas', canActivate: [AdminGuard], component: EmpresasComponent },
+            { path: 'empresas/saldos/:id', canActivate: [AdminGuard], component: SaldosComponent },
 
+            // Externos
+            { path: 'externos', canActivate: [AdminGuard], component: ExternosComponent },
+            
         ]
     }
 ];

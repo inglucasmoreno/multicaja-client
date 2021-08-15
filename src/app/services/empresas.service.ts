@@ -44,4 +44,38 @@ export class EmpresasService {
     })
   }
 
+  // --- SALDOS ---
+  
+  // Saldo por ID
+  getSaldo(id: string): Observable<any>{
+    return this.http.get(`${base_url}/empresas/saldos/${id}`, {
+      headers: { 'x-token': localStorage.getItem('token') }
+    })
+  } 
+
+  // Listar saldos
+  listarSaldos( direccion : number = 1, columna: string = 'descripcion', empresa: string): Observable<any>{
+    return this.http.get(`${base_url}/empresas/saldos/lista/${empresa}`, {
+      params: {
+        direccion: String(direccion),
+        columna              
+      },
+      headers: { 'x-token': localStorage.getItem('token') }      
+    })
+  }
+
+  // Nuevo saldo
+  nuevoSaldo(data: any): Observable<any>{
+    return this.http.post(`${base_url}/empresas/saldos`, data, {
+      headers: { 'x-token': localStorage.getItem('token') }
+    })  
+  }
+
+  // Actualizar saldo
+  actualizarSaldo(id: string, data: any): Observable<any>{
+    return this.http.put(`${base_url}/empresas/saldos/${id}`, data, {
+      headers: { 'x-token': localStorage.getItem('token') }  
+    })
+  } 
+
 }

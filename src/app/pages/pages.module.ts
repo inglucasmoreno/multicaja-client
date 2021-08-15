@@ -13,6 +13,8 @@ import { EditarUsuarioComponent } from './usuarios/editar/editar-usuario.compone
 import { EditarPasswordComponent } from './usuarios/editar/editar-password.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EmpresasComponent } from './empresas/empresas.component';
+import { ExternosComponent } from './externos/externos.component';
+import { SaldosComponent } from './empresas/saldos.component';
 
 
 @NgModule({
@@ -24,6 +26,8 @@ import { EmpresasComponent } from './empresas/empresas.component';
     EditarUsuarioComponent,
     EditarPasswordComponent,
     EmpresasComponent,
+    ExternosComponent,
+    SaldosComponent,
   ],
   imports: [
     CommonModule,

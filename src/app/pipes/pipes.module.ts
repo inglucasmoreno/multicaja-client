@@ -5,6 +5,8 @@ import { RolPipe } from './rol.pipe';
 import { MonedaPipe } from './moneda.pipe';
 import { FiltroUsuariosPipe } from './filtro-usuarios.pipe';
 import { FiltroEmpresasPipe } from './filtro-empresas.pipe';
+import { FiltroExternosPipe } from './filtro-externos.pipe';
+import { FiltroSaldosPipe } from './filtro-saldos.pipe';
 
 @NgModule({
   declarations: [
@@ -13,6 +15,8 @@ import { FiltroEmpresasPipe } from './filtro-empresas.pipe';
     MonedaPipe,
     FiltroUsuariosPipe,
     FiltroEmpresasPipe,
+    FiltroExternosPipe,
+    FiltroSaldosPipe,
   ],
   imports: [
     CommonModule
@@ -22,7 +26,9 @@ import { FiltroEmpresasPipe } from './filtro-empresas.pipe';
     RolPipe,
     MonedaPipe,
     FiltroUsuariosPipe,
-    FiltroEmpresasPipe
+    FiltroEmpresasPipe,
+    FiltroExternosPipe,
+    FiltroSaldosPipe
   ]
 })
 export class PipesModule { }

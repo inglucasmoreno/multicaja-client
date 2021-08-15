@@ -1,40 +1,29 @@
 <app-modal [showModal]="showModal">
     <div class="bg-white p-4">
-        <h1 *ngIf="!flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Creando nueva empresa </h1>
-        <h1 *ngIf="flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Editando empresa </h1>
-        <form [formGroup]="empresaForm" class="mt-2">
+        <h1 *ngIf="!flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Creando nuevo saldo </h1>
+        <h1 *ngIf="flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Editando saldo </h1>
+        <form [formGroup]="saldoForm" class="mt-2">
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold bold mt-3 text-gray-600 text-sm">
-                        <span class="text-red-500"> * </span> Razón social
+                        <span class="text-red-500"> * </span> Descripción
                     </div>
                     <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input formControlName="razon_social" placeholder="Ej. Equinoccio Technology" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                        <input formControlName="descripcion" placeholder="Ej. Caja" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm">
-                        CUIT
+                        <span class="text-red-500"> * </span> monto
                     </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input formControlName="cuit" type="text" placeholder="Ej. 24340603989" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                    <div *ngIf="!flagEditando" class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input formControlName="monto" type="number" placeholder="Ej. 15000" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm">
+                    </div>
+                    <div *ngIf="flagEditando" class="bg-gray-100 my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <div class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> {{ saldoForm.value.monto }} </div>
+                    </div>
                 </div>
             </div>
-            <div class="flex flex-col lg:flex-row">
-                <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold bold mt-3 text-gray-600 text-sm">
-                        Teléfono
-                    </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input formControlName="telefono" placeholder="Ej. 2664869642" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
-                </div>
-                <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm">
-                        Dirección
-                    </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input type="text" formControlName="direccion" placeholder="Ej. Portugal 1030" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
-                </div>
-            </div>
+
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
                     <div class="font-semibold mt-3 text-gray-600 text-sm">
@@ -51,8 +40,8 @@
             </div>
         </form>
         <div class="lg:flex lg:items-center mt-6">
-            <button *ngIf="!flagEditando" (click)="nuevaEmpresa()" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
-            <button *ngIf="flagEditando" (click)="editarEmpresa(idEmpresa)" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Editar </button>
+            <button *ngIf="!flagEditando" (click)="nuevoSaldo()" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
+            <button *ngIf="flagEditando" (click)="editarSaldo(saldoId)" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Editar </button>
             <button (click)="showModal= !showModal" class="w-full lg:w-1/2 bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
         </div>
     </div>
@@ -61,11 +50,14 @@
 <app-tarjeta-lista>
     <div class="container mx-auto px-4 sm:px-8">
         <div class="py-4">
-            <div>
-                <h2 class="text-2xl font-semibold leading-tight text-gray-600">
-                    Listado de empresas
-                </h2>
-                <p class='text-gray-500'> Total de empresas: {{ total }} </p>
+            <div class="flex items-center">
+                <app-boton-regresar routerLink="/dashboard/empresas"></app-boton-regresar>
+                <div class="ml-2">
+                    <h2 *ngIf="empresa" class="text-xl font-semibold leading-tight text-gray-600">
+                        {{ empresa.razon_social }}
+                    </h2>
+                    <p class='text-gray-500'> Total de saldos: {{ total }} </p>
+                </div>
             </div>
             <div class="md:flex md:items-center md:justify-between">
                 <div class="my-2 flex sm:flex-row flex-col">
@@ -96,7 +88,7 @@
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <app-boton-generico (click)="abrirModal('crear')"> Nueva empresa </app-boton-generico>
+                    <app-boton-generico (click)="abrirModal('crear')"> Nuevo saldo </app-boton-generico>
                 </div>
             </div>
             <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
@@ -110,31 +102,31 @@
                                     </div>
                                 </th>
                                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    <div (click)="ordenarPorColumna('razon_social')" class="w-max cursor-pointer flex items-center focus:outline-none">
-                                        <span> Razón social </span>
+                                    <div (click)="ordenarPorColumna('descripcion')" class="w-max cursor-pointer flex items-center focus:outline-none">
+                                        <span> Descripción </span>
                                         <span class="ml-2 text-gray-600">    
-                                            <svg *ngIf="ordenar.columna == 'razon_social' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                            <svg *ngIf="ordenar.columna == 'razon_social' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                            <svg *ngIf="ordenar.columna != 'razon_social'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            <svg *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                         </span>
                                     </div>
                                 </th>
                                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    <div (click)="ordenarPorColumna('cuit')" class="cursor-pointer flex items-center focus:outline-none">
+                                    <div (click)="ordenarPorColumna('monto')" class="cursor-pointer flex items-center focus:outline-none">
                                         <span>
-                                            CUIT
+                                            Monto
                                         </span>
                                         <span class="ml-2">
-                                            <svg *ngIf="ordenar.columna == 'cuit' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                            <svg *ngIf="ordenar.columna == 'cuit' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                            <svg *ngIf="ordenar.columna != 'cuit'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            <svg *ngIf="ordenar.columna == 'monto' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'monto' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'monto'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                         </span>
                                     </div>
                                 </th>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    <div (click)="ordenarPorColumna('createdAt')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('createdAt')" class="cursor-pointer flex items-center focus:outline-none">
                                         <span>
-                                            Fecha de creación                                                
+                                            Fecha de creación
                                         </span>
                                         <span class="ml-2">
                                             <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
@@ -143,10 +135,10 @@
                                         </span>
                                     </div>
                                 </th>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     <div (click)="ordenarPorColumna('activo')" class="cursor-pointer flex items-center focus:outline-none">
                                         <span>
-                                            Estado                                               
+                                            Estado
                                         </span>
                                         <span class="ml-2">
                                             <svg *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
@@ -160,37 +152,34 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody *ngIf="empresas">
-                            <tr class="animate__animated animate__fadeIn" *ngFor="let empresa of empresas | filtroEmpresas:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                        <tbody *ngIf="saldos">
+                            <tr class="animate__animated animate__fadeIn" *ngFor="let saldo of saldos | filtroSaldos:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        <img class="bg-orange-100 w-10 h-10" src="assets/img/empresas/empresa_avatar.png" alt="Avatar">
+                                        <img class="w-10 h-10" src="assets/img/saldos/saldo.png" alt="Avatar">
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ empresa.razon_social }}
+                                        {{ saldo.descripcion}}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ empresa.cuit }}
+                                        ${{ saldo.monto | moneda }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ empresa.createdAt | fecha }}
+                                        {{ saldo.createdAt | fecha }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <app-pastilla-estado [activo]=empresa.activo (click)="actualizarEstado(empresa)"></app-pastilla-estado>
+                                    <app-pastilla-estado [activo]=saldo.activo (click)="actualizarSaldo(saldo)"></app-pastilla-estado>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                                     <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
-                                        <app-boton-tabla [routerLink]="['/dashboard/empresas/saldos', empresa._id]" title="Saldos">
-                                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                        </app-boton-tabla>
-                                        <app-boton-tabla class="ml-2" (click)="abrirModal('editar', empresa._id)" title="Editar empresa">
+                                        <app-boton-tabla class="ml-2" (click)="abrirModal('editar', saldo._id)" title="Editar saldo">
                                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                                         </app-boton-tabla>
                                     </p>
