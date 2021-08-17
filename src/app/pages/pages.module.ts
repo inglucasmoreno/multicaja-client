@@ -15,6 +15,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { EmpresasComponent } from './empresas/empresas.component';
 import { ExternosComponent } from './externos/externos.component';
 import { SaldosComponent } from './empresas/saldos.component';
+import { MovimientosComponent } from './movimientos/movimientos.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { SaldosComponent } from './empresas/saldos.component';
     EmpresasComponent,
     ExternosComponent,
     SaldosComponent,
+    MovimientosComponent,
   ],
   imports: [
     CommonModule,

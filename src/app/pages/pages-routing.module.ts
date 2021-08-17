@@ -14,6 +14,7 @@ import { EditarPasswordComponent } from './usuarios/editar/editar-password.compo
 import { EmpresasComponent } from './empresas/empresas.component';
 import { ExternosComponent } from './externos/externos.component';
 import { SaldosComponent } from './empresas/saldos.component';
+import { MovimientosComponent } from './movimientos/movimientos.component';
 
 const routes: Routes = [
     {
@@ -38,6 +39,9 @@ const routes: Routes = [
             // Externos
             { path: 'externos', canActivate: [AdminGuard], component: ExternosComponent },
             
+            // Movimientos
+            { path: 'movimientos', canActivate: [AdminGuard], component: MovimientosComponent },
+
         ]
     }
 ];

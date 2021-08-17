@@ -1,0 +1,247 @@
+<app-modal [showModal]="showModal">
+    <div class="bg-white p-4">
+        <h1 *ngIf="!flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Creando un nuevo movimiento </h1>
+        <form class="mt-2">
+            <div class=" border">
+                <h1 class="bg-gray-800 w-full text-white rounded-t px-2 py-1"> Datos de origen </h1>
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm">
+                            <span class="text-red-500"> * </span> Tipo de origen
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <select name="tipo_origen" [(ngModel)]="data.tipo_origen" (change)="actualizarTipo('Origen', txtOrigen.value)" #txtOrigen class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                                <option value='Externo'> Externo </option>
+                                <option value='Interno'> Interno </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    </div>
+                </div>
+                <div class="px-2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        <span class="text-red-500"> * </span> Origen
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <select name="origen" (change)="actualizarElemento('Origen', txtOrigenValor.value)" #txtOrigenValor [(ngModel)]="data.origen" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <option value=""> Seleccionar origen </option>
+                            <option *ngFor="let elemento of elementosOrigen" [value]="elemento._id"> {{ !elemento.descripcion ? elemento.razon_social : elemento.descripcion }} </option>
+                        </select>
+                    </div>
+                </div>
+                <div *ngIf="data.tipo_origen == 'Interno' && data.origen !== ''" class="px-2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        <span class="text-red-500"> * </span> Saldo
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <select name="origen_saldo" [(ngModel)]="data.origen_saldo" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <option value=""> Seleccionar saldo </option>
+                            <option *ngFor="let elemento of saldos_origen" [value]="elemento._id"> {{ elemento.descripcion + ' - Disponible: ' +  '$' + elemento.monto }} </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+                <div>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down text-green-600 bg-green-100 rounded-full border border-green-300"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                </div>
+                <div class="font-semibold">
+                    <input type="number" name="monto" [(ngModel)]="data.monto" placeholder="Ingresar monto" min=0 class="border p-1 px-3 rounded focus:outline-none text-sm text-center">
+                </div>
+                <div>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down text-green-600 bg-green-100 rounded-full border border-green-300"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                </div>
+            </div>
+            <div class=" border mt-2">
+                <h1 class="bg-gray-800 w-full text-white rounded-t px-2 py-1"> Datos de destino </h1>
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm">
+                            <span class="text-red-500"> * </span> Tipo de destino
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <select name="tipo_destino" [(ngModel)]="data.tipo_destino" (change)="actualizarTipo('Destino', txtDestino.value)" #txtDestino class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                                <option value='Externo'> Externo </option>
+                                <option value='Interno'> Interno </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
+                </div>
+                <div class="px-2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        <span class="text-red-500"> * </span> Destino
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <select name="destino" (change)="actualizarElemento('Destino', txtDestinoValor.value)" #txtDestinoValor [(ngModel)]="data.destino" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <option value=""> Seleccionar destino </option>
+                            <option *ngFor="let elemento of elementosDestino" [value]="elemento._id"> {{ !elemento.descripcion ? elemento.razon_social : elemento.descripcion }} </option>
+                        </select>
+                    </div>
+                </div>
+                <div *ngIf="data.tipo_destino == 'Interno' && data.destino !== ''" class="px-2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        <span class="text-red-500"> * </span> Saldo
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <select name="destino_saldo" [(ngModel)]="data.destino_saldo" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <option value=""> Seleccionar saldo </option>
+                            <option *ngFor="let elemento of saldos_destino" [value]="elemento._id"> {{ elemento.descripcion + ' - Disponible: ' +  '$' + elemento.monto }} </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="lg:flex lg:items-center mt-6">
+            <button (click)="crearMovimiento()" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
+            <button (click)="showModal= !showModal" class="w-full lg:w-1/2 bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
+        </div>
+    </div>
+</app-modal>
+
+<app-tarjeta-lista>
+    <div class="container mx-auto px-4 sm:px-8">
+        <div class="py-4">
+            <div>
+                <h2 class="text-2xl font-semibold leading-tight text-gray-600">
+                    Listado de movimientos
+                </h2>
+                <p class='text-gray-500'> Total de movimientos: {{ total }} </p>
+            </div>
+            <div class="md:flex md:items-center md:justify-between">
+                <div class="my-2 flex sm:flex-row flex-col">
+                    <div class="flex flex-row mb-1 sm:mb-0">
+                        <div class="relative">
+                            <select #txtActivo (change)="filtrarActivos(txtActivo.value)" class="h-full rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                                <option value='true'> Activos </option>
+                                <option value='false'> Inactivos </option>
+                                <option value=''> Todos </option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block relative">
+                        <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
+                            <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500 cursor-pointer hover:text-secondary-500">
+                                <path
+                                    d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
+                                </path>
+                            </svg>
+                        </span>
+                        <input #txtParametro placeholder="Buscar" (keyup)="filtrarParametro(txtParametro.value)" class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+                        />
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <app-boton-generico (click)="abrirModal()"> Nuevo movimiento </app-boton-generico>
+                </div>
+            </div>
+            <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div class="flex items-center focus:outline-none">
+                                        <span> Icono </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('descripcion')" class="w-max cursor-pointer flex items-center focus:outline-none">
+                                        <span> Descripción </span>
+                                        <span class="ml-2 text-gray-600">    
+                                            <svg *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('dni_cuit')" class="cursor-pointer flex items-center focus:outline-none">
+                                        <span>
+                                            DNI/CUIT
+                                        </span>
+                                        <span class="ml-2">
+                                            <svg *ngIf="ordenar.columna == 'dni_cuit' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'dni_cuit' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'dni_cuit'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('createdAt')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                                        <span>
+                                            Fecha de creación                                                
+                                        </span>
+                                        <span class="ml-2">
+                                            <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'createdAt'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('activo')" class="cursor-pointer flex items-center focus:outline-none">
+                                        <span>
+                                            Estado                                               
+                                        </span>
+                                        <span class="ml-2">
+                                            <svg *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'activo'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Acción
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="externos">
+                            <tr class="animate__animated animate__fadeIn" *ngFor="let movimiento of movimientos | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        <img class="w-10 h-10" src="assets/img/externos/externo.png" alt="Avatar">
+                                    </p>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {{ movimiento.descripcion }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {{ movimiento.dni_cuit }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {{ movimiento.createdAt | fecha }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <app-pastilla-estado [activo]=movimiento.activo></app-pastilla-estado>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
+                                    <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
+                                        <app-boton-tabla title="Editar externo">
+                                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                        </app-boton-tabla>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="px-5 py-5 bg-white border-t flex shadow flex-col xs:flex-row items-center xs:justify-between">
+                        <pagination-controls nextLabel="Siguiente" previousLabel="Anterior" (pageChange)="paginaActual = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-tarjeta-lista>
