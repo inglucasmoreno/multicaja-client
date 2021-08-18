@@ -113,20 +113,22 @@ export class MovimientosComponent implements OnInit {
   }
 
   // Actualizacion de saldos
-  actualizarElemento(origen_destino: string, id: string){    
-    if(this.data.tipo_origen === 'Interno' && origen_destino === 'Origen' || this.data.tipo_destino === 'Interno' && origen_destino === 'Destino'){
-      this.alertService.loading();
-      this.empresasService.listarSaldos(1,'descripcion',id).subscribe(({ saldos }) => {
-        if(origen_destino === 'Origen'){  // Origen
-          this.data.origen_saldo = '';
-          this.saldos_origen = saldos; 
-        }else{                            // Destino
-          this.data.destino_saldo = '';
-          this.saldos_destino = saldos; 
-        }
-        this.alertService.close();
-      })
-    }
+  actualizarElemento(origen_destino: string, id: string){
+    if(id !== ''){
+      if(this.data.tipo_origen === 'Interno' && origen_destino === 'Origen' || this.data.tipo_destino === 'Interno' && origen_destino === 'Destino'){
+        this.alertService.loading();
+        this.empresasService.listarSaldos(1,'descripcion',id).subscribe(({ saldos }) => {
+          if(origen_destino === 'Origen'){  // Origen
+            this.data.origen_saldo = '';
+            this.saldos_origen = saldos; 
+          }else{                            // Destino
+            this.data.destino_saldo = '';
+            this.saldos_destino = saldos; 
+          }
+          this.alertService.close();
+        })
+      }
+    }    
   }
 
   // Listado de movimientos
