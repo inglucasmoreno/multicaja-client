@@ -5,6 +5,8 @@ import { DataService } from 'src/app/services/data.service';
 import { MovimientosService } from '../../services/movimientos.service';
 import { ExternosService } from '../../services/externos.service';
 import { EmpresasService } from '../../services/empresas.service';
+import { TipoMovimientos } from '../../models/tipo-movimientos.model';
+import { TipoMovimientoService } from 'src/app/services/tipo-movimiento.service';
 
 @Component({
   selector: 'app-movimientos',
@@ -16,6 +18,7 @@ export class MovimientosComponent implements OnInit {
 
   // Modal
   public showModal = false;
+  public showModalCheque = true;
   public showModalDetalles = false;
   public flagEditando = false;
   
@@ -29,6 +32,9 @@ export class MovimientosComponent implements OnInit {
 
   // Empresas
   public empresas: any[] = [];
+
+  // Tipos de movimientos
+  public tipos: TipoMovimientos[] = [];
 
   // Elementos origen
   public elementosOrigen: any[] = [];
@@ -47,6 +53,7 @@ export class MovimientosComponent implements OnInit {
     tipo_destino: 'Externo',
     origen: '',
     destino: '',
+    tipo_movimiento: '',
     origen_saldo: '',
     destino_saldo: '',
     monto: null
@@ -78,6 +85,7 @@ export class MovimientosComponent implements OnInit {
   });
   
   constructor(private movimientosService: MovimientosService,
+              private tipoMovimientosService: TipoMovimientoService,
               private externosService: ExternosService,
               private empresasService: EmpresasService,
               private alertService: AlertService,
@@ -86,11 +94,18 @@ export class MovimientosComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataService.ubicacionActual = "Dashboard - Movimientos";
-    console.log(this.data.tipo_origen);
     this.listarMovimientos();
     this.listarExternos();
     this.listadoEmpresas();
+    this.listarTipos();
   }
+
+  // Listar tipos de movimientos
+  listarTipos(): void {
+    this.tipoMovimientosService.listarTipos().subscribe( ({ tipos }) => {
+      this.tipos= tipos.filter( tipo => tipo.activo );
+    });
+  };
   
   // Actualizar selectores
   actualizarTipo(origen_destino: string, tipo: string ): void {
@@ -179,16 +194,20 @@ export class MovimientosComponent implements OnInit {
 
     if(verificacion) return this.alertService.formularioInvalido();
     
-    this.alertService.loading();
-
-    this.movimientosService.nuevoMovimiento(this.data).subscribe(resp=>{
-      this.listarMovimientos();
-      this.reiniciarFormulario();
+    if(this.data.tipo_movimiento === '612e2248c09829326470cb51'){ // Abrir modal - CHEQUE
       this.showModal = false;
-      this.alertService.close();
-    },({error})=>{
-      this.alertService.errorApi(error);
-    });
+      this.showModalCheque = true;
+    }else{ // Crear nuevo movimiento
+      this.alertService.loading();
+      this.movimientosService.nuevoMovimiento(this.data).subscribe(()=>{
+        this.listarMovimientos();
+        this.reiniciarFormulario();
+        this.showModal = false;
+        this.alertService.close();
+      },({error})=>{
+        this.alertService.errorApi(error);
+      });      
+    }
 
   }
     
@@ -199,6 +218,7 @@ export class MovimientosComponent implements OnInit {
       monto: null,     
       tipo_origen: 'Externo',
       tipo_destino: 'Externo',
+      tipo_movimiento: '',
       origen: '',
       destino: '',
       origen_saldo: '',
@@ -214,6 +234,12 @@ export class MovimientosComponent implements OnInit {
     this.showModal = true;
   }
     
+  // Regresar al modal - Nuevo tipo
+  regresar(): void {
+    this.showModalCheque = false;
+    this.showModal = true;
+  }
+
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
     this.filtro.activo = activo;

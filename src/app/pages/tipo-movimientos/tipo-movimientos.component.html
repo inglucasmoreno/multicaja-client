@@ -122,7 +122,7 @@
                             </tr>
                         </thead>
                         <tbody *ngIf="tipos">
-                            <tr class="animate__animated animate__fadeIn" *ngFor="let tipo of tipos | filtroExternos:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                            <tr class="animate__animated animate__fadeIn" *ngFor="let tipo of tipos | filtroTipoMovimiento:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
                                         {{ tipo.descripcion }}
