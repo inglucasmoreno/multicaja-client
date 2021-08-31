@@ -16,6 +16,7 @@ export class MovimientosComponent implements OnInit {
 
   // Modal
   public showModal = false;
+  public showModalDetalles = false;
   public flagEditando = false;
   
   // Movimientos

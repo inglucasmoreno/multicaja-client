@@ -15,6 +15,7 @@ import { EmpresasComponent } from './empresas/empresas.component';
 import { ExternosComponent } from './externos/externos.component';
 import { SaldosComponent } from './empresas/saldos.component';
 import { MovimientosComponent } from './movimientos/movimientos.component';
+import { TipoMovimientosComponent } from './tipo-movimientos/tipo-movimientos.component';
 
 const routes: Routes = [
     {
@@ -41,6 +42,9 @@ const routes: Routes = [
             
             // Movimientos
             { path: 'movimientos', canActivate: [AdminGuard], component: MovimientosComponent },
+
+            // Tipos de movimientos
+            { path: 'tipo-movimientos', canActivate: [AdminGuard], component:  TipoMovimientosComponent},
 
         ]
     }

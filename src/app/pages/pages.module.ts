@@ -16,6 +16,7 @@ import { EmpresasComponent } from './empresas/empresas.component';
 import { ExternosComponent } from './externos/externos.component';
 import { SaldosComponent } from './empresas/saldos.component';
 import { MovimientosComponent } from './movimientos/movimientos.component';
+import { TipoMovimientosComponent } from './tipo-movimientos/tipo-movimientos.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { MovimientosComponent } from './movimientos/movimientos.component';
     ExternosComponent,
     SaldosComponent,
     MovimientosComponent,
+    TipoMovimientosComponent,
   ],
   imports: [
     CommonModule,
