@@ -18,10 +18,13 @@ export class MovimientosComponent implements OnInit {
 
   // Modal
   public showModal = false;
-  public showModalCheque = true;
+  public showModalCheque = false;
   public showModalDetalles = false;
   public flagEditando = false;
   
+  // Tipos especiales
+  public tipoCheque = '612fe410c2d42b3d98b6f17d';
+
   // Movimientos
   public idMovimiento = '';
   public movimientos: any[] = [];
@@ -57,6 +60,18 @@ export class MovimientosComponent implements OnInit {
     origen_saldo: '',
     destino_saldo: '',
     monto: null
+  }
+
+  public cheque = {
+    nro_cheque: '',
+    concepto: '',
+    cliente_descripcion: '',
+    cliente: '',
+    destino_descripcion: '',
+    destino: '',
+    emisor: '',
+    cuit: '',
+    monto: ''
   }
 
   // Paginacion
@@ -129,7 +144,7 @@ export class MovimientosComponent implements OnInit {
   }
 
   // Actualizacion de saldos
-  actualizarElemento(origen_destino: string, id: string){
+  actualizarElemento(origen_destino: string, id: string, otro: any){
     if(id !== ''){
       if(this.data.tipo_origen === 'Interno' && origen_destino === 'Origen' || this.data.tipo_destino === 'Interno' && origen_destino === 'Destino'){
         this.alertService.loading();
@@ -194,7 +209,7 @@ export class MovimientosComponent implements OnInit {
 
     if(verificacion) return this.alertService.formularioInvalido();
     
-    if(this.data.tipo_movimiento === '612e2248c09829326470cb51'){ // Abrir modal - CHEQUE
+    if(this.data.tipo_movimiento === this.tipoCheque){ // Abrir modal - CHEQUE
       this.showModal = false;
       this.showModalCheque = true;
     }else{ // Crear nuevo movimiento

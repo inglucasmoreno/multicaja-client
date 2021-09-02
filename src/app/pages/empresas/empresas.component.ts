@@ -58,6 +58,7 @@ export class EmpresasComponent implements OnInit {
 
   // Listar empresas
   listarEmpresas(): void {
+    this.alertService.loading();
     this.empresasService.listarEmpresas( 
       this.ordenar.direccion,
       this.ordenar.columna
