@@ -27,6 +27,7 @@ export class MovimientosComponent implements OnInit {
 
   // Movimientos
   public idMovimiento = '';
+  public movimientoSeleccionado: any = null;
   public movimientos: any[] = [];
   public total = 0;
   
@@ -86,8 +87,8 @@ export class MovimientosComponent implements OnInit {
   
   // Ordenar
   public ordenar = {
-    direccion: 1,  // Asc (1) | Desc (-1)
-    columna: 'descripcion'
+    direccion: -1,  // Asc (1) | Desc (-1)
+    columna: 'createdAt'
   }
   
   // Modelo reactivo
@@ -151,7 +152,7 @@ export class MovimientosComponent implements OnInit {
         this.empresasService.listarSaldos(1,'descripcion',id).subscribe(({ saldos }) => {
           if(origen_destino === 'Origen'){  // Origen
             this.data.origen_saldo = '';
-            this.saldos_origen = saldos; 
+            this.saldos_origen = saldos.filter( saldo => (saldo.activo == true) ); 
           }else{                            // Destino
             this.data.destino_saldo = '';
             this.saldos_destino = saldos; 
@@ -181,9 +182,9 @@ export class MovimientosComponent implements OnInit {
   // Listado de agentes externos
   listarExternos(): void {
     this.externosService.listarExternos().subscribe(({ externos }) => {
-      this.externos = externos;
-      this.elementosOrigen = externos;
-      this.elementosDestino = externos;
+      this.externos = externos.filter( externo => (externo.activo == true) );
+      this.elementosOrigen = this.externos;
+      this.elementosDestino = this.externos;
     },({error})=>{
       this.alertService.errorApi(error);
     });
@@ -192,7 +193,7 @@ export class MovimientosComponent implements OnInit {
   // Listado de empresas
   listadoEmpresas(): void {
     this.empresasService.listarEmpresas().subscribe(({ empresas })=> {
-      this.empresas = empresas;
+      this.empresas = empresas.filter( empresa => (empresa.activo == true) );
     },({error})=>{
       this.alertService.errorApi(error);  
     });
@@ -248,7 +249,18 @@ export class MovimientosComponent implements OnInit {
     this.reiniciarFormulario();
     this.showModal = true;
   }
-    
+
+  // Abrir modal detalles
+  abrirModalDetalles(id: string): void {
+    this.alertService.loading();
+    this.movimientosService.getMovimiento(id).subscribe(({ movimiento }) => {
+      this.movimientoSeleccionado = movimiento;
+      console.log(this.movimientoSeleccionado);
+      this.alertService.close();
+    });
+    this.showModalDetalles = true;  
+  }  
+
   // Regresar al modal - Nuevo tipo
   regresar(): void {
     this.showModalCheque = false;

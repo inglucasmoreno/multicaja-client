@@ -1,13 +1,36 @@
 <!-- Modal: Detalle de movimiento -->
-<app-modal [showModal]="showModalDetalles">
+<app-modal-medium [showModal]="showModalDetalles">
     <div class="flex items-center justify-between text-white bg-gray-800 rounded-t p-1">
         <h1 class="px-2"> Detalles de movimiento </h1>
         <svg (click)="showModalDetalles = !showModalDetalles" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </div>
-    <div class="bg-white p-2">
-        <p> Cuerpo del detalle </p>
+    <div class="p-2" *ngIf="this.movimientoSeleccionado">
+        <div class="border bg-gray-100 p-2">
+            <h2> <span class="font-semibold"> Tipo de movimiento: </span> <span> {{ this.movimientoSeleccionado.tipo_movimiento.descripcion }} </span> </h2>
+            <h2> <span class="font-semibold"> Monto: </span> <span> ${{ this.movimientoSeleccionado.monto | moneda }} </span> </h2>
+        </div>
+        <div class="bg-white lg:flex mt-2">
+            <div class="lg:w-1/2 w-full h-full text-sm">
+                <p class="font-semibold bg-orange-700 text-white py-1 px-2 rounded text-center"> Datos de origen </p>
+                <div class="p-1">
+                    <p class="p-1"> <span class="font-semibold"> Origen: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.origen_descripcion }} </span> </p>
+                    <p class="p-1"> <span class="font-semibold"> Saldo impactado: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_origen === 'Interno' ? this.movimientoSeleccionado.origen_saldo.descripcion : 'Externo'}} </span> </p>
+                    <p class="p-1"> <span class="font-semibold"> Saldo anterior: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_origen === 'Interno' ? ('$' + (this.movimientoSeleccionado.origen_monto_anterior | moneda)) : 'Externo' }} </span> </p>
+                    <p class="p-1"> <span class="font-semibold"> Nuevo saldo: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_origen === 'Interno' ? ('$' + (this.movimientoSeleccionado.origen_monto_nuevo | moneda)) : 'Externo' }} </span> </p>
+                </div>
+            </div>
+            <div class="lg:w-1/2 w-full h-full ml-1 text-sm">
+                <p class="font-semibold bg-green-700 text-white py-1 px-2 rounded text-center"> Datos de destino </p>
+                <div class="p-1">
+                    <p class="p-1"> <span class="font-semibold"> Destino: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.destino_descripcion }} </span> </p>
+                    <p class="p-1"> <span class="font-semibold"> Saldo impactado: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_destino === 'Interno' ? this.movimientoSeleccionado.destino_saldo.descripcion : 'Externo'}} </span> </p>
+                    <p class="p-1"> <span class="font-semibold"> Saldo anterior: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_destino === 'Interno' ? ('$' + (this.movimientoSeleccionado.destino_monto_anterior | moneda)) : 'Externo' }} </span> </p>
+                    <p class="p-1"> <span class="font-semibold"> Nuevo saldo: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_destino === 'Interno' ? ('$' + (this.movimientoSeleccionado.destino_monto_nuevo | moneda)) : 'Externo' }} </span> </p>
+                </div>
+            </div>
+        </div>
     </div>
-</app-modal>
+</app-modal-medium>
 
 <!-- Modal: Datos de cheque -->
 <app-modal [showModal]="showModalCheque">
@@ -213,24 +236,10 @@
                 <h2 class="text-2xl font-semibold leading-tight text-gray-600">
                     Listado de movimientos
                 </h2>
-                <p class='text-gray-500'> Total de movimientos: {{ total }} </p>
+                <p class='text-gray-500'> Total de movimientos: {{ this.movimientos.length }} </p>
             </div>
             <div class="md:flex md:items-center md:justify-between">
                 <div class="my-2 flex sm:flex-row flex-col">
-                    <div class="flex flex-row mb-1 sm:mb-0">
-                        <div class="relative">
-                            <select #txtActivo (change)="filtrarActivos(txtActivo.value)" class="h-full rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                                <option value='true'> Activos </option>
-                                <option value='false'> Inactivos </option>
-                                <option value=''> Todos </option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
                     <div class="block relative">
                         <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
                             <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500 cursor-pointer hover:text-secondary-500">
@@ -239,7 +248,7 @@
                                 </path>
                             </svg>
                         </span>
-                        <input #txtParametro placeholder="Buscar" (keyup)="filtrarParametro(txtParametro.value)" class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+                        <input #txtParametro placeholder="Buscar" (keyup)="filtrarParametro(txtParametro.value)" class="appearance-none rounded-r rounded-l border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
                         />
                     </div>
                 </div>
@@ -259,6 +268,18 @@
                                             <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
                                             <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
                                             <svg *ngIf="ordenar.columna != 'createdAt'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('tipo_movimiento.descripcion')" class="cursor-pointer flex items-center focus:outline-none">
+                                        <span>
+                                            Tipo
+                                        </span>
+                                        <span class="ml-2">
+                                            <svg *ngIf="ordenar.columna == 'tipo_movimiento.descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'tipo_movimiento.descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'tipo_movimiento.descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                         </span>
                                     </div>
                                 </th>
@@ -301,25 +322,30 @@
                             </tr>
                         </thead>
                         <tbody *ngIf="externos">
-                            <tr (click)="showModalDetalles = true" class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let movimiento of movimientos | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                            <tr (click)="abrirModalDetalles(movimiento._id)" class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let movimiento of movimientos | filtroMovimientos:filtro.parametro| paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
+                                    <p class="text-gray-900 whitespace-no-wrap w-max">
                                         {{ movimiento.createdAt | fecha }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ movimiento.origen_descripcion }}
+                                    <p class="text-gray-900 whitespace-no-wrap w-max">
+                                        {{ movimiento.tipo_movimiento.descripcion }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ movimiento.destino_descripcion }}
+                                    <p class="text-gray-900 whitespace-no-wrap w-max">
+                                        {{ movimiento.origen_descripcion }} <span *ngIf="movimiento.origen_saldo_descripcion != null" class="bg-orange-100 border border-orange-200 text-orange-800 ml-1 font-semibold rounded px-1"> {{ movimiento.origen_saldo_descripcion }} </span>
+                                    </p>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap w-max">
+                                        {{ movimiento.destino_descripcion }} <span *ngIf="movimiento.destino_saldo_descripcion != null" class="bg-green-100 border border-green-200 text-green-800 ml-1 font-semibold rounded px-1"> {{ movimiento.destino_saldo_descripcion }} </span>
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        ${{ movimiento.monto }}
+                                        ${{ movimiento.monto | moneda}}
                                     </p>
                                 </td>
                             </tr>

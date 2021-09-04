@@ -13,6 +13,13 @@ export class MovimientosService {
 
   constructor(private http: HttpClient) {}
 
+  // Movimiento por ID
+  getMovimiento(id: string): Observable<any> {
+    return this.http.get(`${base_url}/movimientos/${id}`, {
+      headers: { 'x-token': localStorage.getItem('token') }   
+    });
+  }
+
   // Nuevo movimiento
   nuevoMovimiento(data: any): Observable<any>{
     return this.http.post(`${base_url}/movimientos`, data, {
