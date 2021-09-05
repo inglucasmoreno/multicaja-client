@@ -16,6 +16,7 @@ import { ExternosComponent } from './externos/externos.component';
 import { SaldosComponent } from './empresas/saldos.component';
 import { MovimientosComponent } from './movimientos/movimientos.component';
 import { TipoMovimientosComponent } from './tipo-movimientos/tipo-movimientos.component';
+import { CarteraChequesComponent } from './cartera-cheques/cartera-cheques.component';
 
 const routes: Routes = [
     {
@@ -26,7 +27,7 @@ const routes: Routes = [
             
             // Home
             { path: 'home', component: HomeComponent },
-            
+
             // Usuarios
             { path: 'usuarios', canActivate: [AdminGuard], component: UsuariosComponent },
             { path: 'usuarios/nuevo', canActivate: [AdminGuard], component: NuevoUsuarioComponent },
@@ -37,6 +38,9 @@ const routes: Routes = [
             { path: 'empresas', canActivate: [AdminGuard], component: EmpresasComponent },
             { path: 'empresas/saldos/:id', canActivate: [AdminGuard], component: SaldosComponent },
 
+            // Cheques
+            { path: 'cheques/cartera/:id', canActivate: [AdminGuard], component: CarteraChequesComponent },
+                
             // Externos
             { path: 'externos', canActivate: [AdminGuard], component: ExternosComponent },
             

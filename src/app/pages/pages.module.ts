@@ -17,6 +17,7 @@ import { ExternosComponent } from './externos/externos.component';
 import { SaldosComponent } from './empresas/saldos.component';
 import { MovimientosComponent } from './movimientos/movimientos.component';
 import { TipoMovimientosComponent } from './tipo-movimientos/tipo-movimientos.component';
+import { CarteraChequesComponent } from './cartera-cheques/cartera-cheques.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { TipoMovimientosComponent } from './tipo-movimientos/tipo-movimientos.co
     SaldosComponent,
     MovimientosComponent,
     TipoMovimientosComponent,
+    CarteraChequesComponent,
   ],
   imports: [
     CommonModule,

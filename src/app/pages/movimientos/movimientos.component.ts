@@ -7,6 +7,7 @@ import { ExternosService } from '../../services/externos.service';
 import { EmpresasService } from '../../services/empresas.service';
 import { TipoMovimientos } from '../../models/tipo-movimientos.model';
 import { TipoMovimientoService } from 'src/app/services/tipo-movimiento.service';
+import { ChequesService } from '../../services/cheques.service';
 
 @Component({
   selector: 'app-movimientos',
@@ -62,7 +63,8 @@ export class MovimientosComponent implements OnInit {
     destino_saldo: '',
     monto: null
   }
-
+  
+  // cheque
   public cheque = {
     nro_cheque: '',
     concepto: '',
@@ -72,7 +74,7 @@ export class MovimientosComponent implements OnInit {
     destino: '',
     emisor: '',
     cuit: '',
-    monto: ''
+    importe: 0
   }
 
   // Paginacion
@@ -102,6 +104,7 @@ export class MovimientosComponent implements OnInit {
   
   constructor(private movimientosService: MovimientosService,
               private tipoMovimientosService: TipoMovimientoService,
+              private chequesService: ChequesService,
               private externosService: ExternosService,
               private empresasService: EmpresasService,
               private alertService: AlertService,
@@ -147,10 +150,14 @@ export class MovimientosComponent implements OnInit {
   // Actualizacion de saldos
   actualizarElemento(origen_destino: string, id: string, otro: any){
     if(id !== ''){
+      
+      if(origen_destino === 'Origen') this.cheque.cliente_descripcion = otro[otro.selectedIndex].text;
+      else this.cheque.destino_descripcion = otro[otro.selectedIndex].text;
+
       if(this.data.tipo_origen === 'Interno' && origen_destino === 'Origen' || this.data.tipo_destino === 'Interno' && origen_destino === 'Destino'){
         this.alertService.loading();
         this.empresasService.listarSaldos(1,'descripcion',id).subscribe(({ saldos }) => {
-          if(origen_destino === 'Origen'){  // Origen
+          if(origen_destino === 'Origen'){  // Origen         
             this.data.origen_saldo = '';
             this.saldos_origen = saldos.filter( saldo => (saldo.activo == true) ); 
           }else{                            // Destino
@@ -163,6 +170,30 @@ export class MovimientosComponent implements OnInit {
     }    
   }
 
+  // Crear movimientos
+  crearCheque():void {
+    
+    const { nro_cheque, concepto, cliente, destino, cliente_descripcion, destino_descripcion, emisor, cuit } = this.cheque;
+    
+    const validacion = nro_cheque.trim() === '' || 
+                       concepto.trim() === '' ||
+                       cliente.trim() === '' ||
+                       destino.trim() === '' ||
+                       cliente_descripcion === '' ||
+                       destino_descripcion === ''
+
+    if(validacion) return this.alertService.info('Debes completar todos los datos del cheque');
+
+    if(emisor.trim() === '') this.cheque.emisor = null;
+    if(cuit.trim() === '') this.cheque.cuit = null;
+    
+    this.alertService.loading();
+    this.chequesService.nuevoCheque(this.cheque).subscribe( () => { // Se crea el cheque
+      this.nuevoMovimiento();  // Se crea el movimiento
+    });
+  
+  }
+
   // Listado de movimientos
   listarMovimientos(): void {
     this.alertService.loading();
@@ -170,7 +201,6 @@ export class MovimientosComponent implements OnInit {
       this.ordenar.direccion,
       this.ordenar.columna
     ).subscribe(({ movimientos, total }) => {
-      console.log(movimientos);
       this.movimientos = movimientos;
       this.total = total;
       this.alertService.close();
@@ -206,29 +236,40 @@ export class MovimientosComponent implements OnInit {
                          this.data.origen.trim() === '' ||
                          this.data.destino.trim() === '' ||
                          this.data.tipo_origen === 'Interno' && this.data.origen_saldo === '' ||
-                         this.data.tipo_destino === 'Interno' && this.data.destino_saldo === ''
+                         this.data.tipo_destino === 'Interno' && this.data.destino_saldo === '' ||
+                         this.data.tipo_movimiento === ''
 
     if(verificacion) return this.alertService.formularioInvalido();
     
     if(this.data.tipo_movimiento === this.tipoCheque){ // Abrir modal - CHEQUE
+      this.cheque.cliente = this.data.origen;
+      this.cheque.destino = this.data.destino;
+      this.cheque.importe = this.data.monto;
       this.showModal = false;
       this.showModalCheque = true;
     }else{ // Crear nuevo movimiento
-      this.alertService.loading();
-      this.movimientosService.nuevoMovimiento(this.data).subscribe(()=>{
-        this.listarMovimientos();
-        this.reiniciarFormulario();
-        this.showModal = false;
-        this.alertService.close();
-      },({error})=>{
-        this.alertService.errorApi(error);
-      });      
+      this.nuevoMovimiento();
     }
 
+  }
+
+  // Nuevo movimiento
+  nuevoMovimiento(): void {
+    this.alertService.loading();
+    this.movimientosService.nuevoMovimiento(this.data).subscribe(()=>{
+      this.listarMovimientos();
+      this.reiniciarFormulario();
+      this.showModal = false;
+      this.showModalCheque = false;
+      this.alertService.close();
+    },({error})=>{
+      this.alertService.errorApi(error);
+    });  
   }
     
   // Reiniciar formulario
   reiniciarFormulario(): void {
+    
     this.data = {
       descripcion: 'Testing',
       monto: null,     
@@ -240,8 +281,22 @@ export class MovimientosComponent implements OnInit {
       origen_saldo: '',
       destino_saldo: '',
     }
+
+    this.cheque = {
+      nro_cheque: '',
+      concepto: '',
+      cliente_descripcion: '',
+      cliente: '',
+      destino_descripcion: '',
+      destino: '',
+      emisor: '',
+      cuit: '',
+      importe: 0
+    }
+
     this.saldos_origen = [];
     this.saldos_destino = [];
+ 
   };
 
   // Abrir modal

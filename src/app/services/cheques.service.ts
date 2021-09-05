@@ -20,9 +20,10 @@ export class ChequesService {
   } 
 
   // Listar cheques
-  listarCheques( direccion : number = 1, columna: string = 'createdAt' ): Observable<any>{
-    return this.http.get(`${base_url}/cheques`, {
+  listarCheques(id: string, direccion : number = 1, columna: string = 'createdAt', activo: string ): Observable<any>{
+    return this.http.get(`${base_url}/cheques/cartera/${id}`, {
       params: {
+        activo,
         direccion: String(direccion),
         columna              
       },
