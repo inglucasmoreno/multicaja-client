@@ -7,6 +7,7 @@ import { EmpresasService } from '../../services/empresas.service';
 import { ExternosService } from '../../services/externos.service';
 import { environment } from '../../../environments/environment';
 import { MovimientosService } from 'src/app/services/movimientos.service';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-cartera-cheques',
@@ -43,6 +44,9 @@ export class CarteraChequesComponent implements OnInit {
     cheque: '',
     concepto: '',
 
+    fecha_transferencia: format(Date.now(), 'yyyy-MM-dd'),
+    fecha_cobro: format(Date.now(), 'yyyy-MM-dd'),
+
     origen: "",
     origen_descripcion: "",
     origen_saldo_descripcion: 'CHEQUES',
@@ -67,6 +71,8 @@ export class CarteraChequesComponent implements OnInit {
 
   // DATOS - CHEQUE
   public nuevoCheque = {
+    fecha_emision: format(Date.now(), 'yyyy-MM-dd'),
+    banco: '',
     nro_cheque: '',
     concepto: '',
     cliente_descripcion: '',
@@ -174,10 +180,12 @@ export class CarteraChequesComponent implements OnInit {
   // Crear cheque
   crearCheque(): void {
 
-    const { nro_cheque, concepto, cliente, importe } = this.nuevoCheque;
+    const { nro_cheque, concepto, cliente, importe, fecha_emision, banco } = this.nuevoCheque;
 
     // Verificacion
     const verificacion = nro_cheque.trim() === '' ||
+                         fecha_emision.trim() === '' ||
+                         banco.trim() === '' ||
                          concepto.trim() === '' ||
                          cliente.trim() === '' ||
                          importe === null
@@ -293,7 +301,7 @@ export class CarteraChequesComponent implements OnInit {
   // Cobrar cheque
   cobrarCheque(): void {
     
-    if(this.selectorSaldo === '') return this.alertService.info('Debe seleccionar un saldo a impactar');
+    if(this.selectorSaldo === '' || this.data.fecha_cobro === '') return this.alertService.formularioInvalido();
 
     this.alertService.question({ msg: 'Estas por cobrar un cheque', buttonText: 'Cobrar' })
       .then(({isConfirmed}) => {  
@@ -328,7 +336,7 @@ export class CarteraChequesComponent implements OnInit {
   transferirCheque(destino: any): void {
 
     // Verificacion
-    if(destino.value.trim() === '' || this.concepto.trim() === '') return this.alertService.info('Debe completar todos los campos');
+    if(destino.value.trim() === '' || this.data.fecha_transferencia == '' || this.concepto.trim() === '') return this.alertService.info('Debe completar todos los campos');
 
     this.alertService.question({ msg: 'Estas por transferir un cheque', buttonText: 'Transferir' })
     .then(({isConfirmed}) => {  
@@ -439,7 +447,9 @@ export class CarteraChequesComponent implements OnInit {
     this.data = {
       cheque: '',
       concepto: '',
-      origen: "", //
+      fecha_transferencia: format(Date.now(), 'yyyy-MM-dd'),
+      fecha_cobro: format(Date.now(), 'yyyy-MM-dd'),
+      origen: "", 
       origen_descripcion: "",
       origen_saldo_descripcion: 'CHEQUES',
       origen_saldo: "",
@@ -456,6 +466,8 @@ export class CarteraChequesComponent implements OnInit {
 
     // DATOS - CHEQUE
     this.nuevoCheque = {
+      fecha_emision: format(Date.now(), 'yyyy-MM-dd'),
+      banco: '',
       nro_cheque: '',
       concepto: '',
       cliente_descripcion: '',

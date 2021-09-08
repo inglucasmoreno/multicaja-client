@@ -23,12 +23,12 @@
             </h1>
             <div *ngIf="showDatosCheque" class="p-2 text-sm">
                 <div class="lg:flex items-center">
-                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Fecha de emision: </span> <span> {{ this.mostrarCheque.createdAt | fecha }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Fecha de emision: </span> <span> {{ this.mostrarCheque.fecha_emision | fecha }} </span> </p>
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Numero de cheque: </span> <span> {{ this.mostrarCheque.nro_cheque }} </span> </p>
                 </div>
                 <div class="lg:flex items-center">
-                    <p *ngIf="mostrarCheque.emisor !== null" class="p-2 lg:w-1/2"> <span class="font-semibold"> Emisor: </span> <span> {{ this.mostrarCheque.emisor }} </span> </p>
-                    <p *ngIf="mostrarCheque.cuit !== null" class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT: </span> <span> {{ this.mostrarCheque.cuit }} </span> </p>
+                    <p *ngIf="mostrarCheque.emisor !== null && mostrarCheque.emisor !== ''" class="p-2 lg:w-1/2"> <span class="font-semibold"> Emisor: </span> <span> {{ this.mostrarCheque.emisor }} </span> </p>
+                    <p *ngIf="mostrarCheque.cuit !== null &&  mostrarCheque.cuit !== ''" class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT: </span> <span> {{ this.mostrarCheque.cuit }} </span> </p>
                 </div>
                 <div class="lg:flex items-center">
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ this.mostrarCheque.cliente_descripcion }} </span> </p>

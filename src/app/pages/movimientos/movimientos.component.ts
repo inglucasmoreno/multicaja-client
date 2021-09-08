@@ -336,6 +336,7 @@ export class MovimientosComponent implements OnInit {
       }
     });
     this.showModalDetalles = true;  
+    console.log(this.mostrarCheque);
   }  
 
   // Regresar al modal - Nuevo tipo
