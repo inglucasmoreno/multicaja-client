@@ -19,7 +19,7 @@
                         <input formControlName="monto" type="number" placeholder="Ej. 15000" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm">
                     </div>
                     <div *ngIf="flagEditando" class="bg-gray-100 my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <div class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> {{ saldoForm.value.monto }} </div>
+                        <div [ngClass]="{'text-red-500':saldoForm.value.monto < 0}" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> {{ saldoForm.value.monto }} </div>
                     </div>
                 </div>
             </div>
@@ -165,7 +165,7 @@
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
+                                    <p [ngClass]="{'text-red-500':saldo.monto < 0}" class="text-gray-900 whitespace-no-wrap">
                                         ${{ saldo.monto | moneda }}
                                     </p>
                                 </td>

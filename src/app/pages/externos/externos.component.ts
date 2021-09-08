@@ -196,20 +196,22 @@ export class ExternosComponent implements OnInit {
   
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
-  this.filtro.activo = activo;
+    this.paginaActual = 1;
+    this.filtro.activo = activo;
   }
   
   // Filtrar por Parametro
   filtrarParametro(parametro: string): void{
-  this.filtro.parametro = parametro;
+    this.paginaActual = 1;
+    this.filtro.parametro = parametro;
   }
   
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-  this.ordenar.columna = columna;
-  this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
-  this.alertService.loading();
-  this.listarExternos();
+    this.ordenar.columna = columna;
+    this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
+    this.alertService.loading();
+    this.listarExternos();
   }
   
 

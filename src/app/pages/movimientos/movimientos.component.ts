@@ -8,6 +8,7 @@ import { EmpresasService } from '../../services/empresas.service';
 import { TipoMovimientos } from '../../models/tipo-movimientos.model';
 import { TipoMovimientoService } from 'src/app/services/tipo-movimiento.service';
 import { ChequesService } from '../../services/cheques.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-movimientos',
@@ -23,15 +24,20 @@ export class MovimientosComponent implements OnInit {
   public showModalDetalles = false;
   public flagEditando = false;
   
+  // Flag
+  public showDatosCheque = false;
+  public showDatosMovimiento = true;
+
   // Tipos especiales
-  public tipoCheque = '612fe410c2d42b3d98b6f17d';
+  public tipoCheque = environment.tipo_cheque;
 
   // Movimientos
   public idMovimiento = '';
   public movimientoSeleccionado: any = null;
   public movimientos: any[] = [];
   public total = 0;
-  
+  public mostrarCheque:any = {};
+
   // Externos
   public externos: any[] = [];
 
@@ -53,6 +59,7 @@ export class MovimientosComponent implements OnInit {
 
   // Data
   public data = {
+    cheque: null,
     descripcion: 'Testing',
     tipo_origen: 'Externo',
     tipo_destino: 'Externo',
@@ -170,7 +177,7 @@ export class MovimientosComponent implements OnInit {
     }    
   }
 
-  // Crear movimientos
+  // Crear cheque
   crearCheque():void {
     
     const { nro_cheque, concepto, cliente, destino, cliente_descripcion, destino_descripcion, emisor, cuit } = this.cheque;
@@ -188,7 +195,8 @@ export class MovimientosComponent implements OnInit {
     if(cuit.trim() === '') this.cheque.cuit = null;
     
     this.alertService.loading();
-    this.chequesService.nuevoCheque(this.cheque).subscribe( () => { // Se crea el cheque
+    this.chequesService.nuevoCheque(this.cheque).subscribe( ({ cheque }) => { // Se crea el cheque
+      this.data.cheque = cheque._id;
       this.nuevoMovimiento();  // Se crea el movimiento
     });
   
@@ -271,6 +279,7 @@ export class MovimientosComponent implements OnInit {
   reiniciarFormulario(): void {
     
     this.data = {
+      cheque: null,
       descripcion: 'Testing',
       monto: null,     
       tipo_origen: 'Externo',
@@ -294,6 +303,9 @@ export class MovimientosComponent implements OnInit {
       importe: 0
     }
 
+    this.elementosOrigen = this.externos;
+    this.elementosDestino = this.externos;
+
     this.saldos_origen = [];
     this.saldos_destino = [];
  
@@ -307,11 +319,21 @@ export class MovimientosComponent implements OnInit {
 
   // Abrir modal detalles
   abrirModalDetalles(id: string): void {
+    this.showDatosCheque = false;
     this.alertService.loading();
     this.movimientosService.getMovimiento(id).subscribe(({ movimiento }) => {
       this.movimientoSeleccionado = movimiento;
-      console.log(this.movimientoSeleccionado);
-      this.alertService.close();
+      if(movimiento.cheque !== null){
+        this.chequesService.getCheques(movimiento.cheque).subscribe( ({cheque}) => {
+          this.mostrarCheque = cheque;
+          this.alertService.close();
+          console.log(this.mostrarCheque);   
+        },({error}) => {
+          this.alertService.errorApi(error);
+        });  
+      }else{
+        this.alertService.close();
+      }
     });
     this.showModalDetalles = true;  
   }  
@@ -324,11 +346,13 @@ export class MovimientosComponent implements OnInit {
 
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
+    this.paginaActual = 1;
     this.filtro.activo = activo;
   }
   
   // Filtrar por Parametro
   filtrarParametro(parametro: string): void{
+    this.paginaActual = 1;
     this.filtro.parametro = parametro;
   }
   

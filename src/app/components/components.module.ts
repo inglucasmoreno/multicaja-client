@@ -15,6 +15,7 @@ import { BotonIconoComponent } from './boton-icono/boton-icono.component';
 import { PastillaPendienteCompletadoComponent } from './pastilla-pendiente-completado/pastilla-pendiente-completado.component';
 import { ModalComponent } from './modal/modal.component';
 import { ModalMediumComponent } from './modal-medium/modal-medium.component';
+import { ModalSmallComponent } from './modal-small/modal-small.component';
 
 
 
@@ -34,6 +35,7 @@ import { ModalMediumComponent } from './modal-medium/modal-medium.component';
     PastillaPendienteCompletadoComponent,
     ModalComponent,
     ModalMediumComponent,
+    ModalSmallComponent,
   ],
   imports: [
     CommonModule,
@@ -53,7 +55,8 @@ import { ModalMediumComponent } from './modal-medium/modal-medium.component';
     BotonIconoComponent,
     PastillaPendienteCompletadoComponent,
     ModalComponent,
-    ModalMediumComponent
+    ModalMediumComponent,
+    ModalSmallComponent
   ]
 })
 export class ComponentsModule { }

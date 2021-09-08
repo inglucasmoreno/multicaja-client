@@ -27,6 +27,21 @@ export class MovimientosService {
     });  
   };
 
+  // Cobrar cheque
+  cobrarCheque(data: any): Observable<any>{
+    return this.http.post(`${base_url}/movimientos/cobrar-cheque`, data, {
+      headers: { 'x-token': localStorage.getItem('token') }
+    });  
+  };
+
+  // Transferir cheque
+  transferirCheque(data: any): Observable<any>{
+    return this.http.post(`${base_url}/movimientos/transferir-cheque`, data, {
+      headers: { 'x-token': localStorage.getItem('token') }
+    });  
+  };
+
+
   // Listar externos
   listarMovimientos( direccion : number = 1, columna: string = 'createdAt' ): Observable<any>{
     return this.http.get(`${base_url}/movimientos`, {

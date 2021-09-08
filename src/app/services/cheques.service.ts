@@ -38,6 +38,13 @@ export class ChequesService {
     })  
   }
 
+  // Nuevo cheque desde cartera
+  nuevoChequeDesdeCartera(data: any): Observable<any>{
+    return this.http.post(`${base_url}/cheques/crear`, data, {
+      headers: { 'x-token': localStorage.getItem('token') }
+    })  
+  }
+
   // Actualizar cheque
   actualizarCheque(id: string, data: any): Observable<any>{
     return this.http.put(`${base_url}/cheques/${id}`, data, {

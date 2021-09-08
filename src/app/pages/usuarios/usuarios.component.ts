@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { format } from 'date-fns';
-import { saveAs } from 'file-saver-es'; 
 
 import { UsuariosService } from '../../services/usuarios.service';
 import { AlertService } from '../../services/alert.service';
@@ -96,11 +94,13 @@ export class UsuariosComponent implements OnInit {
   
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
+    this.paginaActual = 1;
     this.filtro.activo = activo;
   }
 
   // Filtrar por Parametro
   filtrarParametro(parametro: string): void{
+    this.paginaActual = 1;
     this.filtro.parametro = parametro;
   }
   

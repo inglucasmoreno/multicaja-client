@@ -4,10 +4,39 @@
         <h1 class="px-2"> Detalles de movimiento </h1>
         <svg (click)="showModalDetalles = !showModalDetalles" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </div>
-    <div class="p-2" *ngIf="this.movimientoSeleccionado">
-        <div class="border bg-gray-100 p-2">
-            <h2> <span class="font-semibold"> Tipo de movimiento: </span> <span> {{ this.movimientoSeleccionado.tipo_movimiento.descripcion }} </span> </h2>
-            <h2> <span class="font-semibold"> Monto: </span> <span> ${{ this.movimientoSeleccionado.monto | moneda }} </span> </h2>
+    <div class="p-2" *ngIf="movimientoSeleccionado">
+        <h1 (click)="showDatosMovimiento = !showDatosMovimiento" class="bg-gray-100 flex items-center justify-between text-sm py-1 px-2 text-gray-800 rounded-t border font-semibold hover:bg-yellow-100 cursor-pointer">
+            <span> Datos de movimiento  </span>
+            <svg *ngIf="!showDatosMovimiento" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            <svg *ngIf="showDatosMovimiento" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+        </h1>
+        <div *ngIf="showDatosMovimiento" class="border p-2 bg-white text-sm">
+            <h2 class="p-1"> <span class="font-semibold"> Fecha: </span> <span> {{ this.movimientoSeleccionado.createdAt | fecha }} </span> </h2>
+            <h2 class="p-1"> <span class="font-semibold"> Tipo de movimiento: </span> <span> {{ this.movimientoSeleccionado.tipo_movimiento.descripcion }} </span> </h2>
+            <h2 class="p-1"> <span class="font-semibold"> Monto: </span> <span> ${{ this.movimientoSeleccionado.monto | moneda }} </span> </h2>
+        </div>
+        <div *ngIf="movimientoSeleccionado && movimientoSeleccionado.cheque !== null" class="mt-2 border border-gray-200 rounded-t">
+            <h1 (click)="showDatosCheque = !showDatosCheque" class="bg-gray-100 py-1 px-2 text-gray-800 hover:bg-yellow-100 border-b cursor-pointer flex items-center justify-between">
+                <span class="font-semibold text-sm"> Datos de cheque </span>
+                <svg *ngIf="!showDatosCheque" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <svg *ngIf="showDatosCheque" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </h1>
+            <div *ngIf="showDatosCheque" class="p-2 text-sm">
+                <div class="lg:flex items-center">
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Fecha de emision: </span> <span> {{ this.mostrarCheque.createdAt | fecha }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Numero de cheque: </span> <span> {{ this.mostrarCheque.nro_cheque }} </span> </p>
+                </div>
+                <div class="lg:flex items-center">
+                    <p *ngIf="mostrarCheque.emisor !== null" class="p-2 lg:w-1/2"> <span class="font-semibold"> Emisor: </span> <span> {{ this.mostrarCheque.emisor }} </span> </p>
+                    <p *ngIf="mostrarCheque.cuit !== null" class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT: </span> <span> {{ this.mostrarCheque.cuit }} </span> </p>
+                </div>
+                <div class="lg:flex items-center">
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ this.mostrarCheque.cliente_descripcion }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Destino: </span> <span> {{ this.mostrarCheque.destino_descripcion }} </span> </p>
+                </div>
+                <p class="p-2"> <span class="font-semibold"> Concepto: </span> <span> {{ this.mostrarCheque.concepto }} </span> </p>
+                <p class="p-2"> <span class="font-semibold"> Importe: </span> <span> ${{ this.mostrarCheque.importe | moneda }} </span> </p>
+            </div>
         </div>
         <div class="bg-white lg:flex mt-2">
             <div class="lg:w-1/2 w-full h-full text-sm">
@@ -15,8 +44,8 @@
                 <div class="p-1">
                     <p class="p-1"> <span class="font-semibold"> Origen: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.origen_descripcion }} </span> </p>
                     <p class="p-1"> <span class="font-semibold"> Saldo impactado: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_origen === 'Interno' ? this.movimientoSeleccionado.origen_saldo.descripcion : 'Externo'}} </span> </p>
-                    <p class="p-1"> <span class="font-semibold"> Saldo anterior: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_origen === 'Interno' ? ('$' + (this.movimientoSeleccionado.origen_monto_anterior | moneda)) : 'Externo' }} </span> </p>
-                    <p class="p-1"> <span class="font-semibold"> Nuevo saldo: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_origen === 'Interno' ? ('$' + (this.movimientoSeleccionado.origen_monto_nuevo | moneda)) : 'Externo' }} </span> </p>
+                    <p class="p-1"> <span class="font-semibold"> Saldo anterior: </span> <span [ngClass]="{ 'text-red-500' : this.movimientoSeleccionado.origen_monto_anterior < 0}" class="text-sm"> {{ this.movimientoSeleccionado.tipo_origen === 'Interno' ? ('$' + (this.movimientoSeleccionado.origen_monto_anterior | moneda)) : 'Externo' }} </span>                        </p>
+                    <p class="p-1"> <span class="font-semibold"> Nuevo saldo: </span> <span [ngClass]="{ 'text-red-500' : this.movimientoSeleccionado.origen_monto_nuevo < 0}" class="text-sm"> {{ this.movimientoSeleccionado.tipo_origen === 'Interno' ? ('$' + (this.movimientoSeleccionado.origen_monto_nuevo | moneda)) : 'Externo' }} </span>                        </p>
                 </div>
             </div>
             <div class="lg:w-1/2 w-full h-full ml-1 text-sm">
@@ -24,8 +53,8 @@
                 <div class="p-1">
                     <p class="p-1"> <span class="font-semibold"> Destino: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.destino_descripcion }} </span> </p>
                     <p class="p-1"> <span class="font-semibold"> Saldo impactado: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_destino === 'Interno' ? this.movimientoSeleccionado.destino_saldo.descripcion : 'Externo'}} </span> </p>
-                    <p class="p-1"> <span class="font-semibold"> Saldo anterior: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_destino === 'Interno' ? ('$' + (this.movimientoSeleccionado.destino_monto_anterior | moneda)) : 'Externo' }} </span> </p>
-                    <p class="p-1"> <span class="font-semibold"> Nuevo saldo: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_destino === 'Interno' ? ('$' + (this.movimientoSeleccionado.destino_monto_nuevo | moneda)) : 'Externo' }} </span> </p>
+                    <p class="p-1"> <span class="font-semibold"> Saldo anterior: </span> <span [ngClass]="{ 'text-red-500' : this.movimientoSeleccionado.destino_monto_anterior < 0}" class="text-sm"> {{ this.movimientoSeleccionado.tipo_destino === 'Interno' ? ('$' + (this.movimientoSeleccionado.destino_monto_anterior | moneda)) : 'Externo' }} </span>                        </p>
+                    <p class="p-1"> <span class="font-semibold"> Nuevo saldo: </span> <span [ngClass]="{ 'text-red-500' : this.movimientoSeleccionado.destino_monto_nuevo < 0}" class="text-sm"> {{ this.movimientoSeleccionado.tipo_destino === 'Interno' ? ('$' + (this.movimientoSeleccionado.destino_monto_nuevo | moneda)) : 'Externo' }} </span>                        </p>
                 </div>
             </div>
         </div>

@@ -1,3 +1,192 @@
+<!-- Modal: Datos de cheque -->
+<app-modal [showModal]="showNuevoCheque">
+    <div *ngIf="empresa">
+        <div class="flex items-center justify-between bg-gray-800 py-2 px-3 rounded-t">
+            <h1 class="text-white font-semibold text-md"> Recibir cheque </h1>
+            <svg width="20" height="20" (click)="showNuevoCheque = false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white cursor-pointer pr-1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <div class="p-2">
+            <div>
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm">
+                            <span class="text-red-500"> * </span> Nro. de cheque
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <input [(ngModel)]="nuevoCheque.nro_cheque" placeholder="Ej. 7ZEPN6GMWLQ2Q0M" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm">
+                            <span class="text-red-500"> * </span> Concepto
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <input [(ngModel)]="nuevoCheque.concepto" placeholder="Ej. Pago por servicio" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1">
+                        <div class="font-semibold text-gray-600 text-sm">
+                            <span class="text-red-500"> * </span> Cliente
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <select [(ngModel)]="nuevoCheque.cliente" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
+                                <option value=""> Seleccionar cliente </option>
+                                <option *ngFor="let externo of externos" [value]="externo._id"> {{ externo.descripcion }} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                        <div class="font-semibold text-gray-600 text-sm">
+                            <span class="text-red-500"> * </span> Destino
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <div class="border border-gray-200 bg-gray-100 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                                {{ empresa.razon_social }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1">
+                        <div class="font-semibold text-gray-600 text-sm">
+                            Emisor
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <input [(ngModel)]="nuevoCheque.emisor" placeholder="Ej. Moreno Lucas Omar" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                        <div class="font-semibold text-gray-600 text-sm">
+                            CUIT (Emisor)
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <input [(ngModel)]="nuevoCheque.cuit" placeholder="Ej. 22340603981" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1">
+                        <div class="font-semibold text-gray-600 text-sm">
+                            <span class="text-red-500"> * </span> Importe
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <input [(ngModel)]="nuevoCheque.importe" placeholder="Ej. 15000" type="number" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
+                </div>
+            </div>
+        </div>
+        <div class="lg:flex lg:items-center mt-6 px-3 pb-5">
+            <button (click)="crearCheque()" class="w-full lg:w-1/2 focus:outline-none bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
+            <button (click)="showNuevoCheque = false" class="w-full lg:w-1/2 focus:outline-none bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
+        </div>
+    </div>
+</app-modal>
+
+<!-- Modal: Transferir cheque -->
+<app-modal-small [showModal]="showModalTransferirCheque">
+    <div class="bg-white rounded">
+        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
+            <h1 class="py-1 px-2"> Transfiriendo cheque </h1>
+            <svg (click)="regresarDetalles()" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <div class="p-2">
+            <div class="w-full">
+                <div class="font-semibold text-gray-800 text-sm">
+                    <div *ngIf="chequeSeleccionado" class="p-2 border bg-gray-100">
+                        <h1 class="text-sm font-semibold text-gray-800"> Nro de cheque: <span class="font-normal"> {{ chequeSeleccionado.nro_cheque }} </span> </h1>
+                        <h1 class="text-sm font-semibold text-gray-800"> Importe: <span class="font-normal"> ${{ chequeSeleccionado.importe | moneda }} </span> </h1>
+                    </div>
+                </div>
+                <div class="font-semibold text-gray-800 text-sm mt-3">
+                    Información de destino
+                </div>
+                <div class="bg-white flex mt-2">
+                    <select [(ngModel)]="tipoDestino" (change)="actualizarDestino(txtTipo.value)" #txtTipo class="border border-gray-200 rounded p-2 w-full shadow text-sm focus:outline-none">
+                        <option value="Externo"> Externo </option>
+                        <option value="Interno"> Interno </option>
+                    </select>
+                </div>
+                <div class="bg-white flex mt-2">
+                    <select [(ngModel)]="destino" #txtDestino class="border border-gray-200 rounded p-2 w-full shadow text-sm focus:outline-none">
+                        <option value=""> Seleccionar destino </option>
+                        <option *ngFor="let destino of destinos" [value]="destino._id"> {{ tipoDestino === 'Externo' ? destino.descripcion : destino.razon_social }} </option>
+                    </select>
+                </div>
+                <div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-200 rounded shadow">
+                        <input [(ngModel)]="concepto" placeholder="Nuevo concepto" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm">
+                    </div>
+                </div>
+            </div>
+            <button (click)="transferirCheque(txtDestino)" class="border p-1 w-full mt-3 rounded focus:outline-none hover:text-green-700 bg-gray-100 font-semibold"> Transferir cheque </button>
+        </div>
+    </div>
+</app-modal-small>
+
+<!-- Modal: Cobrar cheque -->
+<app-modal-small [showModal]="showModalCobrarCheque">
+    <div class="bg-white rounded">
+        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
+            <h1 class="py-1 px-2"> Cobrando cheque </h1>
+            <svg (click)="regresarDetalles()" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <div *ngIf="chequeSeleccionado" class="p-2 border bg-gray-100">
+            <h1 class="text-sm font-semibold text-gray-800"> Nro de cheque: <span class="font-normal"> {{ chequeSeleccionado.nro_cheque }} </span> </h1>
+            <h1 class="text-sm font-semibold text-gray-800"> Importe: <span class="font-normal"> ${{ chequeSeleccionado.importe | moneda }} </span> </h1>
+        </div>
+        <div class="p-2">
+            <div class="w-full">
+                <div class="bg-white flex">
+                    <select [(ngModel)]="selectorSaldo" #txtSaldo class="border border-gray-200 rounded p-2 w-full shadow text-sm focus:outline-none">
+                        <option value=""> Seleccionar saldo a impactar </option>
+                        <option *ngFor="let saldo of saldos" [value]="saldo._id"> {{ saldo.descripcion }} </option>
+                    </select>
+                </div>
+            </div>
+            <button (click)="cobrarCheque()" class="border p-1 w-full mt-2 rounded focus:outline-none hover:text-green-700 bg-gray-100 font-semibold"> Cobrar cheque </button>
+        </div>
+    </div>
+</app-modal-small>
+
+<!-- Modal: Detalles de cheque -->
+<app-modal [showModal]="showModalDetalles">
+    <div class="bg-white rounded">
+        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
+            <h1 class="py-1 px-2"> Detalles de cheque </h1>
+            <svg (click)="showModalDetalles = false" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <div *ngIf="chequeSeleccionado" class="p-2">
+            <div class="bg-white p-2 text-sm">
+                <p class="py-2 border-b border-t border-r border-l flex items-center justify-between px-2"> <span class="font-semibold"> Fecha de emisión </span> <span class="text-sm"> {{ chequeSeleccionado.createdAt | fecha }} </span> </p>
+                <p [ngClass]="{'bg-blue-100':chequeSeleccionado.estado === 'Cobrado','bg-yellow-100':chequeSeleccionado.estado === 'Transferido'}" *ngIf="!chequeSeleccionado.activo" class="py-2 border-b border-r border-l flex items-center justify-between px-2 bg-gray-100">
+                    <span class="font-semibold"> Fecha de {{ chequeSeleccionado.estado === 'Transferido' ? 'transferencia' : 'cobro' }} </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.updatedAt | fecha }} </span>
+                </p>
+                <p *ngIf="chequeSeleccionado.estado === 'Transferido'" class="py-2 border-b border-r border-l flex items-center justify-between px-2 bg-yellow-100">
+                    <span class="font-semibold"> Transferido a </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.transferencia_destino_descripcion }} </span>
+                </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Número de cheque </span> <span class="text-xs"> {{ chequeSeleccionado.nro_cheque }} </span> </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Cliente </span> <span class="text-xs"> {{ chequeSeleccionado.cliente_descripcion }} </span> </p>
+                <p *ngIf="chequeSeleccionado.emisor" class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Emisor </span> <span class="text-xs"> {{ chequeSeleccionado.emisor }} </span> </p>
+                <p *ngIf="chequeSeleccionado.cuit" class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> CUIT de emisor </span> <span class="text-xs"> {{ chequeSeleccionado.cuit }} </span> </p>
+                <p *ngIf="chequeSeleccionado.estado === 'Activo'" class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> En poder de </span> <span class="text-xs"> {{ chequeSeleccionado.destino_descripcion }} </span> </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Concepto </span> <span class="text-xs"> {{ chequeSeleccionado.concepto }} </span> </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Estado </span> <span [ngClass]="{'bg-green-100 border-green-200' : chequeSeleccionado.estado === 'Activo', 'bg-blue-100 border-blue-200' : chequeSeleccionado.estado === 'Cobrado', 'bg-yellow-100 border-yellow-200' : chequeSeleccionado.estado === 'Transferido'}"
+                        class="text-sm px-1 rounded border font-semibold"> {{ chequeSeleccionado.estado }} </span> </p>
+                <p class="py-2 border-b border-l border-r bg-gray-100 flex items-center justify-between px-2"> <span class="font-semibold"> Importe </span> <span class="font-semibold"> ${{ chequeSeleccionado.importe | moneda }} </span> </p>
+            </div>
+            <div *ngIf="chequeSeleccionado.activo" class="flex items-center">
+                <button (click)="modalCobrar()" class="w-1/2 p-1 focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100"> Cobrar </button>
+                <button (click)="modalTransferir()" class="w-1/2 p-1 focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100 ml-2"> Transferir </button>
+            </div>
+        </div>
+    </div>
+</app-modal>
+
+<!-- Tarjeta principal -->
 <app-tarjeta-lista>
     <div class="container mx-auto px-4 sm:px-8">
         <div class="py-4">
@@ -36,9 +225,10 @@
                         />
                     </div>
                 </div>
-                <!-- <div class="flex items-center">
-                    <app-boton-generico> Nuevo tipo </app-boton-generico>
-                </div> -->
+                <div class="flex items-center">
+                    <app-boton-generico> Emitir cheque </app-boton-generico>
+                    <app-boton-generico (click)="modalNuevoCheque()"> Recibir cheque </app-boton-generico>
+                </div>
             </div>
             <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                 <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
@@ -117,7 +307,9 @@
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ !cheque.activo ? (cheque.updatedAt | fecha) : 'En cartera' }}
+                                        <span [ngClass]="{'bg-green-100 border-green-200':cheque.estado === 'Activo','bg-blue-100 border-blue-200':cheque.estado === 'Cobrado','bg-yellow-100 border-yellow-200':cheque.estado === 'Transferido'}" class="p-1 border rounded">
+                                            {{ !cheque.activo ? (cheque.updatedAt | fecha) : 'En cartera' }}
+                                        </span>
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
@@ -135,10 +327,10 @@
                                         ${{ cheque.importe | moneda }}
                                     </p>
                                 </td>
-                                <td *ngIf="cheque.activo" class="px-5 py-2 border-b border-gray-200 text-xs text-center">
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                                     <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
-                                        <app-boton-tabla title="Dar salida">
-                                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <app-boton-tabla (click)="modalDetalles(cheque)" title="Ver cheque">
+                                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </app-boton-tabla>
                                     </p>
                                 </td>

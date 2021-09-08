@@ -9,12 +9,9 @@ import { environment } from '../../../environments/environment';
   ]
 })
 export class HomeComponent implements OnInit {
-
-  public dirManual = environment.url_manual;
   
   constructor(private dataService: DataService) { }
-
-
+  
   ngOnInit(): void {
     this.dataService.ubicacionActual = 'Dashboard - Home';
   }
