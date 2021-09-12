@@ -17,6 +17,10 @@ import { SaldosComponent } from './empresas/saldos.component';
 import { MovimientosComponent } from './movimientos/movimientos.component';
 import { TipoMovimientosComponent } from './tipo-movimientos/tipo-movimientos.component';
 import { CarteraChequesComponent } from './cartera-cheques/cartera-cheques.component';
+import { ChequesEmitidosComponent } from './cheques-emitidos/cheques-emitidos.component';
+import { ReportesComponent } from './reportes/reportes.component';
+import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-emitidos.component';
+import { ReportesMovimientosComponent } from './reportes/reportes-movimientos.component';
 
 const routes: Routes = [
     {
@@ -40,6 +44,7 @@ const routes: Routes = [
 
             // Cheques
             { path: 'cheques/cartera/:id', canActivate: [AdminGuard], component: CarteraChequesComponent },
+            { path: 'cheques/emitidos/:id', canActivate: [AdminGuard], component: ChequesEmitidosComponent },
                 
             // Externos
             { path: 'externos', canActivate: [AdminGuard], component: ExternosComponent },
@@ -49,6 +54,11 @@ const routes: Routes = [
 
             // Tipos de movimientos
             { path: 'tipo-movimientos', canActivate: [AdminGuard], component:  TipoMovimientosComponent},
+
+            // Reportes
+            { path: 'reportes', canActivate: [AdminGuard], component:  ReportesComponent},
+            { path: 'reportes/movimientos', canActivate: [AdminGuard], component:  ReportesMovimientosComponent},
+            { path: 'reportes/cheques-emitidos', canActivate: [AdminGuard], component:  ReportesChequesEmitidosComponent},
 
         ]
     }

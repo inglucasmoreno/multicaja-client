@@ -1,7 +1,7 @@
 <app-modal [showModal]="showModal">
     <div class="bg-white p-4">
         <h1 *ngIf="!flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Creando un nuevo externo </h1>
-        <h1 *ngIf="flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Editando externo </h1>
+        <h1 *ngIf="flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Actualizando externo </h1>
         <form [formGroup]="externoForm" class="mt-2">
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
@@ -52,7 +52,7 @@
         </form>
         <div class="lg:flex lg:items-center mt-6">
             <button *ngIf="!flagEditando" (click)="nuevoExterno()" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
-            <button *ngIf="flagEditando" (click)="editarExterno(idExterno)" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Editar </button>
+            <button *ngIf="flagEditando" (click)="editarExterno(idExterno)" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Actualizar </button>
             <button (click)="showModal= !showModal" class="w-full lg:w-1/2 bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
         </div>
     </div>
@@ -164,7 +164,7 @@
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ externo.dni_cuit }}
+                                        {{ externo.dni_cuit === '' ? 'Sin especificar' : externo.dni_cuit}}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
@@ -177,7 +177,7 @@
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                                     <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
-                                        <app-boton-tabla (click)="abrirModal('editar', externo._id)" title="Editar externo">
+                                        <app-boton-tabla (click)="abrirModal('editar', externo._id)" title="Actualizar externo">
                                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                                         </app-boton-tabla>
                                     </p>

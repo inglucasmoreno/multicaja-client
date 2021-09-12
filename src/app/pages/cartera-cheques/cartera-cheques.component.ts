@@ -46,6 +46,7 @@ export class CarteraChequesComponent implements OnInit {
 
     fecha_transferencia: format(Date.now(), 'yyyy-MM-dd'),
     fecha_cobro: format(Date.now(), 'yyyy-MM-dd'),
+    fecha_cobrado: format(Date.now(), 'yyyy-MM-dd'),
 
     origen: "",
     origen_descripcion: "",
@@ -72,6 +73,7 @@ export class CarteraChequesComponent implements OnInit {
   // DATOS - CHEQUE
   public nuevoCheque = {
     fecha_emision: format(Date.now(), 'yyyy-MM-dd'),
+    fecha_cobro: '',
     banco: '',
     nro_cheque: '',
     concepto: '',
@@ -90,7 +92,7 @@ export class CarteraChequesComponent implements OnInit {
   
   // FILTRADO
   public filtro = {
-    activo: 'true',
+    estado: 'Activo',
     parametro: ''
   }
   
@@ -101,8 +103,8 @@ export class CarteraChequesComponent implements OnInit {
 
   // ORDENAR
   public ordenar = {
-    direccion: -1,  // Asc (1) | Desc (-1)
-    columna: 'createdAt'
+    direccion: 1,  // Asc (1) | Desc (-1)
+    columna: 'fecha_cobro'
   }
 
   constructor(private dataService: DataService,
@@ -137,13 +139,13 @@ export class CarteraChequesComponent implements OnInit {
         this.data.origen_saldo = empresa.saldos_especiales.cheques; // Saldo de cheques
         
         // LISTADO DE CHEQUES
-        this.chequesService.listarCheques(this.id, this.ordenar.direccion, this.ordenar.columna, this.filtro.activo).subscribe(({ cheques }) => {
+        this.chequesService.listarCheques(this.id, this.ordenar.direccion, this.ordenar.columna, '', this.filtro.estado).subscribe(({ cheques }) => {
           this.cheques = cheques;
           this.calcularTotal();
           
           // LISTADO DE SALDOS         
           this.empresasService.listarSaldos(1, 'descripcion', this.id).subscribe(({ saldos }) => {            
-            this.saldos = saldos;
+            this.saldos = saldos.filter(saldo => (saldo._id !== this.empresa.saldos_especiales.cheques));
 
             // LISTADO DE EXTERNOS
             this.externosService.listarExternos(1, 'descripcion').subscribe(({ externos })=>{    
@@ -176,19 +178,30 @@ export class CarteraChequesComponent implements OnInit {
   
   };
 
+  // Actualizar informacion de externo
+  actualizarExterno(id: string): void {
+    if(id !== ''){
+      this.alertService.loading();
+      this.externosService.getExterno(id).subscribe(({externo}) => {
+        this.nuevoCheque.emisor = externo.descripcion;
+        this.nuevoCheque.cuit = externo.dni_cuit; 
+        this.alertService.close();
+      });
+    }
+  }
 
   // Crear cheque
   crearCheque(): void {
 
-    const { nro_cheque, concepto, cliente, importe, fecha_emision, banco } = this.nuevoCheque;
+    const { nro_cheque, concepto, cliente, importe, fecha_emision } = this.nuevoCheque;
 
     // Verificacion
     const verificacion = nro_cheque.trim() === '' ||
                          fecha_emision.trim() === '' ||
-                         banco.trim() === '' ||
                          concepto.trim() === '' ||
                          cliente.trim() === '' ||
-                         importe === null
+                         importe === null ||
+                         importe < 0
                          
 
     if(verificacion) return this.alertService.formularioInvalido();
@@ -199,6 +212,7 @@ export class CarteraChequesComponent implements OnInit {
 
     // COMPLETANDO DATOS DE CHEQUE
     // this.nuevoCheque.cliente_descripcion -> BACK-END
+    this.nuevoCheque.fecha_cobro = this.nuevoCheque.fecha_cobro === '' ? '1970-01-01' : this.nuevoCheque.fecha_cobro;
     this.nuevoCheque.destino = this.empresa._id;
     this.nuevoCheque.destino_descripcion = this.empresa.razon_social;
 
@@ -213,8 +227,8 @@ export class CarteraChequesComponent implements OnInit {
     // destino_monto_nuevo: -> DESDE BACK-END
     this.data.tipo_origen = 'Externo';
     this.data.origen = this.nuevoCheque.cliente;
-    this.data.origen_saldo = null;
-    this.data.origen_saldo_descripcion = null;
+    this.data.origen_saldo = '';
+    this.data.origen_saldo_descripcion = '';
     this.data.tipo_destino = "Interno";
     this.data.destino = this.nuevoCheque.destino;
     this.data.destino_descripcion = this.nuevoCheque.destino_descripcion;
@@ -226,8 +240,8 @@ export class CarteraChequesComponent implements OnInit {
     data.movimiento = this.data;
     
     this.alertService.loading();
-    this.chequesService.nuevoChequeDesdeCartera(data).subscribe((resp)=>{
-      console.log(resp);
+    this.chequesService.nuevoChequeDesdeCartera(data).subscribe(()=>{
+      this.reiniciarData();
       this.listarCheques();
       this.showNuevoCheque = false;
     },({error})=>{
@@ -268,21 +282,10 @@ export class CarteraChequesComponent implements OnInit {
     });  
   }
 
-  // Listar saldos
-  listarSaldos(): void {
-    this.alertService.loading();
-    this.empresasService.listarSaldos(1, 'descripcion', this.id).subscribe(({ saldos }) => {
-      this.saldos = saldos;
-      this.alertService.close();
-    },({error})=>{
-      this.alertService.errorApi(error);
-    });    
-  };
-
   // Listar cheques
   listarCheques(): void {
     this.alertService.loading();
-    this.chequesService.listarCheques(this.id, this.ordenar.direccion, this.ordenar.columna, this.filtro.activo).subscribe(({ cheques }) => {
+    this.chequesService.listarCheques(this.id, this.ordenar.direccion, this.ordenar.columna, '', this.filtro.estado).subscribe(({ cheques }) => {
       this.cheques = cheques;
       this.calcularTotal();
       this.alertService.close();
@@ -310,18 +313,24 @@ export class CarteraChequesComponent implements OnInit {
         this.alertService.loading();
         
         this.data.tipo_origen = 'Interno',
+        this.data.origen = this.empresa._id;
+        this.data.origen_descripcion = this.empresa.razon_social;
+        this.data.origen_saldo_descripcion = 'CHEQUES';
+        this.data.origen_saldo = this.empresa.saldos_especiales.cheques;
+
         this.data.tipo_destino = 'Interno',
+        this.data.destino = this.empresa._id,
         this.data.destino_saldo = this.selectorSaldo;
-        this.data.destino = this.data.origen,
-        this.data.destino_descripcion = this.data.origen_descripcion,
+        this.data.destino_descripcion = this.empresa.razon_social,
+        
         this.data.tipo_movimiento = environment.tipo_cobro_cheque;
     
         this.movimientosService.cobrarCheque(this.data).subscribe( () => {
-        
+    
           this.listarCheques();
           this.reiniciarData();
           this.showModalCobrarCheque = false;
-        
+                    
         },({ error })=>{
         
           this.alertService.errorApi(error);
@@ -332,7 +341,7 @@ export class CarteraChequesComponent implements OnInit {
   
   }
 
-  // Transferir cheque
+  // Endosar - Transferir cheque
   transferirCheque(destino: any): void {
 
     // Verificacion
@@ -345,8 +354,13 @@ export class CarteraChequesComponent implements OnInit {
         this.alertService.loading();
     
         // Se completa la data de envio - TRANSFERENCIA
+        this.data.tipo_origen = 'Interno',
+        this.data.origen = this.empresa._id;
+        this.data.origen_descripcion = this.empresa.razon_social;
+        this.data.origen_saldo_descripcion = 'CHEQUES';
+        this.data.origen_saldo = this.empresa.saldos_especiales.cheques;
+
         this.data.concepto = this.concepto;
-        this.data.tipo_origen = 'Interno';
         this.data.tipo_destino = this.tipoDestino;
         this.data.destino = this.destino;
         this.data.tipo_movimiento = environment.tipo_transferencia_cheque;   
@@ -366,12 +380,6 @@ export class CarteraChequesComponent implements OnInit {
   
   }
 
-  // Actualizar saldo de impacto
-  // actualizarSaldoImpacto(saldo: any): void {
-  //   this.data.destino_saldo = saldo.value;
-  //   this.data.destino_saldo_descripcion = saldo[saldo.selectedIndex].text;
-  // }
-
   // Regresar a detalles
   regresarDetalles(): void {
     this.showModalDetalles = true;
@@ -384,11 +392,12 @@ export class CarteraChequesComponent implements OnInit {
     
     // Se selecciona el cheque
     this.chequeSeleccionado= cheque;
+
     this.data.cheque = cheque._id;
     this.data.monto = cheque.importe;
     
     this.showModalDetalles = true;
-  
+    
   }
 
   // Modal: Abrir nuevo cheque
@@ -399,6 +408,7 @@ export class CarteraChequesComponent implements OnInit {
   
   // Modal: Cobrar cheques
   modalCobrar(): void {
+    this.data.fecha_cobrado = format(Date.now(), 'yyyy-MM-dd'),
     this.selectorSaldo = '';
     this.data.destino_saldo_descripcion = '';
     this.data.destino_saldo = '';
@@ -421,10 +431,10 @@ export class CarteraChequesComponent implements OnInit {
  
   }
 
-  // Filtrar Activo/Inactivo
-  filtrarActivos(activo: any): void{
+  // Filtrar por estado
+  filtrarPorEstado(estado: any): void{
     this.paginaActual = 1;
-    this.filtro.activo = activo;
+    this.filtro.estado = estado;
     this.listarCheques();
   }
     
@@ -447,6 +457,7 @@ export class CarteraChequesComponent implements OnInit {
     this.data = {
       cheque: '',
       concepto: '',
+      fecha_cobrado: format(Date.now(), 'yyyy-MM-dd'),
       fecha_transferencia: format(Date.now(), 'yyyy-MM-dd'),
       fecha_cobro: format(Date.now(), 'yyyy-MM-dd'),
       origen: "", 
@@ -467,6 +478,7 @@ export class CarteraChequesComponent implements OnInit {
     // DATOS - CHEQUE
     this.nuevoCheque = {
       fecha_emision: format(Date.now(), 'yyyy-MM-dd'),
+      fecha_cobro: '',
       banco: '',
       nro_cheque: '',
       concepto: '',

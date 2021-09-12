@@ -24,11 +24,15 @@
             <div *ngIf="showDatosCheque" class="p-2 text-sm">
                 <div class="lg:flex items-center">
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Fecha de emision: </span> <span> {{ this.mostrarCheque.fecha_emision | fecha }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Fecha de cobro: </span> <span> {{ this.mostrarCheque.fecha_cobro | fecha }} </span> </p>
+                </div>
+                <div class="lg:flex items-center">
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Banco: </span> <span> {{ this.mostrarCheque.banco === '' ? 'Sin especificar' : this.mostrarCheque.banco }} </span> </p>
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Numero de cheque: </span> <span> {{ this.mostrarCheque.nro_cheque }} </span> </p>
                 </div>
                 <div class="lg:flex items-center">
-                    <p *ngIf="mostrarCheque.emisor !== null && mostrarCheque.emisor !== ''" class="p-2 lg:w-1/2"> <span class="font-semibold"> Emisor: </span> <span> {{ this.mostrarCheque.emisor }} </span> </p>
-                    <p *ngIf="mostrarCheque.cuit !== null &&  mostrarCheque.cuit !== ''" class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT: </span> <span> {{ this.mostrarCheque.cuit }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Emisor: </span> <span> {{ this.mostrarCheque.emisor === '' ? 'Sin especificar' : this.mostrarCheque.emisor }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT (Emisor): </span> <span> {{ this.mostrarCheque.cuit === '' ? 'Sin especificar' : this.mostrarCheque.cuit }} </span> </p>
                 </div>
                 <div class="lg:flex items-center">
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ this.mostrarCheque.cliente_descripcion }} </span> </p>
@@ -172,7 +176,7 @@
             </div>
             <div class="flex mt-2">
                 <div class="w-1/2 h-full mr-2">
-                    <h1 class="bg-orange-700 text-white p-1 rounded font-semibold text-center mt-1 text-sm "> Datos de destino </h1>
+                    <h1 class="bg-orange-700 text-white p-1 rounded font-semibold text-center mt-1 text-sm "> Datos de origen </h1>
                     <div class="flex flex-col lg:flex-row">
                         <div class="w-full flex-1">
                             <div class="font-semibold mt-3 text-gray-600 text-sm">
@@ -365,12 +369,12 @@
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap w-max">
-                                        {{ movimiento.origen_descripcion }} <span *ngIf="movimiento.origen_saldo_descripcion != null" class="bg-orange-100 border border-orange-200 text-orange-800 ml-1 font-semibold rounded px-1"> {{ movimiento.origen_saldo_descripcion }} </span>
+                                        {{ movimiento.origen_descripcion }} <span class="bg-orange-100 border border-orange-200 text-orange-800 ml-1 font-semibold rounded px-1"> {{ (movimiento.origen_saldo_descripcion !== null && movimiento.origen_saldo_descripcion !== '') ? movimiento.origen_saldo_descripcion : 'EXTERNO'  }} </span>
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap w-max">
-                                        {{ movimiento.destino_descripcion }} <span *ngIf="movimiento.destino_saldo_descripcion != null" class="bg-green-100 border border-green-200 text-green-800 ml-1 font-semibold rounded px-1"> {{ movimiento.destino_saldo_descripcion }} </span>
+                                        {{ movimiento.destino_descripcion }} <span class="bg-green-100 border border-green-200 text-green-800 ml-1 font-semibold rounded px-1"> {{ (movimiento.destino_saldo_descripcion !== null && movimiento.destino_saldo_descripcion !== '') ? movimiento.destino_saldo_descripcion : 'EXTERNO'  }} </span>
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-sm">

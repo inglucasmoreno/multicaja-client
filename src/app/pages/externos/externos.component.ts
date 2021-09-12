@@ -87,15 +87,7 @@ export class ExternosComponent implements OnInit {
   
   this.alertService.loading();  // Comienzo de loading
   
-  const data = {
-    descripcion: this.externoForm.value.descripcion,
-    dni_cuit: this.externoForm.value.dni_cuit.trim() == '' ? 'SIN IDENTIFICACION' : this.externoForm.value.dni_cuit,
-    telefono: this.externoForm.value.telefono.trim() == '' ? 'SIN TELEFONO' : this.externoForm.value.telefono,
-    direccion: this.externoForm.value.direccion.trim() == '' ? 'SIN DIRECCION' : this.externoForm.value.direccion,
-    activo: this.externoForm.value.activo
-  }
-
-  this.externosService.nuevoExterno(data).subscribe(() => {
+  this.externosService.nuevoExterno(this.externoForm.value).subscribe(() => {
     this.listarExternos();
     this.reiniciarFormulario();
     this.showModal = false;
@@ -134,18 +126,10 @@ export class ExternosComponent implements OnInit {
       this.alertService.formularioInvalido();
       return;
   }
-
-  const data = {
-    descripcion: this.externoForm.value.descripcion,
-    dni_cuit: this.externoForm.value.dni_cuit.trim() == '' ? 'SIN IDENTIFICACION' : this.externoForm.value.dni_cuit,
-    telefono: this.externoForm.value.telefono.trim() == '' ? 'SIN TELEFONO' : this.externoForm.value.telefono,
-    direccion: this.externoForm.value.direccion.trim() == '' ? 'SIN DIRECCION' : this.externoForm.value.direccion,
-    activo: this.externoForm.value.activo
-  }
   
   this.alertService.loading();  // Comienzo de loading
   
-  this.externosService.actualizarExterno(id, data).subscribe(() => {
+  this.externosService.actualizarExterno(id, this.externoForm.value).subscribe(() => {
     this.listarExternos();
     this.reiniciarFormulario();
     this.showModal = false;

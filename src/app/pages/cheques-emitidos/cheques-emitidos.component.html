@@ -1,8 +1,71 @@
+<!-- Modal: Cobrar cheque -->
+<app-modal-small [showModal]="showModalCobrarCheque">
+    <div class="bg-white rounded">
+        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
+            <h1 class="py-1 px-2"> Cheque cobrado </h1>
+            <svg (click)="regresarDetalles()" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <div *ngIf="chequeSeleccionado" class="p-2">
+            <div class="p-2 border bg-gray-100">
+                <h1 class="text-sm font-semibold text-gray-800 p-1"> Nro de cheque: <span class="font-normal text-sm"> {{ chequeSeleccionado.nro_cheque }} </span> </h1>
+                <h1 class="text-sm font-semibold text-gray-800 p-1"> Saldo impactado: <span class="font-normal text-xs"> {{ chequeSeleccionado.banco }} </span> </h1>
+                <h1 class="text-sm font-semibold text-gray-800 p-1"> Destino: <span class="font-normal text-xs"> {{ chequeSeleccionado.destino_descripcion }} </span> </h1>
+                <h1 class="text-sm font-semibold text-gray-800 p-1"> Importe: <span class="font-normal"> ${{ chequeSeleccionado.importe | moneda }} </span> </h1>
+            </div>
+        </div>
+        <div class="px-2 mt-1">
+            <div class="font-semibold text-gray-800 text-sm">
+                Fue cobrado el
+            </div>
+            <div>
+                <div class="bg-whsite my-2 p-1 flex border border-gray-200 rounded shadow">
+                    <input type="date" [(ngModel)]="nuevoCheque.fecha_cobrado" class="p-1 px-1 appearance-none outline-none w-full text-gray-800 text-sm">
+                </div>
+            </div>
+            <button (click)="chequeCobrado()" class="border p-1 w-full mt-4 rounded focus:outline-none hover:text-green-700 mb-2 bg-gray-100 font-semibold"> Cheque cobrado </button>
+        </div>
+    </div>
+</app-modal-small>
+
+<!-- Modal: Detalles de cheque -->
+<app-modal [showModal]="showModalDetalles">
+    <div class="bg-white rounded">
+        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
+            <h1 class="py-1 px-2"> Detalles de cheque </h1>
+            <svg (click)="showModalDetalles = false" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+        <div *ngIf="chequeSeleccionado" class="p-2">
+            <div class="bg-white p-2 text-sm">
+                <!-- <p class="py-2 border-b border-t border-r border-l flex items-center justify-between px-2 bg-gray-100"> <span class="font-semibold"> Recepcion en sistema </span> <span class="text-sm"> {{ chequeSeleccionado.createdAt | fecha}} </span> </p> -->
+                <p class="py-2 border-b border-r border-t border-l flex items-center justify-between px-2"> <span class="font-semibold"> Fecha de emisión </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_emision | fecha}} </span> </p>
+                <p class="py-2 border-b border-r border-l flex items-center justify-between px-2"> <span class="font-semibold"> Fecha de cobro </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_cobro | fecha }} </span></p>
+                <p *ngIf="chequeSeleccionado.activo === false" class="py-2 border-b border-r border-l flex items-center justify-between px-2 bg-blue-100"> <span class="font-semibold"> Cobrado el </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_cobrado | fecha }} </span></p>
+                <p class="py-2 border-b border-r border-l flex items-center justify-between px-2"> <span class="font-semibold"> Banco </span> <span class="text-xs"> {{ chequeSeleccionado.banco !== '' ? chequeSeleccionado.banco : 'Sin especificar'}} </span> </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Número de cheque </span> <span class="text-xs"> {{ chequeSeleccionado.nro_cheque }} </span> </p>
+                <p *ngIf="chequeSeleccionado.estado === 'Cobrado'" class="py-2 border-b border-l border-r flex items-center justify-between px-2 bg-blue-100"> <span class="font-semibold"> Ultimo propietario </span> <span class="text-xs"> {{ chequeSeleccionado.destino_descripcion }} </span> </p>
+                <p [ngClass]="{'bg-blue-100' : chequeSeleccionado.activo === false}" class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Destino </span> <span class="text-xs"> {{ chequeSeleccionado.destino_descripcion }} </span> </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Cliente </span> <span class="text-xs"> {{ chequeSeleccionado.cliente_descripcion }} </span> </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Emisor </span> <span class="text-xs"> {{ chequeSeleccionado.emisor !== '' ? chequeSeleccionado.emisor : 'Sin especificar' }} </span> </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> CUIT de emisor </span> <span class="text-xs"> {{ chequeSeleccionado.cuit !== '' ? chequeSeleccionado.cuit : 'Sin especificar' }} </span> </p>
+                <p *ngIf="chequeSeleccionado.estado === 'Activo'" class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> En poder de </span> <span class="text-xs"> {{ chequeSeleccionado.destino_descripcion }} </span> </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Concepto </span> <span class="text-xs"> {{ chequeSeleccionado.concepto }} </span> </p>
+                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Estado </span> <span [ngClass]="{'bg-yellow-100 border-yellow-200' : (chequeSeleccionado.estado === 'Emitido' && chequeSeleccionado.activo === true), 'bg-blue-100 border-blue-200' : (chequeSeleccionado.estado === 'Emitido' && chequeSeleccionado.activo === false)}"
+                        class="text-sm px-1 rounded border font-semibold"> {{ chequeSeleccionado.activo === true ? chequeSeleccionado.estado : 'Emitido y cobrado' }} </span> </p>
+                <p class="py-2 border-b border-l border-r bg-gray-100 flex items-center justify-between px-2"> <span class="font-semibold"> Importe </span> <span class="font-semibold"> ${{ chequeSeleccionado.importe | moneda }} </span> </p>
+            </div>
+            <div *ngIf="chequeSeleccionado.activo" class="flex items-center">
+                <button (click)="modalCobrarCheque()" class="p-2 w-full focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100"> El cheque fue cobrado </button>
+            </div>
+        </div>
+    </div>
+</app-modal>
+
+
 <!-- Modal: Nuevo cheque -->
 <app-modal [showModal]="showNuevoCheque">
     <div *ngIf="empresa">
         <div class="flex items-center justify-between bg-gray-800 py-2 px-3 rounded-t">
-            <h1 class="text-white font-semibold text-md"> Recibiendo cheque de terceros </h1>
+            <h1 class="text-white font-semibold text-md"> Emitiendo nuevo cheque </h1>
             <svg width="20" height="20" (click)="showNuevoCheque = false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white cursor-pointer pr-1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
         <div class="p-2 w-11/12 lg:w-full">
@@ -49,21 +112,17 @@
                             <span class="text-red-500"> * </span> Cliente
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select (change)="actualizarExterno(txtExterno.value)" #txtExterno [(ngModel)]="nuevoCheque.cliente" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
-                                <option value=""> Seleccionar cliente </option>
-                                <option *ngFor="let externo of externos" [value]="externo._id"> {{ externo.descripcion }} </option>
-                            </select>
+                            <div class="border border-gray-200 bg-gray-100 rounded px-2 py-1 w-full shadow text-sm focus:outline-none"> {{ nuevoCheque.emisor }} </div>
                         </div>
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                        <div class="font-semibold text-gray-600 text-sm">
-                            <span class="text-red-500"> * </span> Destino
+                        <div class="text-gray-600 text-sm">
+                            <span class="font-semibold"> Banco </span> <span class="text-gray-500"> (Saldo de cliente) </span>
                         </div>
-                        <div class="bg-white my-2 flex">
-                            <div class="border border-gray-200 bg-gray-100 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
-                                {{ empresa.razon_social }}
-                            </div>
-                        </div>
+                        <select [(ngModel)]="nuevoCheque.banco_id" class="border border-gray-200 rounded p-1 mt-2 w-full shadow text-sm focus:outline-none">
+                            <option value=""> Seleccionar banco </option>
+                            <option *ngFor="let saldo of saldos" [value]="saldo._id"> {{ saldo.descripcion }} - ${{ saldo.monto }} </option>
+                        </select>
                     </div>
                 </div>
                 <div class="flex flex-col mt-3  lg:flex-row">
@@ -72,7 +131,7 @@
                             Emisor
                         </div>
                         <div class="bg-white my-2 flex">
-                            <input [(ngModel)]="nuevoCheque.emisor" placeholder="Ej. Moreno Lucas Omar" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                            <div class="border border-gray-200 bg-gray-100 rounded px-2 py-1 w-full shadow text-sm focus:outline-none"> {{ nuevoCheque.emisor }} </div>
                         </div>
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
@@ -80,17 +139,20 @@
                             CUIT (Emisor)
                         </div>
                         <div class="bg-white my-2 flex">
-                            <input [(ngModel)]="nuevoCheque.cuit" placeholder="Ej. 22340603981" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                            <div class="border border-gray-200 bg-gray-100 rounded px-2 py-1 w-full shadow text-sm focus:outline-none"> {{ nuevoCheque.cuit === '' ? 'Sin especificar' : nuevoCheque.cuit }} </div>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col mt-3 lg:flex-row">
                     <div class="w-full mx-2 flex-1">
                         <div class="font-semibold text-gray-600 text-sm">
-                            Banco
+                            <span class="text-red-500"> * </span> Tipo destino
                         </div>
                         <div class="bg-white my-2 flex">
-                            <input [(ngModel)]="nuevoCheque.banco" placeholder="Ej. Supervielle" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                            <select (change)="actualizarDestino()" [(ngModel)]="data.tipo_destino" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
+                                <option value="Externo"> Externo </option>
+                                <option value="Interno"> Interno </option>
+                            </select>
                         </div>
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
@@ -102,141 +164,28 @@
                         </div>
                     </div>
                 </div>
+                <div class="flex flex-col mt-3 lg:flex-row">
+                    <div class="w-full mx-2 flex-1">
+                        <div class="font-semibold text-gray-600 text-sm">
+                            <span class="text-red-500"> * </span> Destino
+                        </div>
+                        <div class="bg-white my-2 flex">
+                            <select [(ngModel)]="nuevoCheque.destino" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
+                                <option value=""> Seleccionar destino </option>
+                                <option *ngFor="let destino of destinos" [value]="destino._id"> {{ data.tipo_destino === 'Externo' ? destino.descripcion : destino.razon_social}} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
+                </div>
             </div>
         </div>
         <div class="w-full lg:flex lg:items-center mt-6 px-3 pb-5">
-            <button (click)="crearCheque()" class="w-full lg:w-1/2 focus:outline-none bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
+            <button (click)="emitirCheque()" class="w-full lg:w-1/2 focus:outline-none bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Emitir </button>
             <button (click)="showNuevoCheque = false" class="w-full lg:w-1/2 focus:outline-none bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
         </div>
     </div>
 </app-modal>
-
-<!-- Modal: Transferir cheque -->
-<app-modal-small [showModal]="showModalTransferirCheque">
-    <div class="bg-white rounded">
-        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
-            <h1 class="py-1 px-2"> Endosando cheque </h1>
-            <svg (click)="regresarDetalles()" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </div>
-        <div class="p-2">
-            <div class="w-full">
-                <div class="font-semibold text-gray-800 text-sm">
-                    <div *ngIf="chequeSeleccionado" class="p-2 border bg-gray-100">
-                        <h1 class="text-sm font-semibold text-gray-800"> Nro de cheque: <span class="font-normal"> {{ chequeSeleccionado.nro_cheque }} </span> </h1>
-                        <h1 class="text-sm font-semibold text-gray-800"> Importe: <span class="font-normal"> ${{ chequeSeleccionado.importe | moneda }} </span> </h1>
-                    </div>
-                </div>
-                <div class="font-semibold text-gray-800 text-sm mt-3">
-                    Fecha de transferencia
-                </div>
-                <div>
-                    <div class="bg-whsite my-2 p-1 flex border border-gray-200 rounded shadow">
-                        <input type="date" [(ngModel)]="data.fecha_transferencia" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm">
-                    </div>
-                </div>
-                <div class="font-semibold text-gray-800 text-sm mt-3">
-                    Información de destino
-                </div>
-                <div class="bg-white flex mt-2">
-                    <select [(ngModel)]="tipoDestino" (change)="actualizarDestino(txtTipo.value)" #txtTipo class="border border-gray-200 rounded p-2 w-full shadow text-sm focus:outline-none">
-                        <option value="Externo"> Externo </option>
-                        <option value="Interno"> Interno </option>
-                    </select>
-                </div>
-                <div class="bg-white flex mt-2">
-                    <select [(ngModel)]="destino" #txtDestino class="border border-gray-200 rounded p-2 w-full shadow text-sm focus:outline-none">
-                        <option value=""> Seleccionar destino </option>
-                        <option *ngFor="let destino of destinos" [value]="destino._id"> {{ tipoDestino === 'Externo' ? destino.descripcion : destino.razon_social }} </option>
-                    </select>
-                </div>
-                <div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-200 rounded shadow">
-                        <input [(ngModel)]="concepto" placeholder="Nuevo concepto" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm">
-                    </div>
-                </div>
-            </div>
-            <button (click)="transferirCheque(txtDestino)" class="border p-1 w-full mt-3 rounded focus:outline-none hover:text-green-700 bg-gray-100 font-semibold"> Endosar cheque </button>
-        </div>
-    </div>
-</app-modal-small>
-
-<!-- Modal: Cobrar cheque -->
-<app-modal-small [showModal]="showModalCobrarCheque">
-    <div class="bg-white rounded">
-        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
-            <h1 class="py-1 px-2"> Cobrando cheque </h1>
-            <svg (click)="regresarDetalles()" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </div>
-        <div *ngIf="chequeSeleccionado" class="p-2">
-            <div class="p-2 border bg-gray-100">
-                <h1 class="text-sm font-semibold text-gray-800"> Nro de cheque: <span class="font-normal"> {{ chequeSeleccionado.nro_cheque }} </span> </h1>
-                <h1 class="text-sm font-semibold text-gray-800"> Importe: <span class="font-normal"> ${{ chequeSeleccionado.importe | moneda }} </span> </h1>
-            </div>
-        </div>
-        <div class="px-2 mt-1">
-            <div class="font-semibold text-gray-800 text-sm">
-                Fecha de cobro
-            </div>
-            <div>
-                <div class="bg-whsite my-2 p-1 flex border border-gray-200 rounded shadow">
-                    <input type="date" [(ngModel)]="data.fecha_cobrado" class="p-1 px-1 appearance-none outline-none w-full text-gray-800 text-sm">
-                </div>
-            </div>
-            <div class="w-full">
-                <div class="font-semibold text-gray-800 text-sm">
-                    Saldo destino
-                </div>
-                <div class="bg-white flex">
-                    <select [(ngModel)]="selectorSaldo" #txtSaldo class="border border-gray-200 rounded p-2 w-full shadow text-sm mt-2 focus:outline-none">
-                        <option value=""> Seleccionar saldo a impactar </option>
-                        <option *ngFor="let saldo of saldos" [value]="saldo._id"> {{ saldo.descripcion }} </option>
-                    </select>
-                </div>
-            </div>
-            <button (click)="cobrarCheque()" class="border p-1 w-full mt-4 rounded focus:outline-none hover:text-green-700 mb-2 bg-gray-100 font-semibold"> Cobrar cheque </button>
-        </div>
-    </div>
-</app-modal-small>
-
-<!-- Modal: Detalles de cheque -->
-<app-modal [showModal]="showModalDetalles">
-    <div class="bg-white rounded">
-        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
-            <h1 class="py-1 px-2"> Detalles de cheque </h1>
-            <svg (click)="showModalDetalles = false" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </div>
-        <div *ngIf="chequeSeleccionado" class="p-2">
-            <div class="bg-white p-2 text-sm">
-                <!-- <p class="py-2 border-b border-t border-r border-l flex items-center justify-between px-2 bg-gray-100"> <span class="font-semibold"> Recepcion en sistema </span> <span class="text-sm"> {{ chequeSeleccionado.createdAt | fecha}} </span> </p> -->
-                <p class="py-2 border-b border-r border-t border-l flex items-center justify-between px-2"> <span class="font-semibold"> Fecha de emisión </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_emision | fecha}} </span> </p>
-                <p class="py-2 border-b border-r border-l flex items-center justify-between px-2"> <span class="font-semibold"> Fecha de cobro </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_cobro | fecha }} </span></p>
-                <p *ngIf="!chequeSeleccionado.activo && chequeSeleccionado.estado === 'Cobrado'" class="py-2 border-b border-r border-l flex items-center justify-between px-2 bg-blue-100"> <span class="font-semibold"> Cobrado el </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_cobrado | fecha }} </span></p>
-                <p *ngIf="!chequeSeleccionado.activo && chequeSeleccionado.estado === 'Transferido'" class="py-2 bg-yellow-100 border-b border-r border-l flex items-center justify-between px-2">
-                    <span class="font-semibold"> Fecha de transferencia </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_transferencia | fecha }} </span>
-                </p>
-                <p class="py-2 border-b border-r border-l flex items-center justify-between px-2"> <span class="font-semibold"> Banco </span> <span class="text-xs"> {{ chequeSeleccionado.banco !== '' ? chequeSeleccionado.banco : 'Sin especificar'}} </span> </p>
-                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Número de cheque </span> <span class="text-xs"> {{ chequeSeleccionado.nro_cheque }} </span> </p>
-                <p *ngIf="chequeSeleccionado.estado === 'Transferido'" class="py-2 border-b border-r border-l flex items-center justify-between px-2 bg-yellow-100">
-                    <span class="font-semibold"> Transferido a </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.transferencia_destino_descripcion }} </span>
-                </p>
-                <p *ngIf="chequeSeleccionado.estado === 'Cobrado'" class="py-2 border-b border-l border-r flex items-center justify-between px-2 bg-blue-100"> <span class="font-semibold"> Ultimo propietario </span> <span class="text-xs"> {{ chequeSeleccionado.destino_descripcion }} </span> </p>
-                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Cliente </span> <span class="text-xs"> {{ chequeSeleccionado.cliente_descripcion }} </span> </p>
-                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Emisor </span> <span class="text-xs"> {{ chequeSeleccionado.emisor !== '' ? chequeSeleccionado.emisor : 'Sin especificar' }} </span> </p>
-                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> CUIT de emisor </span> <span class="text-xs"> {{ chequeSeleccionado.cuit !== '' ? chequeSeleccionado.cuit : 'Sin especificar' }} </span> </p>
-                <p *ngIf="chequeSeleccionado.estado === 'Activo'" class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> En poder de </span> <span class="text-xs"> {{ chequeSeleccionado.destino_descripcion }} </span> </p>
-                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Concepto </span> <span class="text-xs"> {{ chequeSeleccionado.concepto }} </span> </p>
-                <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Estado </span> <span [ngClass]="{'bg-green-100 border-green-200' : chequeSeleccionado.estado === 'Activo', 'bg-blue-100 border-blue-200' : chequeSeleccionado.estado === 'Cobrado', 'bg-yellow-100 border-yellow-200' : chequeSeleccionado.estado === 'Transferido'}"
-                        class="text-sm px-1 rounded border font-semibold"> {{ chequeSeleccionado.estado }} </span> </p>
-                <p class="py-2 border-b border-l border-r bg-gray-100 flex items-center justify-between px-2"> <span class="font-semibold"> Importe </span> <span class="font-semibold"> ${{ chequeSeleccionado.importe | moneda }} </span> </p>
-            </div>
-            <div *ngIf="chequeSeleccionado.activo" class="flex items-center">
-                <button (click)="modalCobrar()" class="w-1/2 p-1 focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100"> Cobrar </button>
-                <button (click)="modalTransferir()" class="w-1/2 p-1 focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100 ml-2"> Endosar </button>
-            </div>
-        </div>
-    </div>
-</app-modal>
-
 <!-- Tarjeta principal -->
 <app-tarjeta-lista>
     <div class="container mx-auto px-4 sm:px-8">
@@ -253,9 +202,8 @@
                     <div class="flex flex-row mb-1 sm:mb-0">
                         <div class="relative">
                             <select #txtEstado (change)="filtrarPorEstado(txtEstado.value)" class="h-full rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                                <option value='Activo'> En cartera </option>
-                                <option value='Cobrado'> Cobrados </option>
-                                <option value='Transferido'> Transferidos </option>
+                                <option value='true'> Emitidos </option>
+                                <option value='false'> Cobrados </option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -277,7 +225,7 @@
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <app-boton-generico (click)="modalNuevoCheque()"> Recibir cheque </app-boton-generico>
+                    <app-boton-generico (click)="modalEmitirCheque()"> Emitir cheque </app-boton-generico>
                 </div>
             </div>
             <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
@@ -309,18 +257,6 @@
                                         </span>
                                     </div>
                                 </th>
-                                <!-- <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    <div (click)="ordenarPorColumna('updatedAt')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
-                                        <span>
-                                            Fecha de salida                                             
-                                        </span>
-                                        <span class="ml-2">
-                                            <svg *ngIf="ordenar.columna == 'updatedAt' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                            <svg *ngIf="ordenar.columna == 'updatedAt' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                            <svg *ngIf="ordenar.columna != 'updatedAt'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                        </span>
-                                    </div>
-                                </th> -->
                                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     <div (click)="ordenarPorColumna('nro_cheque')" class="w-max cursor-pointer flex items-center focus:outline-none">
                                         <span> Numero </span>
@@ -332,14 +268,14 @@
                                     </div>
                                 </th>
                                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    <div (click)="ordenarPorColumna('cliente_descripcion')" class="cursor-pointer flex items-center focus:outline-none">
+                                    <div (click)="ordenarPorColumna('destino_descripcion')" class="cursor-pointer flex items-center focus:outline-none">
                                         <span>
-                                            Cliente                                              
+                                            Destino                                              
                                         </span>
                                         <span class="ml-2">
-                                            <svg *ngIf="ordenar.columna == 'cliente_descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                            <svg *ngIf="ordenar.columna == 'cliente_descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                            <svg *ngIf="ordenar.columna != 'cliente_descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            <svg *ngIf="ordenar.columna == 'destino_descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'destino_descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'destino_descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                         </span>
                                     </div>
                                 </th>
@@ -361,7 +297,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="animate__animated animate__fadeIn" *ngFor="let cheque of cheques | filtroCarteraCheques:filtro.parametro | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                            <tr class="animate__animated animate__fadeIn" *ngFor="let cheque of cheques | filtroChequesEmitidos:filtro.parametro | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
                                         {{ cheque.createdAt | fecha }}
@@ -369,16 +305,9 @@
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ cheque.fecha_cobro| fecha }}
+                                        {{ cheque.fecha_cobro | fecha }}
                                     </p>
                                 </td>
-                                <!-- <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        <span [ngClass]="{'bg-green-100 border-green-200':cheque.estado === 'Activo','bg-blue-100 border-blue-200':cheque.estado === 'Cobrado','bg-yellow-100 border-yellow-200':cheque.estado === 'Transferido'}" class="p-1 border rounded">
-                                            {{ !cheque.activo ? (cheque.updatedAt | fecha) : 'En cartera' }}
-                                        </span>
-                                    </p>
-                                </td> -->
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
                                         {{ cheque.nro_cheque }}
@@ -386,7 +315,7 @@
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ cheque.cliente_descripcion }}
+                                        {{ cheque.destino_descripcion }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
@@ -396,7 +325,7 @@
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                                     <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
-                                        <app-boton-tabla (click)="modalDetalles(cheque)" title="Ver cheque">
+                                        <app-boton-tabla (click)="modalDetalles(cheque._id)" title="Ver cheque">
                                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </app-boton-tabla>
                                     </p>

@@ -129,7 +129,13 @@ export class MovimientosComponent implements OnInit {
   // Listar tipos de movimientos
   listarTipos(): void {
     this.tipoMovimientosService.listarTipos().subscribe( ({ tipos }) => {
-      this.tipos= tipos.filter( tipo => tipo.activo );
+      this.tipos= tipos.filter( tipo => (tipo.activo && 
+                                         tipo._id !== environment.tipo_cheque &&
+                                         tipo._id !== environment.tipo_ingreso_cheque &&
+                                         tipo._id !== environment.tipo_transferencia_cheque &&
+                                         tipo._id !== environment.tipo_cobro_cheque &&
+                                         tipo._id !== environment.tipo_cheque_emitido_cobrado &&
+                                         tipo._id !== environment.tipo_emision_cheque));
     });
   };
   
@@ -166,10 +172,10 @@ export class MovimientosComponent implements OnInit {
         this.empresasService.listarSaldos(1,'descripcion',id).subscribe(({ saldos }) => {
           if(origen_destino === 'Origen'){  // Origen         
             this.data.origen_saldo = '';
-            this.saldos_origen = saldos.filter( saldo => (saldo.activo == true) ); 
+            this.saldos_origen = saldos.filter( saldo => (saldo.activo == true && saldo.descripcion !== 'CHEQUES') ); 
           }else{                            // Destino
             this.data.destino_saldo = '';
-            this.saldos_destino = saldos; 
+            this.saldos_destino = saldos.filter( saldo => (saldo.activo == true && saldo.descripcion !== 'CHEQUES') ); 
           }
           this.alertService.close();
         })
@@ -320,6 +326,7 @@ export class MovimientosComponent implements OnInit {
   // Abrir modal detalles
   abrirModalDetalles(id: string): void {
     this.showDatosCheque = false;
+    this.showDatosMovimiento = true;
     this.alertService.loading();
     this.movimientosService.getMovimiento(id).subscribe(({ movimiento }) => {
       this.movimientoSeleccionado = movimiento;
@@ -327,7 +334,6 @@ export class MovimientosComponent implements OnInit {
         this.chequesService.getCheques(movimiento.cheque).subscribe( ({cheque}) => {
           this.mostrarCheque = cheque;
           this.alertService.close();
-          console.log(this.mostrarCheque);   
         },({error}) => {
           this.alertService.errorApi(error);
         });  
@@ -336,7 +342,6 @@ export class MovimientosComponent implements OnInit {
       }
     });
     this.showModalDetalles = true;  
-    console.log(this.mostrarCheque);
   }  
 
   // Regresar al modal - Nuevo tipo

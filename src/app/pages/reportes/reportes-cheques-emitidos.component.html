@@ -1,0 +1,50 @@
+<div class="p-2 lg:flex">
+    <div class="w-full lg:w-1/2 p-2 bg-white border shadow h-full">
+        <h1 class="font-semibold p-2 border bg-gray-100 text-center border-gray-200"> Filtrado de cheques emitidos </h1>
+        <div class="mt-4">
+            <div class="flex items-center text-sm">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <label class="font-semibold ml-1"> Desde <span class="font-normal"> (Fecha de emision) </span> </label>
+            </div>
+            <div class="w-full">
+                <div class="bg-white my-2 flex">
+                    <input [(ngModel)]="filtroCheques.fechaDesde" type="date" class="border rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                </div>
+            </div>
+            <div class="flex items-center text-sm mt-4">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <label class="font-semibold ml-1"> Hasta <span class="font-normal"> (Fecha de emision) </span> </label>
+            </div>
+            <div class="w-full">
+                <div class="bg-white my-2 flex">
+                    <input [(ngModel)]="filtroCheques.fechaHasta" type="date" class="border rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                </div>
+            </div>
+            <div class="bg-white my-3">
+                <p class="text-sm font-semibold"> Emisor </p>
+                <select [(ngModel)]="filtroCheques.emisor" name="emisor" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                    <option value=''> Todos los emisores </option>
+                    <option *ngFor="let emisor of emisores" [value]='emisor._id'> {{ emisor.razon_social }} </option>
+                </select>
+            </div>
+            <div class="bg-white my-3">
+                <p class="text-sm font-semibold"> Destino </p>
+                <select [(ngModel)]="filtroCheques.destino" name="destino" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                    <option value=''> Todos los destinos </option>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <button class="flex items-center justify-center bg-gray-100 border border-gray-200 rounded p-2 w-1/2 hover:text-green-700">  
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>    
+                    <span class="ml-1"> Buscar </span>
+                </button>
+                <button routerLink="/dashboard/reportes" class="flex items-center justify-center bg-gray-100 border border-gray-200 rounded p-2 w-1/2 text-center ml-2 hover:text-green-700">  
+                    <span> Regresar </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="w-full p-2 bg-white border shadow lg:ml-2 mt-2 lg:mt-0 h-full">
+        <h1> Listado de cheques emitidos </h1>
+    </div>
+</div>

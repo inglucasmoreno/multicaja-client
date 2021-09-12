@@ -18,6 +18,10 @@ import { SaldosComponent } from './empresas/saldos.component';
 import { MovimientosComponent } from './movimientos/movimientos.component';
 import { TipoMovimientosComponent } from './tipo-movimientos/tipo-movimientos.component';
 import { CarteraChequesComponent } from './cartera-cheques/cartera-cheques.component';
+import { ChequesEmitidosComponent } from './cheques-emitidos/cheques-emitidos.component';
+import { ReportesComponent } from './reportes/reportes.component';
+import { ReportesMovimientosComponent } from './reportes/reportes-movimientos.component';
+import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-emitidos.component';
 
 
 @NgModule({
@@ -34,6 +38,10 @@ import { CarteraChequesComponent } from './cartera-cheques/cartera-cheques.compo
     MovimientosComponent,
     TipoMovimientosComponent,
     CarteraChequesComponent,
+    ChequesEmitidosComponent,
+    ReportesComponent,
+    ReportesMovimientosComponent,
+    ReportesChequesEmitidosComponent,
   ],
   imports: [
     CommonModule,

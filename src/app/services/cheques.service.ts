@@ -20,10 +20,24 @@ export class ChequesService {
   } 
 
   // Listar cheques
-  listarCheques(id: string, direccion : number = 1, columna: string = 'createdAt', activo: string ): Observable<any>{
+  listarCheques(id: string, direccion : number = 1, columna: string = 'createdAt', activo: string, estado: string ): Observable<any>{
     return this.http.get(`${base_url}/cheques/cartera/${id}`, {
       params: {
         activo,
+        estado,
+        direccion: String(direccion),
+        columna              
+      },
+      headers: { 'x-token': localStorage.getItem('token') }      
+    })
+  }
+
+  // Listar cheques
+  listarChequesEmitidos(id: string, direccion : number = 1, columna: string = 'createdAt', activo: string, estado: string ): Observable<any>{
+    return this.http.get(`${base_url}/cheques/listar/emitidos/${id}`, {
+      params: {
+        activo,
+        estado,
         direccion: String(direccion),
         columna              
       },
@@ -38,9 +52,23 @@ export class ChequesService {
     })  
   }
 
+  // Cheque emitido cobrado
+  emitidoCobrado(data: any): Observable<any>{
+    return this.http.post(`${base_url}/cheques/emitido/cobrado`, data, {
+      headers: { 'x-token': localStorage.getItem('token') }
+    })  
+  }
+
   // Nuevo cheque desde cartera
   nuevoChequeDesdeCartera(data: any): Observable<any>{
     return this.http.post(`${base_url}/cheques/crear`, data, {
+      headers: { 'x-token': localStorage.getItem('token') }
+    })  
+  }
+
+  // Emitir cheque
+  emitirCheque(data: any): Observable<any>{
+    return this.http.post(`${base_url}/cheques/emitir`, data, {
       headers: { 'x-token': localStorage.getItem('token') }
     })  
   }
