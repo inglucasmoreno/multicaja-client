@@ -28,13 +28,21 @@
                 </select>
             </div>
             <div class="bg-white my-3">
+                <p class="text-sm font-semibold"> Tipo de destino </p>
+                <select (change)="cambiarDestinos()" [(ngModel)]="filtroCheques.tipoDestino" name="tipo_destino" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                    <option value='Interno'> Interno </option>
+                    <option value='Externo'> Externo </option>
+                </select>
+            </div>
+            <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Destino </p>
                 <select [(ngModel)]="filtroCheques.destino" name="destino" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> Todos los destinos </option>
+                    <option *ngFor="let destino of destinos" [value]='destino._id'> {{ destino.razon_social ? destino.razon_social : destino.descripcion }} </option>
                 </select>
             </div>
             <div class="flex items-center">
-                <button class="flex items-center justify-center bg-gray-100 border border-gray-200 rounded p-2 w-1/2 hover:text-green-700">  
+                <button (click)="buscar()" class="flex items-center justify-center bg-gray-100 border border-gray-200 rounded p-2 w-1/2 hover:text-green-700">  
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>    
                     <span class="ml-1"> Buscar </span>
                 </button>
