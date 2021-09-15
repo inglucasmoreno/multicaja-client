@@ -91,8 +91,10 @@ export class ChequesEmitidosComponent implements OnInit {
     banco: '',
     nro_cheque: '',
     concepto: '',
+    tipo_cliente: '',
     cliente_descripcion: '',
     cliente: '',
+    tipo_destino: '',
     destino_descripcion: '',  // Razon social de empresa
     destino: '',              // ID de empresa
     emisor: '',
@@ -235,6 +237,8 @@ export class ChequesEmitidosComponent implements OnInit {
 
     // DATOS DE CHEQUE
     this.nuevoCheque.cliente_descripcion = this.empresa.razon_social;
+    this.nuevoCheque.tipo_cliente = 'Interno',
+    this.nuevoCheque.tipo_destino = this.data.tipo_destino;
     // banco - Back
     // destino_descripcion - Back
     // Trabajar fecha de cobro
@@ -394,8 +398,10 @@ export class ChequesEmitidosComponent implements OnInit {
       nro_cheque: '', 
       concepto: '', 
       cliente_descripcion: '', 
+      tipo_cliente: '',
       cliente: '', 
-      destino_descripcion: '',  
+      destino_descripcion: '',
+      tipo_destino: '',  
       destino: '',         
       emisor: '',  
       cuit: '',  

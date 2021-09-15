@@ -21,6 +21,7 @@ import { ChequesEmitidosComponent } from './cheques-emitidos/cheques-emitidos.co
 import { ReportesComponent } from './reportes/reportes.component';
 import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-emitidos.component';
 import { ReportesMovimientosComponent } from './reportes/reportes-movimientos.component';
+import { ReportesEvolucionSaldosComponent } from './reportes/reportes-evolucion-saldos.component';
 
 const routes: Routes = [
     {
@@ -59,6 +60,7 @@ const routes: Routes = [
             { path: 'reportes', canActivate: [AdminGuard], component:  ReportesComponent},
             { path: 'reportes/movimientos', canActivate: [AdminGuard], component:  ReportesMovimientosComponent},
             { path: 'reportes/cheques-emitidos', canActivate: [AdminGuard], component:  ReportesChequesEmitidosComponent},
+            { path: 'reportes/evolucion-saldos', canActivate: [AdminGuard], component:  ReportesEvolucionSaldosComponent},
 
         ]
     }

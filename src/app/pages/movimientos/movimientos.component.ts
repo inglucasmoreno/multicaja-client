@@ -215,6 +215,7 @@ export class MovimientosComponent implements OnInit {
       this.ordenar.direccion,
       this.ordenar.columna
     ).subscribe(({ movimientos, total }) => {
+      console.log(movimientos);
       this.movimientos = movimientos;
       this.total = total;
       this.alertService.close();

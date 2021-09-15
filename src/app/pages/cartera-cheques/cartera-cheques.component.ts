@@ -79,7 +79,9 @@ export class CarteraChequesComponent implements OnInit {
     concepto: '',
     cliente_descripcion: '',
     cliente: '',
+    tipo_cliente: '',
     destino_descripcion: '',  // Razon social de empresa
+    tipo_destino: '',
     destino: '',              // ID de empresa
     emisor: '',
     cuit: '',
@@ -215,6 +217,8 @@ export class CarteraChequesComponent implements OnInit {
     this.nuevoCheque.fecha_cobro = this.nuevoCheque.fecha_cobro === '' ? '1970-01-01' : this.nuevoCheque.fecha_cobro;
     this.nuevoCheque.destino = this.empresa._id;
     this.nuevoCheque.destino_descripcion = this.empresa.razon_social;
+    this.nuevoCheque.tipo_cliente = this.data.tipo_origen;
+    this.nuevoCheque.tipo_destino = this.data.tipo_destino;
 
     data.cheque = this.nuevoCheque;
 
@@ -483,8 +487,10 @@ export class CarteraChequesComponent implements OnInit {
       nro_cheque: '',
       concepto: '',
       cliente_descripcion: '',
+      tipo_cliente: '',
       cliente: '',
       destino_descripcion: '',  // Razon social de empresa
+      tipo_destino: '',
       destino: '',              // ID de empresa
       emisor: '',
       cuit: '',

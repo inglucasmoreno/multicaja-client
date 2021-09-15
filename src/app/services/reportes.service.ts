@@ -13,15 +13,34 @@ export class ReportesService {
   constructor(private http: HttpClient) { }
 
   // Movimientos
-  movimientos(data: any): Observable<any> {
+  movimientos(direccion : number = 1, columna: string = 'createdAt', data: any): Observable<any> {
     return this.http.post(`${base_url}/reportes/movimientos`, data, {
+      params: {
+        direccion: String(direccion),
+        columna              
+      },
       headers: { 'x-token': localStorage.getItem('token') }   
     });
   }
 
   // Cheques emitidos
-  chequesEmitidos(data: any): Observable<any> {
+  chequesEmitidos(direccion : number = 1, columna: string = 'createdAt',data: any): Observable<any> {
     return this.http.post(`${base_url}/reportes/cheques-emitidos`, data, {
+      params: {
+        direccion: String(direccion),
+        columna              
+      },
+      headers: { 'x-token': localStorage.getItem('token') }   
+    });
+  }
+
+  // Cheques emitidos
+  saldos(direccion : number = 1, columna: string = 'createdAt', data: any): Observable<any> {
+    return this.http.post(`${base_url}/reportes/saldos`, data, {
+      params: {
+        direccion: String(direccion),
+        columna              
+      },
       headers: { 'x-token': localStorage.getItem('token') }   
     });
   }

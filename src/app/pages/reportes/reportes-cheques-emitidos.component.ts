@@ -19,6 +19,9 @@ export class ReportesChequesEmitidosComponent implements OnInit {
               private externosService: ExternosService,
               private reportesService: ReportesService) { }
 
+  // Modals
+  showModalDetalles = false;
+
   // Empresas
   public empresas: any[] = [];
 
@@ -31,13 +34,28 @@ export class ReportesChequesEmitidosComponent implements OnInit {
   // Destinos
   public destinos: any[] = [];
 
+  // Cheques
+  public cheques: any[] = [];
+  public chequeSeleccionado: any = {};
+
   public filtroCheques = {
-    tipoDestino: 'Interno',
+    estado: '',
+    tipoDestino: '',
     fechaDesde: '',
     fechaHasta: '',
-    emisor: '',
+    cliente: '',
     destino: '' 
   }
+
+  // Ordenar
+  public ordenar = {
+    direccion: 1,  // Asc (1) | Desc (-1)
+    columna: 'fecha_emision'
+  }
+
+  // Paginacion
+  public paginaActual: number = 1;
+  public cantidadItems: number = 5;
 
   ngOnInit(): void {
     this.dataService.ubicacionActual = 'Dashboard - Reportes - Cheques emitidos';
@@ -62,7 +80,14 @@ export class ReportesChequesEmitidosComponent implements OnInit {
 
   // Buscar
   buscar(): void {
-    console.log(this.filtroCheques);  
+    this.paginaActual = 1;
+    this.alertService.loading();
+    this.reportesService.chequesEmitidos(this.ordenar.direccion, this.ordenar.columna, this.filtroCheques).subscribe(({cheques})=>{
+      this.cheques = cheques;
+      this.alertService.close();
+    },({error})=>{
+      this.alertService.errorApi(error);
+    }); 
   }
 
   // Cambiar destinos
@@ -73,6 +98,12 @@ export class ReportesChequesEmitidosComponent implements OnInit {
     }else{
       this.destinos = this.externos;
     } 
+  }
+
+  // Modal: Abrir modal detalles
+  modalDetalles(cheque: any): void {
+    this.chequeSeleccionado = cheque;
+    this.showModalDetalles = true;
   }
 
   // Listar emisores
@@ -93,16 +124,11 @@ export class ReportesChequesEmitidosComponent implements OnInit {
     });
   }
 
-  // Listar cheques emitidos
-  listarCheques(): void {
-    this.alertService.loading();
-    const data = {};
-    this.reportesService.chequesEmitidos(data).subscribe(({ cheques }) => {
-      console.log(cheques);
-      this.alertService.close();
-    },({error})=>{
-      this.alertService.errorApi(error);
-    });  
+  // Ordenar por fecha
+  ordenarFecha(): void {
+    this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1;
+    console.log(this.ordenar.direccion);
+    this.buscar();
   }
   
 }

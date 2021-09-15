@@ -22,6 +22,7 @@ import { ChequesEmitidosComponent } from './cheques-emitidos/cheques-emitidos.co
 import { ReportesComponent } from './reportes/reportes.component';
 import { ReportesMovimientosComponent } from './reportes/reportes-movimientos.component';
 import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-emitidos.component';
+import { ReportesEvolucionSaldosComponent } from './reportes/reportes-evolucion-saldos.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-em
     ReportesComponent,
     ReportesMovimientosComponent,
     ReportesChequesEmitidosComponent,
+    ReportesEvolucionSaldosComponent,
   ],
   imports: [
     CommonModule,
