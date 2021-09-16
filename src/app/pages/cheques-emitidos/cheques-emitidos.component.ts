@@ -16,6 +16,9 @@ import { ChequesService } from 'src/app/services/cheques.service';
 })
 export class ChequesEmitidosComponent implements OnInit {
 
+  // SELECTOR DE ESTADO
+  public estadoSeleccionado = 'true';
+
   // MODAL
   public showModalDetalles = false;
   public showModalCobrarCheque = false;

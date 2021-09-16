@@ -1,25 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TipoMovimientos } from 'src/app/models/tipo-movimientos.model';
 import { AlertService } from 'src/app/services/alert.service';
-import { DataService } from 'src/app/services/data.service';
-import { TipoMovimientoService } from '../../services/tipo-movimiento.service';
+import { CuentaContableService } from 'src/app/services/cuenta-contable.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
-  selector: 'app-tipo-movimientos',
-  templateUrl: './tipo-movimientos.component.html',
+  selector: 'app-cuentas-contables',
+  templateUrl: './cuentas-contables.component.html',
   styles: [
   ]
 })
-export class TipoMovimientosComponent implements OnInit {
-
+export class CuentasContablesComponent implements OnInit {
+  
   // Modal
   public showModal = false;
   public flagEditando = false;
   
   // Tipos
-  public idTipo = '';
-  public tipos: TipoMovimientos[] = [];
+  public idCuentaContable = '';
+  public cuentasContables: any[] = [];
   public total = 0;
   
   // Paginacion
@@ -39,42 +38,42 @@ export class TipoMovimientosComponent implements OnInit {
   }
 
   // Modelo reactivo
-  public tipoForm = this.fb.group({
+  public cuentaContableForm = this.fb.group({
     descripcion: ['', Validators.required],
     activo: [true, Validators.required],
   });
-  
-  constructor(private tipoMovimientosService: TipoMovimientoService,
+
+  constructor(private dataService: DataService,
               private alertService: AlertService,
               private fb: FormBuilder,
-              private dataService: DataService) { }
-  
+              private cuentaContableService: CuentaContableService) { }
+
   ngOnInit(): void {
-    this.dataService.ubicacionActual = "Dashboard - Tipo de movimientos";
-    this.listarTipos();
+    this.dataService.ubicacionActual = 'Dashboard - Cuentas contables';
+    this.listarCuentasContables();
   }
-  
-  // Listar tipos
-  listarTipos(): void {
+
+  // Listar cuentras contables
+  listarCuentasContables(): void {
     this.alertService.loading();
-    this.tipoMovimientosService.listarTipos( 
+    this.cuentaContableService.listarCuentasContables( 
       this.ordenar.direccion,
       this.ordenar.columna
       )
-    .subscribe( ({ tipos, total })=> {
-      this.tipos = tipos;
+    .subscribe( ({ cuentasContables, total })=> {
+      this.cuentasContables = cuentasContables;
       this.total = total;
       this.alertService.close();
     }, (({error}) => {
       this.alertService.errorApi(error.msg);
     }));
   }
-  
-  // Crear un nuevo tipo
-  nuevoTipo(): void {
 
-    const { status } = this.tipoForm;
-    const { descripcion } = this.tipoForm.value;
+   // Nueva cuenta contable
+   nuevaCuenta(): void {
+    
+    const { status } = this.cuentaContableForm;
+    const { descripcion } = this.cuentaContableForm.value;
     
     // Se verifica si los campos son invalidos
     if(status === 'INVALID' || descripcion.trim() === ''){
@@ -85,40 +84,40 @@ export class TipoMovimientosComponent implements OnInit {
     this.alertService.loading();  // Comienzo de loading
     
     const data = {
-      descripcion: this.tipoForm.value.descripcion,
-      activo: this.tipoForm.value.activo
+      descripcion: this.cuentaContableForm.value.descripcion,
+      activo: this.cuentaContableForm.value.activo
     }
   
-    this.tipoMovimientosService.nuevoTipo(data).subscribe(() => {
-      this.listarTipos();
+    this.cuentaContableService.nuevaCuentaContable(data).subscribe(() => {
+      this.listarCuentasContables();
       this.reiniciarFormulario();
       this.showModal = false;
     },( ({error}) => {
       this.alertService.errorApi(error.msg);
       return;  
     }));
-  
+    
   }
-  
-  // Tipo por ID
-  getTipo(id: string): void {
+
+  // Cuenta contable por ID
+  getCuentaContable(id: string): void {
     this.alertService.loading();
-    this.tipoMovimientosService.getTipo(id).subscribe(({ tipo }) => {
-      this.idTipo = tipo._id;
-      this.tipoForm.setValue({
-        descripcion: tipo.descripcion,
-        activo: tipo.activo,     
+    this.cuentaContableService.getCuentaContable(id).subscribe(({ cuentaContable }) => {
+      this.idCuentaContable = cuentaContable._id;
+      this.cuentaContableForm.setValue({
+        descripcion: cuentaContable.descripcion,
+        activo: cuentaContable.activo,     
       });
       this.alertService.close();       
     },({error})=>{
       this.alertService.errorApi(error.msg);
     });  
   }
-  
-  // Editar tipo
-  editarTipo(id: string): void {
-    const { status } = this.tipoForm;
-    const { descripcion } = this.tipoForm.value;
+
+  // Editar cuenta contable
+  editarCuentaContable(id: string): void {
+    const { status } = this.cuentaContableForm;
+    const { descripcion } = this.cuentaContableForm.value;
     
     // Se verifica si los campos son invalidos
     if(status === 'INVALID' || descripcion.trim() === ''){
@@ -127,58 +126,58 @@ export class TipoMovimientosComponent implements OnInit {
     }
 
     const data = {
-      descripcion: this.tipoForm.value.descripcion,
-      activo: this.tipoForm.value.activo
+      descripcion: this.cuentaContableForm.value.descripcion,
+      activo: this.cuentaContableForm.value.activo
     }
     
     this.alertService.loading();  // Comienzo de loading
     
-    this.tipoMovimientosService.actualizarTipo(id, data).subscribe(() => {
-      this.listarTipos();
+    this.cuentaContableService.actualizarCuentaContable(id, data).subscribe(() => {
+      this.listarCuentasContables();
       this.reiniciarFormulario();
       this.showModal = false;
     },({error})=>{
       this.alertService.errorApi(error.msg);
     });
   }
-  
+
   // Actualizar estado Activo/Inactivo
-  actualizarTipos(tipo: any): void {
-    const { _id, activo } = tipo;
+  actualizarCuentaContable(cuenta: any): void {
+    const { _id, activo } = cuenta;
     this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
         .then(({isConfirmed}) => {  
           if (isConfirmed) {
             this.alertService.loading();
-            this.tipoMovimientosService.actualizarTipo(_id, { activo: !activo }).subscribe(() => {
+            this.cuentaContableService.actualizarCuentaContable(_id, { activo: !activo }).subscribe(() => {
               this.alertService.loading();
-              this.listarTipos();
+              this.listarCuentasContables();
             }, ({error}) => {
               this.alertService.errorApi(error.msg);
             });
           }
         });
   }
-  
-  // Reiniciar formulario
-  reiniciarFormulario(): void {
-  this.tipoForm.setValue({
-    descripcion: '',
-    activo: true,    
-  });    
-  };
-  
+
   // Abrir modal
   abrirModal(tipo: string, id: string = null): void {
     if(tipo === "crear"){          // Modal: Nuevo tipo
       this.reiniciarFormulario();
       this.flagEditando = false;
     }else{                         // Modal: Editar tipo
-      this.getTipo(id);
+      this.getCuentaContable(id);
       this.flagEditando = true;
     }
     this.showModal = true;
   }
-  
+
+  // Reiniciar formulario
+  reiniciarFormulario(): void {
+    this.cuentaContableForm.setValue({
+      descripcion: '',
+      activo: true,    
+    });    
+  };
+
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
     this.paginaActual = 1;
@@ -187,17 +186,16 @@ export class TipoMovimientosComponent implements OnInit {
   
   // Filtrar por Parametro
   filtrarParametro(parametro: string): void{
-  this.paginaActual = 1;
-  this.filtro.parametro = parametro;
+    this.paginaActual = 1;
+    this.filtro.parametro = parametro;
   }
   
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-  this.ordenar.columna = columna;
-  this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
-  this.alertService.loading();
-  this.listarTipos();
+    this.ordenar.columna = columna;
+    this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
+    this.alertService.loading();
+    this.listarCuentasContables();
   }
-  
 
 }

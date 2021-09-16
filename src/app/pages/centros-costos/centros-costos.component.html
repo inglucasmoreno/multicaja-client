@@ -1,0 +1,156 @@
+<app-modal [showModal]="showModal">
+    <div class="bg-white p-4">
+        <h1 *ngIf="!flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Creando un centro de costos </h1>
+        <h1 *ngIf="flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Editando centro de costos </h1>
+        <form [formGroup]="centroCostosForm" class="mt-2">
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold bold mt-3 text-gray-600 text-sm">
+                        <span class="text-red-500"> * </span> Descripción
+                    </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input formControlName="descripcion" placeholder="Ej. Prestamo" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm">
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm">
+                        <span class="text-red-500"> * </span> Estado
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <select formControlName="activo" class="border border-gray-200 rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                            <option value=true> Activo </option>
+                            <option value=false> Inactivo </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1"></div>
+            </div>
+        </form>
+        <div class="lg:flex lg:items-center mt-6">
+            <button *ngIf="!flagEditando" (click)="nuevoCentro()" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
+            <button *ngIf="flagEditando" (click)="editarCentroCosto(idCentroCosto)" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Editar </button>
+            <button (click)="showModal= !showModal" class="w-full lg:w-1/2 bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
+        </div>
+    </div>
+</app-modal>
+
+<app-tarjeta-lista>
+    <div class="container mx-auto px-4 sm:px-8">
+        <div class="py-4">
+            <div>
+                <h2 class="text-2xl font-semibold leading-tight text-gray-600">
+                    Listado de centros de costos
+                </h2>
+                <p class='text-gray-500'> Total de centros: {{ total }} </p>
+            </div>
+            <div class="md:flex md:items-center md:justify-between">
+                <div class="my-2 flex sm:flex-row flex-col">
+                    <div class="flex flex-row mb-1 sm:mb-0">
+                        <div class="relative">
+                            <select #txtActivo (change)="filtrarActivos(txtActivo.value)" class="h-full rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                                <option value='true'> Activos </option>
+                                <option value='false'> Inactivos </option>
+                                <option value=''> Todos </option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block relative">
+                        <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
+                            <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500 cursor-pointer hover:text-secondary-500">
+                                <path
+                                    d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
+                                </path>
+                            </svg>
+                        </span>
+                        <input #txtParametro placeholder="Buscar" (keyup)="filtrarParametro(txtParametro.value)" class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+                        />
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <app-boton-generico (click)="abrirModal('crear')"> Nuevo centro </app-boton-generico>
+                </div>
+            </div>
+            <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('descripcion')" class="w-max cursor-pointer flex items-center focus:outline-none">
+                                        <span> Descripción </span>
+                                        <span class="ml-2 text-gray-600">    
+                                            <svg *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('createdAt')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                                        <span>
+                                            Fecha de creación                                                
+                                        </span>
+                                        <span class="ml-2">
+                                            <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'createdAt'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('activo')" class="cursor-pointer flex items-center focus:outline-none">
+                                        <span>
+                                            Estado                                               
+                                        </span>
+                                        <span class="ml-2">
+                                            <svg *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'activo'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Acción
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="centrosCostos">
+                            <tr class="animate__animated animate__fadeIn" *ngFor="let centro of centrosCostos | filtroTipoMovimiento:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {{ centro.descripcion }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {{ centro.createdAt | fecha }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <app-pastilla-estado [activo]=centro.activo (click)="actualizarCentroCosto(centro)"></app-pastilla-estado>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
+                                    <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
+                                        <app-boton-tabla (click)="abrirModal('editar', centro._id)" title="Editar centro">
+                                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                        </app-boton-tabla>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="px-5 py-5 bg-white border-t flex shadow flex-col xs:flex-row items-center xs:justify-between">
+                        <pagination-controls nextLabel="Siguiente" previousLabel="Anterior" (pageChange)="paginaActual = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-tarjeta-lista>

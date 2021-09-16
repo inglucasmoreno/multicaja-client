@@ -22,6 +22,8 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-emitidos.component';
 import { ReportesMovimientosComponent } from './reportes/reportes-movimientos.component';
 import { ReportesEvolucionSaldosComponent } from './reportes/reportes-evolucion-saldos.component';
+import { CentrosCostosComponent } from './centros-costos/centros-costos.component';
+import { CuentasContablesComponent } from './cuentas-contables/cuentas-contables.component';
 
 const routes: Routes = [
     {
@@ -55,6 +57,12 @@ const routes: Routes = [
 
             // Tipos de movimientos
             { path: 'tipo-movimientos', canActivate: [AdminGuard], component:  TipoMovimientosComponent},
+            
+            // Centro de costos
+            { path: 'centros-costos', canActivate: [AdminGuard], component:  CentrosCostosComponent},
+
+            // Cuentas contables
+            { path: 'cuentas-contables', canActivate: [AdminGuard], component: CuentasContablesComponent},
 
             // Reportes
             { path: 'reportes', canActivate: [AdminGuard], component:  ReportesComponent},

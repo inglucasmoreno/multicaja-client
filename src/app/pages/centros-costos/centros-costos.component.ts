@@ -1,25 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TipoMovimientos } from 'src/app/models/tipo-movimientos.model';
 import { AlertService } from 'src/app/services/alert.service';
-import { DataService } from 'src/app/services/data.service';
-import { TipoMovimientoService } from '../../services/tipo-movimiento.service';
+import { DataService } from '../../services/data.service';
+import { CentroCostosService } from '../../services/centro-costos.service';
 
 @Component({
-  selector: 'app-tipo-movimientos',
-  templateUrl: './tipo-movimientos.component.html',
+  selector: 'app-centros-costos',
+  templateUrl: './centros-costos.component.html',
   styles: [
   ]
 })
-export class TipoMovimientosComponent implements OnInit {
+export class CentrosCostosComponent implements OnInit {
 
   // Modal
   public showModal = false;
   public flagEditando = false;
   
   // Tipos
-  public idTipo = '';
-  public tipos: TipoMovimientos[] = [];
+  public idCentroCosto = '';
+  public centrosCostos: any[] = [];
   public total = 0;
   
   // Paginacion
@@ -39,42 +38,42 @@ export class TipoMovimientosComponent implements OnInit {
   }
 
   // Modelo reactivo
-  public tipoForm = this.fb.group({
+  public centroCostosForm = this.fb.group({
     descripcion: ['', Validators.required],
     activo: [true, Validators.required],
   });
-  
-  constructor(private tipoMovimientosService: TipoMovimientoService,
-              private alertService: AlertService,
+
+  constructor(private dataService: DataService,
               private fb: FormBuilder,
-              private dataService: DataService) { }
-  
+              private alertService: AlertService,
+              private centroCostosServices: CentroCostosService) { }
+
   ngOnInit(): void {
-    this.dataService.ubicacionActual = "Dashboard - Tipo de movimientos";
-    this.listarTipos();
+    this.dataService.ubicacionActual = 'Dashboard - Centros de costos';
+    this.listarCentros();
   }
-  
-  // Listar tipos
-  listarTipos(): void {
+
+  // Listar centros de costos
+  listarCentros(): void {
     this.alertService.loading();
-    this.tipoMovimientosService.listarTipos( 
+    this.centroCostosServices.listarCentrosCostos( 
       this.ordenar.direccion,
       this.ordenar.columna
       )
-    .subscribe( ({ tipos, total })=> {
-      this.tipos = tipos;
+    .subscribe( ({ centros, total })=> {
+      this.centrosCostos = centros;
       this.total = total;
       this.alertService.close();
     }, (({error}) => {
       this.alertService.errorApi(error.msg);
     }));
   }
-  
-  // Crear un nuevo tipo
-  nuevoTipo(): void {
 
-    const { status } = this.tipoForm;
-    const { descripcion } = this.tipoForm.value;
+  // Nuevo centro
+  nuevoCentro(): void {
+  
+    const { status } = this.centroCostosForm;
+    const { descripcion } = this.centroCostosForm.value;
     
     // Se verifica si los campos son invalidos
     if(status === 'INVALID' || descripcion.trim() === ''){
@@ -85,40 +84,40 @@ export class TipoMovimientosComponent implements OnInit {
     this.alertService.loading();  // Comienzo de loading
     
     const data = {
-      descripcion: this.tipoForm.value.descripcion,
-      activo: this.tipoForm.value.activo
+      descripcion: this.centroCostosForm.value.descripcion,
+      activo: this.centroCostosForm.value.activo
     }
   
-    this.tipoMovimientosService.nuevoTipo(data).subscribe(() => {
-      this.listarTipos();
+    this.centroCostosServices.nuevoCentroCostos(data).subscribe(() => {
+      this.listarCentros();
       this.reiniciarFormulario();
       this.showModal = false;
     },( ({error}) => {
       this.alertService.errorApi(error.msg);
       return;  
     }));
-  
+    
   }
-  
-  // Tipo por ID
-  getTipo(id: string): void {
+
+  // Centro de costo por ID
+  getCentroCosto(id: string): void {
     this.alertService.loading();
-    this.tipoMovimientosService.getTipo(id).subscribe(({ tipo }) => {
-      this.idTipo = tipo._id;
-      this.tipoForm.setValue({
-        descripcion: tipo.descripcion,
-        activo: tipo.activo,     
+    this.centroCostosServices.getCentroCosto(id).subscribe(({ centro }) => {
+      this.idCentroCosto = centro._id;
+      this.centroCostosForm.setValue({
+        descripcion: centro.descripcion,
+        activo: centro.activo,     
       });
       this.alertService.close();       
     },({error})=>{
       this.alertService.errorApi(error.msg);
     });  
   }
-  
-  // Editar tipo
-  editarTipo(id: string): void {
-    const { status } = this.tipoForm;
-    const { descripcion } = this.tipoForm.value;
+
+  // Editar centro costo
+  editarCentroCosto(id: string): void {
+    const { status } = this.centroCostosForm;
+    const { descripcion } = this.centroCostosForm.value;
     
     // Se verifica si los campos son invalidos
     if(status === 'INVALID' || descripcion.trim() === ''){
@@ -127,58 +126,58 @@ export class TipoMovimientosComponent implements OnInit {
     }
 
     const data = {
-      descripcion: this.tipoForm.value.descripcion,
-      activo: this.tipoForm.value.activo
+      descripcion: this.centroCostosForm.value.descripcion,
+      activo: this.centroCostosForm.value.activo
     }
     
     this.alertService.loading();  // Comienzo de loading
     
-    this.tipoMovimientosService.actualizarTipo(id, data).subscribe(() => {
-      this.listarTipos();
+    this.centroCostosServices.actualizarCentroCostos(id, data).subscribe(() => {
+      this.listarCentros();
       this.reiniciarFormulario();
       this.showModal = false;
     },({error})=>{
       this.alertService.errorApi(error.msg);
     });
   }
-  
+
   // Actualizar estado Activo/Inactivo
-  actualizarTipos(tipo: any): void {
-    const { _id, activo } = tipo;
+  actualizarCentroCosto(centro: any): void {
+    const { _id, activo } = centro;
     this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
         .then(({isConfirmed}) => {  
           if (isConfirmed) {
             this.alertService.loading();
-            this.tipoMovimientosService.actualizarTipo(_id, { activo: !activo }).subscribe(() => {
+            this.centroCostosServices.actualizarCentroCostos(_id, { activo: !activo }).subscribe(() => {
               this.alertService.loading();
-              this.listarTipos();
+              this.listarCentros();
             }, ({error}) => {
               this.alertService.errorApi(error.msg);
             });
           }
         });
   }
-  
-  // Reiniciar formulario
-  reiniciarFormulario(): void {
-  this.tipoForm.setValue({
-    descripcion: '',
-    activo: true,    
-  });    
-  };
-  
+
   // Abrir modal
   abrirModal(tipo: string, id: string = null): void {
     if(tipo === "crear"){          // Modal: Nuevo tipo
       this.reiniciarFormulario();
       this.flagEditando = false;
     }else{                         // Modal: Editar tipo
-      this.getTipo(id);
+      this.getCentroCosto(id);
       this.flagEditando = true;
     }
     this.showModal = true;
   }
-  
+
+  // Reiniciar formulario
+  reiniciarFormulario(): void {
+    this.centroCostosForm.setValue({
+      descripcion: '',
+      activo: true,    
+    });    
+  };
+
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
     this.paginaActual = 1;
@@ -187,17 +186,17 @@ export class TipoMovimientosComponent implements OnInit {
   
   // Filtrar por Parametro
   filtrarParametro(parametro: string): void{
-  this.paginaActual = 1;
-  this.filtro.parametro = parametro;
+    this.paginaActual = 1;
+    this.filtro.parametro = parametro;
   }
   
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-  this.ordenar.columna = columna;
-  this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
-  this.alertService.loading();
-  this.listarTipos();
+    this.ordenar.columna = columna;
+    this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
+    this.alertService.loading();
+    this.listarCentros();
   }
-  
+
 
 }

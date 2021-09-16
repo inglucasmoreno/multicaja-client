@@ -15,5 +15,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.ubicacionActual = 'Dashboard - Home';
   }
-
+  
+  vamosRiver(): void {
+    alert('Vamos River!!!');
+  }
 }

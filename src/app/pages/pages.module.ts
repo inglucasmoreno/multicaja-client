@@ -23,6 +23,8 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { ReportesMovimientosComponent } from './reportes/reportes-movimientos.component';
 import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-emitidos.component';
 import { ReportesEvolucionSaldosComponent } from './reportes/reportes-evolucion-saldos.component';
+import { CentrosCostosComponent } from './centros-costos/centros-costos.component';
+import { CuentasContablesComponent } from './cuentas-contables/cuentas-contables.component';
 
 
 @NgModule({
@@ -44,6 +46,8 @@ import { ReportesEvolucionSaldosComponent } from './reportes/reportes-evolucion-
     ReportesMovimientosComponent,
     ReportesChequesEmitidosComponent,
     ReportesEvolucionSaldosComponent,
+    CentrosCostosComponent,
+    CuentasContablesComponent,
   ],
   imports: [
     CommonModule,

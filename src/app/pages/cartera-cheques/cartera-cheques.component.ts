@@ -38,6 +38,9 @@ export class CarteraChequesComponent implements OnInit {
   public totalImporte: number = 0;
   public concepto = '';
   
+  // SELECTOR
+  public estadoSeleccionado = 'Activo';
+
   // DATOS - MOVIMIENTO
   public data = {
     

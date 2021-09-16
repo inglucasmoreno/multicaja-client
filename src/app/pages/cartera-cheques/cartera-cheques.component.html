@@ -111,7 +111,7 @@
     </div>
 </app-modal>
 
-<!-- Modal: Transferir cheque -->
+<!-- Modal: Endosar cheque -->
 <app-modal-small [showModal]="showModalTransferirCheque">
     <div class="bg-white rounded">
         <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
@@ -127,7 +127,7 @@
                     </div>
                 </div>
                 <div class="font-semibold text-gray-800 text-sm mt-3">
-                    Fecha de transferencia
+                    Fecha de endoso
                 </div>
                 <div>
                     <div class="bg-whsite my-2 p-1 flex border border-gray-200 rounded shadow">
@@ -212,12 +212,12 @@
                 <p class="py-2 border-b border-r border-l flex items-center justify-between px-2"> <span class="font-semibold"> Fecha de cobro </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_cobro | fecha }} </span></p>
                 <p *ngIf="!chequeSeleccionado.activo && chequeSeleccionado.estado === 'Cobrado'" class="py-2 border-b border-r border-l flex items-center justify-between px-2 bg-blue-100"> <span class="font-semibold"> Cobrado el </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_cobrado | fecha }} </span></p>
                 <p *ngIf="!chequeSeleccionado.activo && chequeSeleccionado.estado === 'Transferido'" class="py-2 bg-yellow-100 border-b border-r border-l flex items-center justify-between px-2">
-                    <span class="font-semibold"> Fecha de transferencia </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_transferencia | fecha }} </span>
+                    <span class="font-semibold"> Fecha de endoso </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.fecha_transferencia | fecha }} </span>
                 </p>
                 <p class="py-2 border-b border-r border-l flex items-center justify-between px-2"> <span class="font-semibold"> Banco </span> <span class="text-xs"> {{ chequeSeleccionado.banco !== '' ? chequeSeleccionado.banco : 'Sin especificar'}} </span> </p>
                 <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Número de cheque </span> <span class="text-xs"> {{ chequeSeleccionado.nro_cheque }} </span> </p>
                 <p *ngIf="chequeSeleccionado.estado === 'Transferido'" class="py-2 border-b border-r border-l flex items-center justify-between px-2 bg-yellow-100">
-                    <span class="font-semibold"> Transferido a </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.transferencia_destino_descripcion }} </span>
+                    <span class="font-semibold"> Endosado a </span> <span class="text-sm font-semibold"> {{ chequeSeleccionado.transferencia_destino_descripcion }} </span>
                 </p>
                 <p *ngIf="chequeSeleccionado.estado === 'Cobrado'" class="py-2 border-b border-l border-r flex items-center justify-between px-2 bg-blue-100"> <span class="font-semibold"> Ultimo propietario </span> <span class="text-xs"> {{ chequeSeleccionado.destino_descripcion }} </span> </p>
                 <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Cliente </span> <span class="text-xs"> {{ chequeSeleccionado.cliente_descripcion }} </span> </p>
@@ -226,7 +226,7 @@
                 <p *ngIf="chequeSeleccionado.estado === 'Activo'" class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> En poder de </span> <span class="text-xs"> {{ chequeSeleccionado.destino_descripcion }} </span> </p>
                 <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Concepto </span> <span class="text-xs"> {{ chequeSeleccionado.concepto }} </span> </p>
                 <p class="py-2 border-b border-l border-r flex items-center justify-between px-2"> <span class="font-semibold"> Estado </span> <span [ngClass]="{'bg-green-100 border-green-200' : chequeSeleccionado.estado === 'Activo', 'bg-blue-100 border-blue-200' : chequeSeleccionado.estado === 'Cobrado', 'bg-yellow-100 border-yellow-200' : chequeSeleccionado.estado === 'Transferido'}"
-                        class="text-sm px-1 rounded border font-semibold"> {{ chequeSeleccionado.estado }} </span> </p>
+                        class="text-sm px-1 rounded border font-semibold"> {{ chequeSeleccionado.estado === 'Transferido' ? 'Endosado' : chequeSeleccionado.estado }} </span> </p>
                 <p class="py-2 border-b border-l border-r bg-gray-100 flex items-center justify-between px-2"> <span class="font-semibold"> Importe </span> <span class="font-semibold"> ${{ chequeSeleccionado.importe | moneda }} </span> </p>
             </div>
             <div *ngIf="chequeSeleccionado.activo" class="flex items-center">
@@ -252,10 +252,10 @@
                 <div class="my-2 flex sm:flex-row flex-col">
                     <div class="flex flex-row mb-1 sm:mb-0">
                         <div class="relative">
-                            <select #txtEstado (change)="filtrarPorEstado(txtEstado.value)" class="h-full rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                            <select [(ngModel)]="estadoSeleccionado" #txtEstado (change)="filtrarPorEstado(txtEstado.value)" class="h-full rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                                 <option value='Activo'> En cartera </option>
                                 <option value='Cobrado'> Cobrados </option>
-                                <option value='Transferido'> Transferidos </option>
+                                <option value='Transferido'> Endosados </option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -286,9 +286,16 @@
                         <thead>
                             <tr>
                                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div class="w-max flex items-center justify-center focus:outline-none">
+                                        <span>
+                                            Icono                                             
+                                        </span>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     <div (click)="ordenarPorColumna('createdAt')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                                         <span>
-                                            Fecha de emision                                             
+                                            Fecha de emision                                           
                                         </span>
                                         <span class="ml-2">
                                             <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
@@ -306,6 +313,18 @@
                                             <svg *ngIf="ordenar.columna == 'fecha_cobro' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
                                             <svg *ngIf="ordenar.columna == 'fecha_cobro' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
                                             <svg *ngIf="ordenar.columna != 'fecha_cobro'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th *ngIf="estadoSeleccionado === 'Cobrado'" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('fecha_cobrado')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
+                                        <span>
+                                            Fue cobrado el                                           
+                                        </span>
+                                        <span class="ml-2">
+                                            <svg *ngIf="ordenar.columna == 'fecha_cobrado' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'fecha_cobrado' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'fecha_cobrado'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                         </span>
                                     </div>
                                 </th>
@@ -343,6 +362,18 @@
                                         </span>
                                     </div>
                                 </th>
+                                <th *ngIf="estadoSeleccionado === 'Transferido'" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div (click)="ordenarPorColumna('destino_descripcion')" class="cursor-pointer flex items-center focus:outline-none">
+                                        <span>
+                                            Destino de endoso                                             
+                                        </span>
+                                        <span class="ml-2">
+                                            <svg *ngIf="ordenar.columna == 'destino_descripcion' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
+                                            <svg *ngIf="ordenar.columna == 'destino_descripcion' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                            <svg *ngIf="ordenar.columna != 'destino_descripcion'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </span>
+                                    </div>
+                                </th>
                                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     <div (click)="ordenarPorColumna('importe')" class="cursor-pointer flex items-center focus:outline-none">
                                         <span>
@@ -364,12 +395,22 @@
                             <tr class="animate__animated animate__fadeIn" *ngFor="let cheque of cheques | filtroCarteraCheques:filtro.parametro | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
+                                        <img class="w-8 h-8" src="assets/img/cheques/cheque.png" alt="Icono">
+                                    </p>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap">
                                         {{ cheque.createdAt | fecha }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
                                         {{ cheque.fecha_cobro| fecha }}
+                                    </p>
+                                </td>
+                                <td *ngIf="estadoSeleccionado === 'Cobrado'" class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {{ cheque.fecha_cobrado| fecha }}
                                     </p>
                                 </td>
                                 <!-- <td class="px-5 py-2 border-b border-gray-200 text-xs">
@@ -387,6 +428,11 @@
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
                                         {{ cheque.cliente_descripcion }}
+                                    </p>
+                                </td>
+                                <td *ngIf="estadoSeleccionado === 'Transferido'" class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {{ cheque.transferencia_destino_descripcion }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
