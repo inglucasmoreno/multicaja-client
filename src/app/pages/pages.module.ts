@@ -25,6 +25,7 @@ import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-em
 import { ReportesEvolucionSaldosComponent } from './reportes/reportes-evolucion-saldos.component';
 import { CentrosCostosComponent } from './centros-costos/centros-costos.component';
 import { CuentasContablesComponent } from './cuentas-contables/cuentas-contables.component';
+import { CobrarChequeComponent } from './alertas/cobrar-cheque.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { CuentasContablesComponent } from './cuentas-contables/cuentas-contables
     ReportesEvolucionSaldosComponent,
     CentrosCostosComponent,
     CuentasContablesComponent,
+    CobrarChequeComponent,
   ],
   imports: [
     CommonModule,

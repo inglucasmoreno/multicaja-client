@@ -134,10 +134,11 @@
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <app-pastilla-estado [activo]=cuenta.activo (click)="actualizarCuentaContable(cuenta)"></app-pastilla-estado>
+                                    <app-pastilla-estado *ngIf="cuenta.descripcion !== 'SIN ESPECIFICAR'" [activo]=cuenta.activo (click)="actualizarCuentaContable(cuenta)"></app-pastilla-estado>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
-                                    <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
+                                    <p *ngIf="cuenta.descripcion === 'SIN ESPECIFICAR'" class="p-4"></p>
+                                    <p *ngIf="cuenta.descripcion !== 'SIN ESPECIFICAR'" class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
                                         <app-boton-tabla (click)="abrirModal('editar', cuenta._id)" title="Editar centro">
                                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                                         </app-boton-tabla>

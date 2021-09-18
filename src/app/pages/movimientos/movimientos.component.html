@@ -11,9 +11,17 @@
             <svg *ngIf="showDatosMovimiento" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
         </h1>
         <div *ngIf="showDatosMovimiento" class="border p-2 bg-white text-sm">
-            <h2 class="p-1"> <span class="font-semibold"> Fecha: </span> <span> {{ this.movimientoSeleccionado.createdAt | fecha }} </span> </h2>
-            <h2 class="p-1"> <span class="font-semibold"> Tipo de movimiento: </span> <span> {{ this.movimientoSeleccionado.tipo_movimiento.descripcion }} </span> </h2>
-            <h2 class="p-1"> <span class="font-semibold"> Monto: </span> <span> ${{ this.movimientoSeleccionado.monto | moneda }} </span> </h2>
+            <p class="px-1 lg:py-2"> <span class="font-semibold"> Fecha: </span> <span> {{ this.movimientoSeleccionado.createdAt | fecha }} </span> </p>
+            <div class="lg:flex lg:items-center lg:border-t lg:border-b px-1 lg:py-2">
+                <p class="lg:w-1/2 py-1 lg:py-0"> <span class="font-semibold"> Tipo de movimiento: </span> <span> {{ this.movimientoSeleccionado.tipo_movimiento.descripcion }} </span> </p>
+                <p class="lg:w-1/2 py-1 lg:py-0"> <span class="font-semibold"> Comprobante: </span> <span> {{ this.movimientoSeleccionado.comprobante === '' ? 'SIN ESPECIFICAR' : this.movimientoSeleccionado.comprobante }} </span> </p>
+            </div>
+            <div class="lg:flex lg:items-center lg:border-b lg:py-2 px-1">
+                <p class="lg:w-1/2 lg:py-0 py-1"> <span class="font-semibold"> Centro de costos: </span> <span> {{ this.movimientoSeleccionado.centro_costos.descripcion}} </span> </p>
+                <p class="lg:w-1/2 lg:py-0 py-1"> <span class="font-semibold"> Cuenta contable: </span> <span> {{ this.movimientoSeleccionado.cuenta_contable.descripcion}} </span> </p>
+            </div>
+            <p class="lg:py-2 px-1 py-1"> <span class="font-semibold"> Concepto/Observación: </span> <span> {{ this.movimientoSeleccionado.concepto === '' ? 'SIN ESPECIFICAR' : this.movimientoSeleccionado.concepto }} </span> </p>
+            <p class="lg:py-2 px-1 py-1 lg:border-t"> <span class="font-semibold"> Monto: </span> <span> ${{ this.movimientoSeleccionado.monto | moneda }} </span> </p>
         </div>
         <div *ngIf="movimientoSeleccionado && movimientoSeleccionado.cheque !== null" class="mt-2 border border-gray-200 rounded-t">
             <h1 (click)="showDatosCheque = !showDatosCheque" class="bg-gray-100 py-1 px-2 text-gray-800 hover:bg-yellow-100 border-b cursor-pointer flex items-center justify-between">
@@ -22,23 +30,23 @@
                 <svg *ngIf="showDatosCheque" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
             </h1>
             <div *ngIf="showDatosCheque" class="p-2 text-sm">
-                <div class="lg:flex items-center">
+                <div class="lg:flex items-center border-b">
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Fecha de emision: </span> <span> {{ this.mostrarCheque.fecha_emision | fecha }} </span> </p>
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Fecha de cobro: </span> <span> {{ this.mostrarCheque.fecha_cobro | fecha }} </span> </p>
                 </div>
-                <div class="lg:flex items-center">
-                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Banco: </span> <span> {{ this.mostrarCheque.banco === '' ? 'Sin especificar' : this.mostrarCheque.banco }} </span> </p>
+                <div class="lg:flex items-center border-b">
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Banco: </span> <span> {{ this.mostrarCheque.banco === '' ? 'SIN ESPECIFICAR' : this.mostrarCheque.banco }} </span> </p>
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Numero de cheque: </span> <span> {{ this.mostrarCheque.nro_cheque }} </span> </p>
                 </div>
-                <div class="lg:flex items-center">
-                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Emisor: </span> <span> {{ this.mostrarCheque.emisor === '' ? 'Sin especificar' : this.mostrarCheque.emisor }} </span> </p>
-                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT (Emisor): </span> <span> {{ this.mostrarCheque.cuit === '' ? 'Sin especificar' : this.mostrarCheque.cuit }} </span> </p>
+                <div class="lg:flex items-center border-b">
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Emisor: </span> <span> {{ this.mostrarCheque.emisor === '' ? 'SIN ESPECIFICAR' : this.mostrarCheque.emisor }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT (Emisor): </span> <span> {{ this.mostrarCheque.cuit === '' ? 'SIN ESPECIFICAR' : this.mostrarCheque.cuit }} </span> </p>
                 </div>
-                <div class="lg:flex items-center">
+                <div class="lg:flex items-center border-b">
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ this.mostrarCheque.cliente_descripcion }} </span> </p>
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Destino: </span> <span> {{ this.mostrarCheque.destino_descripcion }} </span> </p>
                 </div>
-                <p class="p-2"> <span class="font-semibold"> Concepto: </span> <span> {{ this.mostrarCheque.concepto }} </span> </p>
+                <p class="p-2 border-b"> <span class="font-semibold"> Concepto: </span> <span> {{ this.mostrarCheque.concepto }} </span> </p>
                 <p class="p-2"> <span class="font-semibold"> Importe: </span> <span> ${{ this.mostrarCheque.importe | moneda }} </span> </p>
             </div>
         </div>
@@ -65,117 +73,73 @@
     </div>
 </app-modal-medium>
 
-<!-- Modal: Datos de cheque -->
-<app-modal [showModal]="showModalCheque">
-    <div class="p-4">
-        <div class="flex items-center text-lg justify-between bg-gray-800 p-2 rounded-t">
-            <h1 class="text-white"> Datos de cheque </h1>
-            <app-boton-regresar (click)="regresar()"></app-boton-regresar>
-        </div>
-        <div>
-            <div class="flex flex-col lg:flex-row">
-                <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm">
-                        <span class="text-red-500"> * </span> Nro. de cheque
-                    </div>
-                    <div class="bg-white my-2 flex">
-                        <input [(ngModel)]="cheque.nro_cheque" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
-                    </div>
-                </div>
-                <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm">
-                        <span class="text-red-500"> * </span> Concepto
-                    </div>
-                    <div class="bg-white my-2 flex">
-                        <input [(ngModel)]="cheque.concepto" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col lg:flex-row">
-                <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold text-gray-600 text-sm">
-                        <span class="text-red-500"> * </span> Cliente
-                    </div>
-                    <div class="bg-white my-2 flex">
-                        <div class="border border-gray-200 bg-gray-100 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
-                            {{ cheque.cliente_descripcion }}
-                        </div>
-                    </div>
-                </div>
-                <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold text-gray-600 text-sm">
-                        <span class="text-red-500"> * </span> Destino
-                    </div>
-                    <div class="bg-white my-2 flex">
-                        <div class="border border-gray-200 bg-gray-100 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
-                            {{ cheque.destino_descripcion }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col lg:flex-row">
-                <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold text-gray-600 text-sm">
-                        Emisor
-                    </div>
-                    <div class="bg-white my-2 flex">
-                        <input [(ngModel)]="cheque.emisor" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
-                    </div>
-                </div>
-                <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold text-gray-600 text-sm">
-                        CUIT
-                    </div>
-                    <div class="bg-white my-2 flex">
-                        <input [(ngModel)]="cheque.cuit" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col lg:flex-row">
-                <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold text-gray-600 text-sm">
-                        <span class="text-red-500"> * </span> Monto
-                    </div>
-                    <div class="bg-white my-2 flex">
-                        <div class="border bg-gray-100 border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none"> ${{ cheque.importe | moneda }} </div>
-                    </div>
-                </div>
-                <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
-            </div>
-        </div>
-        <div class="lg:flex lg:items-center mt-6">
-            <button (click)="crearCheque()" class="w-full lg:w-1/2 focus:outline-none bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
-            <button (click)="showModalCheque = false" class="w-full lg:w-1/2 focus:outline-none bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
-        </div>
-    </div>
-</app-modal>
-
 <!-- Modal: Nuevo movimiento -->
 <app-modal-medium [showModal]="showModal">
     <div class="bg-white p-4">
         <h1 *ngIf="!flagEditando" class="text-lg font-medium bg-gray-800 text-white p-2 rounded text-center"> Creando un nuevo movimiento </h1>
         <form class="mt-1">
-            <div class="px-2 mt-2 w-1/2">
-                <div class="font-semibold text-gray-600 text-sm">
-                    <span class="text-red-500"> * </span> Tipo de movimiento
+            <div class="lg:flex">
+                <div class="px-2 mt-2 w-full lg:w-1/2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        Tipo de movimiento
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <select name="tipo" [(ngModel)]="data.tipo_movimiento" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <option *ngFor="let tipo of tipos" [value]="tipo._id"> {{ tipo.descripcion }} </option>
+                        </select>
+                    </div>
                 </div>
-                <div class="bg-white my-2 flex">
-                    <select name="tipo" [(ngModel)]="data.tipo_movimiento" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
-                        <option value=""> Seleccionar tipo </option>
-                        <option *ngFor="let tipo of tipos" [value]="tipo._id"> {{ tipo.descripcion }} </option>
-                    </select>
+                <div class="px-2 mt-2 w-full lg:w-1/2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        Centro de costos
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <select name="centro_costos" [(ngModel)]="data.centro_costos" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div class="mt-3">
-                <div class="font-semibold text-gray-600 text-sm">
-                    <span class="text-red-500"> * </span> Monto ($)
+            <div class="lg:flex">
+                <div class="px-2 mt-2 w-full lg:w-1/2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        Cuenta contable
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <select name="cuenta_contable" [(ngModel)]="data.cuenta_contable" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
+                        </select>
+                    </div>
                 </div>
-                <div class="font-semibold mx-2 mt-2">
-                    <input type="number" name="monto" [(ngModel)]="data.monto" placeholder="Ingresar monto" min=0 class="border p-1 px-3 rounded focus:outline-none text-sm">
+                <div class="px-2 mt-2 w-full lg:w-1/2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        Concepto/Observación
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <input name="concepto" [(ngModel)]="data.concepto" placeholder="Ej. Pago de sueldo" class="border px-2 border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                    </div>
                 </div>
             </div>
-            <div class="flex mt-2">
-                <div class="w-1/2 h-full mr-2">
+            <div class="lg:flex lg:items-center">
+                <div class="px-2 mt-2 w-full lg:w-1/2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        Comprobante
+                    </div>
+                    <div class="bg-white my-2 flex">
+                        <input name="comprobante" [(ngModel)]="data.comprobante" placeholder="Ej. Cobertura cuenta" class="border px-2 border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2">
+                    <div class="font-semibold text-gray-600 text-sm">
+                        <span class="text-red-500"> * </span> Monto ($)
+                    </div>
+                    <div class="font-semibold mx-2 mt-2">
+                        <input type="number" name="monto" [(ngModel)]="data.monto" placeholder="Ingresar monto" class="border p-1 px-3 w-full rounded focus:outline-none text-sm">
+                    </div>
+                </div>
+            </div>
+            <div class="lg:flex mt-2">
+                <div class="w-full lg:w-1/2 h-full mr-2">
                     <h1 class="bg-orange-700 text-white p-1 rounded font-semibold text-center mt-1 text-sm "> Datos de origen </h1>
                     <div class="flex flex-col lg:flex-row">
                         <div class="w-full flex-1">
@@ -210,12 +174,12 @@
                         <div class="bg-white my-2 flex">
                             <select name="origen_saldo" [(ngModel)]="data.origen_saldo" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                                 <option value=""> Seleccionar saldo </option>
-                                <option *ngFor="let elemento of saldos_origen" [value]="elemento._id"> {{ elemento.descripcion + ' - Disponible: ' +  '$' + elemento.monto }} </option>
+                                <option *ngFor="let elemento of saldos_origen" [value]="elemento._id"> {{ elemento.descripcion + ' - Disponible: ' +  '$' + (elemento.monto | moneda) }} </option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="w-1/2 h-full">
+                <div class="w-full lg:w-1/2 h-full">
                     <h1 class="bg-green-700 text-white p-1 rounded font-semibold text-center mt-1 text-sm"> Datos de destino </h1>
                     <div class="flex flex-col lg:flex-row">
                         <div class="w-full flex-1">
@@ -249,7 +213,7 @@
                         <div class="bg-white my-2 flex">
                             <select name="destino_saldo" [(ngModel)]="data.destino_saldo" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                                 <option value=""> Seleccionar saldo </option>
-                                <option *ngFor="let elemento of saldos_destino" [value]="elemento._id"> {{ elemento.descripcion + ' - Disponible: ' +  '$' + elemento.monto }} </option>
+                                <option *ngFor="let elemento of saldos_destino" [value]="elemento._id"> {{ elemento.descripcion + ' - Disponible: ' +  '$' + (elemento.monto | moneda) }} </option>
                             </select>
                         </div>
                     </div>

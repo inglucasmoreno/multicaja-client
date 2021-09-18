@@ -9,6 +9,8 @@ import { TipoMovimientos } from '../../models/tipo-movimientos.model';
 import { TipoMovimientoService } from 'src/app/services/tipo-movimiento.service';
 import { ChequesService } from '../../services/cheques.service';
 import { environment } from '../../../environments/environment';
+import { CentroCostosService } from '../../services/centro-costos.service';
+import { CuentaContableService } from 'src/app/services/cuenta-contable.service';
 
 @Component({
   selector: 'app-movimientos',
@@ -38,6 +40,12 @@ export class MovimientosComponent implements OnInit {
   public total = 0;
   public mostrarCheque:any = {};
 
+  // Centros de costos
+  public centrosCostos: any[] = [];
+
+  // Cuenta contable
+  public cuentasContables: any[] = [];
+
   // Externos
   public externos: any[] = [];
 
@@ -63,6 +71,10 @@ export class MovimientosComponent implements OnInit {
     descripcion: 'Testing',
     tipo_origen: 'Externo',
     tipo_destino: 'Externo',
+    centro_costos: '',
+    cuenta_contable: '',
+    comprobante: '',
+    concepto: '',
     origen: '',
     destino: '',
     tipo_movimiento: '',
@@ -116,28 +128,67 @@ export class MovimientosComponent implements OnInit {
               private empresasService: EmpresasService,
               private alertService: AlertService,
               private dataService: DataService,
+              private centroCostosService: CentroCostosService,
+              private cuentaContableService: CuentaContableService,
               private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.dataService.ubicacionActual = "Dashboard - Movimientos";
-    this.listarMovimientos();
-    this.listarExternos();
-    this.listadoEmpresas();
-    this.listarTipos();
-  }
 
-  // Listar tipos de movimientos
-  listarTipos(): void {
-    this.tipoMovimientosService.listarTipos().subscribe( ({ tipos }) => {
-      this.tipos= tipos.filter( tipo => (tipo.activo && 
-                                         tipo._id !== environment.tipo_cheque &&
-                                         tipo._id !== environment.tipo_ingreso_cheque &&
-                                         tipo._id !== environment.tipo_transferencia_cheque &&
-                                         tipo._id !== environment.tipo_cobro_cheque &&
-                                         tipo._id !== environment.tipo_cheque_emitido_cobrado &&
-                                         tipo._id !== environment.tipo_emision_cheque));
+    this.movimientosService.listarMovimientos( // LISTADO DE MOVIMIENTOS
+      this.ordenar.direccion,
+      this.ordenar.columna
+    ).subscribe(({ movimientos, total }) => {
+      this.movimientos = movimientos;
+      this.total = total;
+      
+      this.externosService.listarExternos().subscribe(({ externos }) => {                                  // LISTADO DE EXTERNOS
+        this.externos = externos.filter( externo => (externo.activo == true) );
+        this.elementosOrigen = this.externos;
+        this.elementosDestino = this.externos;
+            
+          this.empresasService.listarEmpresas().subscribe(({ empresas })=> {                               // LISTADO DE EMPRESAS
+            this.empresas = empresas.filter( empresa => (empresa.activo == true) );
+            
+            this.centroCostosService.listarCentrosCostos().subscribe(({ centros })=>{                      // LISTADO DE CENTROS DE COSTOS
+              this.centrosCostos = centros.filter( centro => (centro.activo == true));
+              
+              this.cuentaContableService.listarCuentasContables().subscribe(({cuentasContables})=>{        // LISTADO DE CUENTAS CONTABLES
+                this.cuentasContables = cuentasContables.filter( cuenta => (cuenta.activo == true) );
+              
+                this.tipoMovimientosService.listarTipos().subscribe( ({ tipos }) => {                      // LISTADO DE TIPOS
+                  this.tipos= tipos.filter( tipo => (tipo.activo && 
+                                                     tipo._id !== environment.tipo_cheque &&
+                                                     tipo._id !== environment.tipo_ingreso_cheque &&
+                                                     tipo._id !== environment.tipo_transferencia_cheque &&
+                                                     tipo._id !== environment.tipo_cobro_cheque &&
+                                                     tipo._id !== environment.tipo_cheque_emitido_cobrado &&
+                                                     tipo._id !== environment.tipo_emision_cheque));
+                
+                  this.alertService.close();          
+                }, ({error})=>{
+                  this.alertService.errorApi(error); // ERROR: LISTOS  
+                });
+                     
+              },({error})=>{
+                this.alertService.errorApi(error);  // ERROR: CUENTAS CONTABLES
+              });
+            },({error})=>{
+              this.alertService.errorApi(error);    // EROOR: CENTROS DE COSTOS
+            });
+            
+          },({error})=>{
+            this.alertService.errorApi(error);      // ERROR: EMPRESAS
+          });
+      
+      },({error})=>{
+        this.alertService.errorApi(error);          // ERROR: EXTERNOS
+      });  
+    }, ({ error }) => {
+      this.alertService.errorApi(error);            // ERROR: MOVIMIENTOS
     });
-  };
+
+  }
   
   // Actualizar selectores
   actualizarTipo(origen_destino: string, tipo: string ): void {
@@ -183,31 +234,6 @@ export class MovimientosComponent implements OnInit {
     }    
   }
 
-  // Crear cheque
-  crearCheque():void {
-    
-    const { nro_cheque, concepto, cliente, destino, cliente_descripcion, destino_descripcion, emisor, cuit } = this.cheque;
-    
-    const validacion = nro_cheque.trim() === '' || 
-                       concepto.trim() === '' ||
-                       cliente.trim() === '' ||
-                       destino.trim() === '' ||
-                       cliente_descripcion === '' ||
-                       destino_descripcion === ''
-
-    if(validacion) return this.alertService.info('Debes completar todos los datos del cheque');
-
-    if(emisor.trim() === '') this.cheque.emisor = null;
-    if(cuit.trim() === '') this.cheque.cuit = null;
-    
-    this.alertService.loading();
-    this.chequesService.nuevoCheque(this.cheque).subscribe( ({ cheque }) => { // Se crea el cheque
-      this.data.cheque = cheque._id;
-      this.nuevoMovimiento();  // Se crea el movimiento
-    });
-  
-  }
-
   // Listado de movimientos
   listarMovimientos(): void {
     this.alertService.loading();
@@ -224,25 +250,6 @@ export class MovimientosComponent implements OnInit {
     });
   }
 
-  // Listado de agentes externos
-  listarExternos(): void {
-    this.externosService.listarExternos().subscribe(({ externos }) => {
-      this.externos = externos.filter( externo => (externo.activo == true) );
-      this.elementosOrigen = this.externos;
-      this.elementosDestino = this.externos;
-    },({error})=>{
-      this.alertService.errorApi(error);
-    });
-  }
-
-  // Listado de empresas
-  listadoEmpresas(): void {
-    this.empresasService.listarEmpresas().subscribe(({ empresas })=> {
-      this.empresas = empresas.filter( empresa => (empresa.activo == true) );
-    },({error})=>{
-      this.alertService.errorApi(error);  
-    });
-  };
 
   // Crear movimiento
   crearMovimiento(): void {
@@ -251,8 +258,7 @@ export class MovimientosComponent implements OnInit {
                          this.data.origen.trim() === '' ||
                          this.data.destino.trim() === '' ||
                          this.data.tipo_origen === 'Interno' && this.data.origen_saldo === '' ||
-                         this.data.tipo_destino === 'Interno' && this.data.destino_saldo === '' ||
-                         this.data.tipo_movimiento === ''
+                         this.data.tipo_destino === 'Interno' && this.data.destino_saldo === ''
 
     if(verificacion) return this.alertService.formularioInvalido();
     
@@ -288,7 +294,11 @@ export class MovimientosComponent implements OnInit {
     this.data = {
       cheque: null,
       descripcion: 'Testing',
-      monto: null,     
+      monto: null,
+      centro_costos: '',
+      cuenta_contable: '',
+      comprobante: '',
+      concepto: '',     
       tipo_origen: 'Externo',
       tipo_destino: 'Externo',
       tipo_movimiento: '',
@@ -309,6 +319,27 @@ export class MovimientosComponent implements OnInit {
       cuit: '',
       importe: 0
     }
+    
+    // Sin especificar - Centros costos
+    this.centrosCostos.forEach( centro => {
+      if(centro.descripcion === 'SIN ESPECIFICAR'){
+        this.data.centro_costos = centro._id; 
+      }
+    });
+
+    // Sin especificar - Cuenta contable
+    this.cuentasContables.forEach( cuenta => {
+      if(cuenta.descripcion === 'SIN ESPECIFICAR'){
+        this.data.cuenta_contable = cuenta._id;
+      }
+    });
+
+    // Sin especificar - Tipo
+    this.tipos.forEach( tipo => {
+      if(tipo.descripcion === 'SIN ESPECIFICAR'){
+        this.data.tipo_movimiento = tipo._id;
+      }
+    });
 
     this.elementosOrigen = this.externos;
     this.elementosDestino = this.externos;

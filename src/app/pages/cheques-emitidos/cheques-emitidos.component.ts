@@ -7,6 +7,8 @@ import { EmpresasService } from '../../services/empresas.service';
 import { ExternosService } from 'src/app/services/externos.service';
 import { environment } from '../../../environments/environment';
 import { ChequesService } from 'src/app/services/cheques.service';
+import { CentroCostosService } from '../../services/centro-costos.service';
+import { CuentaContableService } from '../../services/cuenta-contable.service';
 
 @Component({
   selector: 'app-cheques-emitidos',
@@ -15,6 +17,12 @@ import { ChequesService } from 'src/app/services/cheques.service';
   ]
 })
 export class ChequesEmitidosComponent implements OnInit {
+
+  // CENTROS DE COSTOS
+  public centrosCostos: any[] = [];
+
+  // CUENTA CONTABLE
+  public cuentasContables: any[] = [];
 
   // SELECTOR DE ESTADO
   public estadoSeleccionado = 'true';
@@ -62,7 +70,9 @@ export class ChequesEmitidosComponent implements OnInit {
   
     cheque: '',
     concepto: '',
-
+    comprobante: '',
+    centro_costos: '',
+    cuenta_contable: '',
     origen: "",
     origen_descripcion: "",
     origen_saldo_descripcion: 'CHEQUES',
@@ -110,6 +120,8 @@ export class ChequesEmitidosComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private empresasService: EmpresasService,
               private chequesService: ChequesService,
+              private centroCostosService: CentroCostosService,
+              private cuentaContableService: CuentaContableService,
               private externosService: ExternosService) { }
 
   ngOnInit(): void {
@@ -142,7 +154,20 @@ export class ChequesEmitidosComponent implements OnInit {
                   this.chequesService.listarChequesEmitidos(this.id, this.ordenar.direccion, this.ordenar.columna, this.filtro.activo, 'Emitido').subscribe(({cheques}) => {
                     this.cheques = cheques;
                     this.calcularTotal(cheques);
-                    this.alertService.close();
+                    
+                    this.centroCostosService.listarCentrosCostos().subscribe(({centros}) => {
+                      this.centrosCostos = centros.filter(centro => (centro.activo));
+                      this.cuentaContableService.listarCuentasContables().subscribe(({cuentasContables}) => {
+                        this.cuentasContables = cuentasContables.filter(cuenta => (cuenta.activo));
+                        this.alertService.close();
+                      },({error})=>{
+                        this.alertService.errorApi(error);
+                      })
+
+                    },({error})=>{
+                      this.alertService.errorApi(error);
+                    });
+                    
                   },({error})=>{
                     this.alertService.errorApi(error);
                   });
@@ -185,6 +210,10 @@ export class ChequesEmitidosComponent implements OnInit {
       movimiento: {
 
         cheque: this.chequeSeleccionado._id,
+        comprobante: '',
+        centro_costos: this.data.centro_costos,
+        cuenta_contable: this.data.cuenta_contable,
+        concepto: this.chequeSeleccionado.concepto,
 
         tipo_origen: 'Interno',
         origen: this.chequeSeleccionado.cliente,
@@ -251,7 +280,9 @@ export class ChequesEmitidosComponent implements OnInit {
     // destino_descripcion - Back
     // destino_saldo - Back
     // Fecha cobro
-
+    
+    this.data.concepto = this.nuevoCheque.concepto;
+    this.data.comprobante = '';
     this.data.destino = this.nuevoCheque.destino;
     this.data.destino_saldo_descripcion = 'CHEQUES';
     this.data.monto = this.nuevoCheque.importe;
@@ -348,6 +379,7 @@ export class ChequesEmitidosComponent implements OnInit {
 
   // Modal - Cobrar cheque
   modalCobrarCheque(): void {
+    this.reiniciarSinEspecificar();
     this.nuevoCheque.fecha_cobrado = format(Date.now(), 'yyyy-MM-dd');
     this.showModalCobrarCheque = true;
     this.showModalDetalles = false;
@@ -368,7 +400,10 @@ export class ChequesEmitidosComponent implements OnInit {
     
       cheque: '',      // back
       concepto: '',
-  
+      comprobante: '',
+      centro_costos: '',
+      cuenta_contable: '',
+      
       origen: "",
       origen_descripcion: "",
       origen_saldo_descripcion: 'CHEQUES',
@@ -410,6 +445,25 @@ export class ChequesEmitidosComponent implements OnInit {
       cuit: '',  
       importe: null
     }  
+  
+    this.reiniciarSinEspecificar();
+
+  }
+
+  reiniciarSinEspecificar(): void {
+    // Sin especificar - Centros costos
+    this.centrosCostos.forEach( centro => {
+      if(centro.descripcion === 'SIN ESPECIFICAR'){
+        this.data.centro_costos = centro._id; 
+      }
+    });
+
+    // Sin especificar - Cuenta contable
+    this.cuentasContables.forEach( cuenta => {
+      if(cuenta.descripcion === 'SIN ESPECIFICAR'){
+        this.data.cuenta_contable = cuenta._id;
+      }
+    });    
   }
 
   // Filtrar por estado

@@ -8,6 +8,8 @@ import { ExternosService } from '../../services/externos.service';
 import { environment } from '../../../environments/environment';
 import { MovimientosService } from 'src/app/services/movimientos.service';
 import { format } from 'date-fns';
+import { CentroCostosService } from '../../services/centro-costos.service';
+import { CuentaContableService } from '../../services/cuenta-contable.service';
 
 @Component({
   selector: 'app-cartera-cheques',
@@ -16,6 +18,12 @@ import { format } from 'date-fns';
   ]
 })
 export class CarteraChequesComponent implements OnInit {
+
+  // CENTRO DE COSTOS
+  public centrosCostos: any[] = [];
+  
+  // CUENTA CONTABLE
+  public cuentasContables: any[]= [];
 
   // MODAL
   public showModalDetalles = false;
@@ -46,6 +54,9 @@ export class CarteraChequesComponent implements OnInit {
     
     cheque: '',
     concepto: '',
+    comprobante: '',
+    centro_costos: '',
+    cuenta_contable: '',
 
     fecha_transferencia: format(Date.now(), 'yyyy-MM-dd'),
     fecha_cobro: format(Date.now(), 'yyyy-MM-dd'),
@@ -117,6 +128,8 @@ export class CarteraChequesComponent implements OnInit {
               private movimientosService: MovimientosService,
               private externosService: ExternosService,
               private activatedRoute: ActivatedRoute,
+              private centroCostosService: CentroCostosService,
+              private cuentaContableService: CuentaContableService,
               private chequesService: ChequesService,
               private alertService: AlertService) { }
 
@@ -154,9 +167,24 @@ export class CarteraChequesComponent implements OnInit {
 
             // LISTADO DE EXTERNOS
             this.externosService.listarExternos(1, 'descripcion').subscribe(({ externos })=>{    
-              this.externos = externos.filter( externo => (externo.activo));
+              this.externos = externos.filter( externo => ( externo.activo ));
               this.destinos = this.externos;
               
+              // LISTADO DE CENTROS DE COSTO
+              this.centroCostosService.listarCentrosCostos().subscribe(({centros}) => {
+                this.centrosCostos = centros.filter(centro => ( centro.activo ));
+                
+                // LISTADO DE CUENTAS CONTABLES
+                this.cuentaContableService.listarCuentasContables().subscribe(({ cuentasContables })=>{
+                  this.cuentasContables = cuentasContables.filter( cuenta => ( cuenta.activo ) );
+                },({error})=>{
+                  this.alertService.errorApi(error);
+                })
+
+              },({error})=>{
+                this.alertService.errorApi(error);
+              });
+
               this.alertService.close(); // -------------------------------------------------------> Finalizacion de carga
             
             // ERROR: LISTADO DE EXTERNOS
@@ -232,6 +260,9 @@ export class CarteraChequesComponent implements OnInit {
     // this.origen_monto_nuevo: -> DESDE BACK-END
     // destion_monto_anterior: -> DESDE BACK-END
     // destino_monto_nuevo: -> DESDE BACK-END
+    this.data.comprobante = '';
+    this.data.concepto = this.nuevoCheque.concepto;
+
     this.data.tipo_origen = 'Externo';
     this.data.origen = this.nuevoCheque.cliente;
     this.data.origen_saldo = '';
@@ -250,6 +281,7 @@ export class CarteraChequesComponent implements OnInit {
     this.chequesService.nuevoChequeDesdeCartera(data).subscribe(()=>{
       this.reiniciarData();
       this.listarCheques();
+      this.dataService.chequesCobrarHoy();
       this.showNuevoCheque = false;
     },({error})=>{
       this.alertService.errorApi(error);
@@ -320,6 +352,7 @@ export class CarteraChequesComponent implements OnInit {
         this.alertService.loading();
         
         this.data.tipo_origen = 'Interno',
+        this.data.comprobante = '',
         this.data.origen = this.empresa._id;
         this.data.origen_descripcion = this.empresa.razon_social;
         this.data.origen_saldo_descripcion = 'CHEQUES';
@@ -336,6 +369,7 @@ export class CarteraChequesComponent implements OnInit {
     
           this.listarCheques();
           this.reiniciarData();
+          this.dataService.chequesCobrarHoy();
           this.showModalCobrarCheque = false;
                     
         },({ error })=>{
@@ -366,7 +400,7 @@ export class CarteraChequesComponent implements OnInit {
         this.data.origen_descripcion = this.empresa.razon_social;
         this.data.origen_saldo_descripcion = 'CHEQUES';
         this.data.origen_saldo = this.empresa.saldos_especiales.cheques;
-
+        this.data.comprobante = '';
         this.data.concepto = this.concepto;
         this.data.tipo_destino = this.tipoDestino;
         this.data.destino = this.destino;
@@ -402,6 +436,7 @@ export class CarteraChequesComponent implements OnInit {
 
     this.data.cheque = cheque._id;
     this.data.monto = cheque.importe;
+    this.data.concepto = cheque.concepto;
     
     this.showModalDetalles = true;
     
@@ -415,6 +450,9 @@ export class CarteraChequesComponent implements OnInit {
   
   // Modal: Cobrar cheques
   modalCobrar(): void {
+    
+    this.reiniciarSinEspecificar();
+
     this.data.fecha_cobrado = format(Date.now(), 'yyyy-MM-dd'),
     this.selectorSaldo = '';
     this.data.destino_saldo_descripcion = '';
@@ -425,7 +463,9 @@ export class CarteraChequesComponent implements OnInit {
 
   // Modal: Transferir cheque
   modalTransferir(): void {
-    
+
+    this.reiniciarSinEspecificar();
+
     // Reiniciando valores del modal
     this.tipoDestino = 'Externo';
     this.destino = '';
@@ -462,8 +502,11 @@ export class CarteraChequesComponent implements OnInit {
   // Reiniciar data
   reiniciarData(){
     this.data = {
-      cheque: '',
+      cheque: this.data.cheque,
       concepto: '',
+      comprobante: '',
+      centro_costos: '',
+      cuenta_contable: '',
       fecha_cobrado: format(Date.now(), 'yyyy-MM-dd'),
       fecha_transferencia: format(Date.now(), 'yyyy-MM-dd'),
       fecha_cobro: format(Date.now(), 'yyyy-MM-dd'),
@@ -481,7 +524,7 @@ export class CarteraChequesComponent implements OnInit {
       monto: 0, 
       activo: true,   
     }
-
+    
     // DATOS - CHEQUE
     this.nuevoCheque = {
       fecha_emision: format(Date.now(), 'yyyy-MM-dd'),
@@ -500,6 +543,24 @@ export class CarteraChequesComponent implements OnInit {
       importe: null
     }
 
+    this.reiniciarSinEspecificar();
+
+  }
+
+  reiniciarSinEspecificar(): void {
+    // Sin especificar - Centros costos
+    this.centrosCostos.forEach( centro => {
+      if(centro.descripcion === 'SIN ESPECIFICAR'){
+        this.data.centro_costos = centro._id; 
+      }
+    });
+
+    // Sin especificar - Cuenta contable
+    this.cuentasContables.forEach( cuenta => {
+      if(cuenta.descripcion === 'SIN ESPECIFICAR'){
+        this.data.cuenta_contable = cuenta._id;
+      }
+    });    
   }
 
 }

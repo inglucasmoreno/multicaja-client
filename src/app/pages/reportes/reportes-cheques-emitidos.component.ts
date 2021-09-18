@@ -127,7 +127,6 @@ export class ReportesChequesEmitidosComponent implements OnInit {
   // Ordenar por fecha
   ordenarFecha(): void {
     this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1;
-    console.log(this.ordenar.direccion);
     this.buscar();
   }
   

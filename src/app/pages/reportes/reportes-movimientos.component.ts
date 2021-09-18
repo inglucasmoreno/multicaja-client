@@ -154,7 +154,6 @@ export class ReportesMovimientosComponent implements OnInit {
     this.alertService.loading();
     const data = {};
     this.reportesService.movimientos(1, 'createdAt', data).subscribe(({ movimientos }) => {
-      console.log(movimientos);
       this.alertService.close();
     },({error})=>{
       this.alertService.errorApi(error);

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +15,4 @@ export class HomeComponent implements OnInit {
     this.dataService.ubicacionActual = 'Dashboard - Home';
   }
   
-  vamosRiver(): void {
-    alert('Vamos River!!!');
-  }
 }
