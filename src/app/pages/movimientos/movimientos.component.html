@@ -1,10 +1,10 @@
 <!-- Modal: Detalle de movimiento -->
-<app-modal-medium [showModal]="showModalDetalles">
+<app-modal-medium *ngIf="movimientoSeleccionado" [showModal]="showModalDetalles">
     <div class="flex items-center justify-between text-white bg-gray-800 rounded-t p-1">
         <h1 class="px-2"> Detalles de movimiento </h1>
         <svg (click)="showModalDetalles = !showModalDetalles" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </div>
-    <div class="p-2" *ngIf="movimientoSeleccionado">
+    <div class="p-2">
         <h1 (click)="showDatosMovimiento = !showDatosMovimiento" class="bg-gray-100 flex items-center justify-between text-sm py-1 px-2 text-gray-800 rounded-t border font-semibold hover:bg-yellow-100 cursor-pointer">
             <span> Datos de movimiento  </span>
             <svg *ngIf="!showDatosMovimiento" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>

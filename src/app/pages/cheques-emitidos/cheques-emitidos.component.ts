@@ -17,7 +17,12 @@ import { CuentaContableService } from '../../services/cuenta-contable.service';
   ]
 })
 export class ChequesEmitidosComponent implements OnInit {
-
+ 
+  // Inicializando SIN ESPECIFICAR
+  public tipo_inicial = '';
+  public centro_inicial = '';
+  public cuenta_inicial = '';
+  
   // CENTROS DE COSTOS
   public centrosCostos: any[] = [];
 
@@ -155,11 +160,16 @@ export class ChequesEmitidosComponent implements OnInit {
                     this.cheques = cheques;
                     this.calcularTotal(cheques);
                     
-                    this.centroCostosService.listarCentrosCostos().subscribe(({centros}) => {
+                    this.centroCostosService.listarCentrosCostos().subscribe(({centros, centro_sin_especificar}) => {
                       this.centrosCostos = centros.filter(centro => (centro.activo));
-                      this.cuentaContableService.listarCuentasContables().subscribe(({cuentasContables}) => {
+                      this.centro_inicial = centro_sin_especificar._id;
+
+                      this.cuentaContableService.listarCuentasContables().subscribe(({cuentasContables, cuenta_sin_especificar}) => {
                         this.cuentasContables = cuentasContables.filter(cuenta => (cuenta.activo));
+                        this.cuenta_inicial = cuenta_sin_especificar._id;
+                        
                         this.alertService.close();
+                      
                       },({error})=>{
                         this.alertService.errorApi(error);
                       })
@@ -302,8 +312,10 @@ export class ChequesEmitidosComponent implements OnInit {
     .then(({isConfirmed}) => {  
     if (isConfirmed) {
       this.alertService.loading();
+      console.log(data);
       this.chequesService.emitirCheque(data).subscribe(() => {
         this.listarCheques();
+        this.dataService.chequesCobrarHoy();
         this.showNuevoCheque = false;
       },({error})=>{
         this.alertService.errorApi(error);
@@ -379,7 +391,9 @@ export class ChequesEmitidosComponent implements OnInit {
 
   // Modal - Cobrar cheque
   modalCobrarCheque(): void {
-    this.reiniciarSinEspecificar();
+    // this.reiniciarSinEspecificar();
+    this.data.centro_costos = this.centro_inicial;
+    this.data.cuenta_contable = this.cuenta_inicial;   
     this.nuevoCheque.fecha_cobrado = format(Date.now(), 'yyyy-MM-dd');
     this.showModalCobrarCheque = true;
     this.showModalDetalles = false;
@@ -446,8 +460,13 @@ export class ChequesEmitidosComponent implements OnInit {
       importe: null
     }  
   
-    this.reiniciarSinEspecificar();
+    this.data.centro_costos = this.centro_inicial;
+    this.data.cuenta_contable = this.cuenta_inicial;   
 
+    console.log(this.data.centro_costos);
+
+    // this.reiniciarSinEspecificar();
+    
   }
 
   reiniciarSinEspecificar(): void {

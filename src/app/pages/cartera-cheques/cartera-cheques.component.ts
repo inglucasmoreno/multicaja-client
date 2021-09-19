@@ -19,6 +19,11 @@ import { CuentaContableService } from '../../services/cuenta-contable.service';
 })
 export class CarteraChequesComponent implements OnInit {
 
+  // Inicializando SIN ESPECIFICAR
+  public tipo_inicial = '';
+  public centro_inicial = '';
+  public cuenta_inicial = '';
+
   // CENTRO DE COSTOS
   public centrosCostos: any[] = [];
   
@@ -171,12 +176,17 @@ export class CarteraChequesComponent implements OnInit {
               this.destinos = this.externos;
               
               // LISTADO DE CENTROS DE COSTO
-              this.centroCostosService.listarCentrosCostos().subscribe(({centros}) => {
+              this.centroCostosService.listarCentrosCostos().subscribe(({centros, centro_sin_especificar}) => {
                 this.centrosCostos = centros.filter(centro => ( centro.activo ));
+                this.centro_inicial = centro_sin_especificar._id;
                 
                 // LISTADO DE CUENTAS CONTABLES
-                this.cuentaContableService.listarCuentasContables().subscribe(({ cuentasContables })=>{
+                this.cuentaContableService.listarCuentasContables().subscribe(({ cuentasContables, cuenta_sin_especificar })=>{
                   this.cuentasContables = cuentasContables.filter( cuenta => ( cuenta.activo ) );
+                  this.cuenta_inicial = cuenta_sin_especificar._id;          
+                  
+                  this.alertService.close(); // -------------------------------------------------------> Finalizacion de carga
+                  
                 },({error})=>{
                   this.alertService.errorApi(error);
                 })
@@ -185,7 +195,6 @@ export class CarteraChequesComponent implements OnInit {
                 this.alertService.errorApi(error);
               });
 
-              this.alertService.close(); // -------------------------------------------------------> Finalizacion de carga
             
             // ERROR: LISTADO DE EXTERNOS
             },({error})=>{
@@ -347,37 +356,37 @@ export class CarteraChequesComponent implements OnInit {
 
     this.alertService.question({ msg: 'Estas por cobrar un cheque', buttonText: 'Cobrar' })
       .then(({isConfirmed}) => {  
-      if (isConfirmed) {
-        
-        this.alertService.loading();
-        
-        this.data.tipo_origen = 'Interno',
-        this.data.comprobante = '',
-        this.data.origen = this.empresa._id;
-        this.data.origen_descripcion = this.empresa.razon_social;
-        this.data.origen_saldo_descripcion = 'CHEQUES';
-        this.data.origen_saldo = this.empresa.saldos_especiales.cheques;
-
-        this.data.tipo_destino = 'Interno',
-        this.data.destino = this.empresa._id,
-        this.data.destino_saldo = this.selectorSaldo;
-        this.data.destino_descripcion = this.empresa.razon_social,
-        
-        this.data.tipo_movimiento = environment.tipo_cobro_cheque;
-    
-        this.movimientosService.cobrarCheque(this.data).subscribe( () => {
-    
-          this.listarCheques();
-          this.reiniciarData();
-          this.dataService.chequesCobrarHoy();
-          this.showModalCobrarCheque = false;
-                    
-        },({ error })=>{
-        
-          this.alertService.errorApi(error);
-        
-        });           
-      }
+        if (isConfirmed) {
+          
+          this.alertService.loading();
+          
+          this.data.tipo_origen = 'Interno',
+          this.data.comprobante = '',
+          this.data.origen = this.empresa._id;
+          this.data.origen_descripcion = this.empresa.razon_social;
+          this.data.origen_saldo_descripcion = 'CHEQUES';
+          this.data.origen_saldo = this.empresa.saldos_especiales.cheques;
+  
+          this.data.tipo_destino = 'Interno',
+          this.data.destino = this.empresa._id,
+          this.data.destino_saldo = this.selectorSaldo;
+          this.data.destino_descripcion = this.empresa.razon_social,
+          
+          this.data.tipo_movimiento = environment.tipo_cobro_cheque;
+      
+          this.movimientosService.cobrarCheque(this.data).subscribe( () => {
+      
+            this.listarCheques();
+            this.reiniciarData();
+            this.dataService.chequesCobrarHoy();
+            this.showModalCobrarCheque = false;
+                      
+          },({ error })=>{
+          
+            this.alertService.errorApi(error);
+          
+          });           
+        }
     });
   
   }
@@ -410,6 +419,7 @@ export class CarteraChequesComponent implements OnInit {
         this.movimientosService.transferirCheque(this.data).subscribe(()=>{
           this.listarCheques();
           this.reiniciarData();
+          this.dataService.chequesCobrarHoy();
           this.showModalTransferirCheque = false;
         },({error})=>{
         
@@ -450,8 +460,9 @@ export class CarteraChequesComponent implements OnInit {
   
   // Modal: Cobrar cheques
   modalCobrar(): void {
-    
-    this.reiniciarSinEspecificar();
+
+    this.data.centro_costos = this.centro_inicial;
+    this.data.cuenta_contable = this.cuenta_inicial;
 
     this.data.fecha_cobrado = format(Date.now(), 'yyyy-MM-dd'),
     this.selectorSaldo = '';
@@ -464,7 +475,8 @@ export class CarteraChequesComponent implements OnInit {
   // Modal: Transferir cheque
   modalTransferir(): void {
 
-    this.reiniciarSinEspecificar();
+    this.data.centro_costos = this.centro_inicial;
+    this.data.cuenta_contable = this.cuenta_inicial;
 
     // Reiniciando valores del modal
     this.tipoDestino = 'Externo';
@@ -543,24 +555,11 @@ export class CarteraChequesComponent implements OnInit {
       importe: null
     }
 
-    this.reiniciarSinEspecificar();
+    this.data.centro_costos = this.centro_inicial;
+    this.data.cuenta_contable = this.cuenta_inicial;
+    
+    console.log(this.data.centro_costos);
 
-  }
-
-  reiniciarSinEspecificar(): void {
-    // Sin especificar - Centros costos
-    this.centrosCostos.forEach( centro => {
-      if(centro.descripcion === 'SIN ESPECIFICAR'){
-        this.data.centro_costos = centro._id; 
-      }
-    });
-
-    // Sin especificar - Cuenta contable
-    this.cuentasContables.forEach( cuenta => {
-      if(cuenta.descripcion === 'SIN ESPECIFICAR'){
-        this.data.cuenta_contable = cuenta._id;
-      }
-    });    
   }
 
 }

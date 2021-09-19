@@ -20,6 +20,11 @@ import { CuentaContableService } from 'src/app/services/cuenta-contable.service'
 })
 export class MovimientosComponent implements OnInit {
 
+  // Inicializando SIN ESPECIFICAR
+  public tipo_inicial = '';
+  public centro_inicial = '';
+  public cuenta_inicial = '';
+
   // Modal
   public showModal = false;
   public showModalCheque = false;
@@ -64,6 +69,9 @@ export class MovimientosComponent implements OnInit {
   // Saldos
   public saldos_origen: any [] = [];
   public saldos_destino: any[] = [];
+
+  // Reinicio de SIN ESPECIFICAR
+
 
   // Data
   public data = {
@@ -135,6 +143,8 @@ export class MovimientosComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.ubicacionActual = "Dashboard - Movimientos";
 
+    this.alertService.loading();
+
     this.movimientosService.listarMovimientos( // LISTADO DE MOVIMIENTOS
       this.ordenar.direccion,
       this.ordenar.columna
@@ -150,13 +160,15 @@ export class MovimientosComponent implements OnInit {
           this.empresasService.listarEmpresas().subscribe(({ empresas })=> {                               // LISTADO DE EMPRESAS
             this.empresas = empresas.filter( empresa => (empresa.activo == true) );
             
-            this.centroCostosService.listarCentrosCostos().subscribe(({ centros })=>{                      // LISTADO DE CENTROS DE COSTOS
+            this.centroCostosService.listarCentrosCostos().subscribe(({ centros, centro_sin_especificar })=>{                      // LISTADO DE CENTROS DE COSTOS
               this.centrosCostos = centros.filter( centro => (centro.activo == true));
-              
-              this.cuentaContableService.listarCuentasContables().subscribe(({cuentasContables})=>{        // LISTADO DE CUENTAS CONTABLES
+              this.centro_inicial = centro_sin_especificar._id;
+
+              this.cuentaContableService.listarCuentasContables().subscribe(({cuentasContables , cuenta_sin_especificar})=>{        // LISTADO DE CUENTAS CONTABLES
                 this.cuentasContables = cuentasContables.filter( cuenta => (cuenta.activo == true) );
+                this.cuenta_inicial = cuenta_sin_especificar._id;
               
-                this.tipoMovimientosService.listarTipos().subscribe( ({ tipos }) => {                      // LISTADO DE TIPOS
+                this.tipoMovimientosService.listarTipos().subscribe( ({ tipos, tipo_sin_especificar }) => {                      // LISTADO DE TIPOS
                   this.tipos= tipos.filter( tipo => (tipo.activo && 
                                                      tipo._id !== environment.tipo_cheque &&
                                                      tipo._id !== environment.tipo_ingreso_cheque &&
@@ -164,8 +176,10 @@ export class MovimientosComponent implements OnInit {
                                                      tipo._id !== environment.tipo_cobro_cheque &&
                                                      tipo._id !== environment.tipo_cheque_emitido_cobrado &&
                                                      tipo._id !== environment.tipo_emision_cheque));
-                
-                  this.alertService.close();          
+                  
+                  this.tipo_inicial = tipo_sin_especificar._id;
+
+                  this.alertService.close();   
                 }, ({error})=>{
                   this.alertService.errorApi(error); // ERROR: LISTOS  
                 });
@@ -262,16 +276,20 @@ export class MovimientosComponent implements OnInit {
 
     if(verificacion) return this.alertService.formularioInvalido();
     
-    if(this.data.tipo_movimiento === this.tipoCheque){ // Abrir modal - CHEQUE
-      this.cheque.cliente = this.data.origen;
-      this.cheque.destino = this.data.destino;
-      this.cheque.importe = this.data.monto;
-      this.showModal = false;
-      this.showModalCheque = true;
-    }else{ // Crear nuevo movimiento
-      this.nuevoMovimiento();
-    }
-
+    this.alertService.question({ msg: '¿Estas por crear un movimiento?', buttonText: 'Crear' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
+        if(this.data.tipo_movimiento === this.tipoCheque){ // Abrir modal - CHEQUE
+          this.cheque.cliente = this.data.origen;
+          this.cheque.destino = this.data.destino;
+          this.cheque.importe = this.data.monto;
+          this.showModal = false;
+          this.showModalCheque = true;
+        }else{ // Crear nuevo movimiento
+          this.nuevoMovimiento();
+        }
+      }
+    });
   }
 
   // Nuevo movimiento
@@ -320,26 +338,9 @@ export class MovimientosComponent implements OnInit {
       importe: 0
     }
     
-    // Sin especificar - Centros costos
-    this.centrosCostos.forEach( centro => {
-      if(centro.descripcion === 'SIN ESPECIFICAR'){
-        this.data.centro_costos = centro._id; 
-      }
-    });
-
-    // Sin especificar - Cuenta contable
-    this.cuentasContables.forEach( cuenta => {
-      if(cuenta.descripcion === 'SIN ESPECIFICAR'){
-        this.data.cuenta_contable = cuenta._id;
-      }
-    });
-
-    // Sin especificar - Tipo
-    this.tipos.forEach( tipo => {
-      if(tipo.descripcion === 'SIN ESPECIFICAR'){
-        this.data.tipo_movimiento = tipo._id;
-      }
-    });
+    this.data.centro_costos = this.centro_inicial;
+    this.data.cuenta_contable = this.cuenta_inicial;
+    this.data.tipo_movimiento = this.tipo_inicial;
 
     this.elementosOrigen = this.externos;
     this.elementosDestino = this.externos;
@@ -348,6 +349,7 @@ export class MovimientosComponent implements OnInit {
     this.saldos_destino = [];
  
   };
+
 
   // Abrir modal
   abrirModal(): void {

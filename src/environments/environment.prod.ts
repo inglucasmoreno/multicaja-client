@@ -1,11 +1,12 @@
 export const environment = {
   production: true,
   base_url: 'https://equinocciotech.com/api',
-  tipo_cheque: '61369c361b13651190cd8ee2',
-  tipo_ingreso_cheque: '613841358ac18a040441f972',
-  tipo_transferencia_cheque: '61369c421b13651190cd8ee4',
-  tipo_cobro_cheque: '61369c3c1b13651190cd8ee3',
-  tipo_emision_cheque: '613bf3c06904cd2a48b745d0',
-  tipo_cheque_emitido_cobrado: '613d0b5c3f96b82c4014ad75',
+  // base_url: 'http://localhost:3000/api',
+  tipo_cheque: '614655306db54147157b0ac1',
+  tipo_ingreso_cheque: '614655406db54147157b0ac2',
+  tipo_transferencia_cheque: '614655e56db54147157b0ac3',
+  tipo_cobro_cheque: '614655f26db54147157b0ac4',
+  tipo_emision_cheque: '614655fd6db54147157b0ac5',
+  tipo_cheque_emitido_cobrado: '614656096db54147157b0ac6',
 };
 

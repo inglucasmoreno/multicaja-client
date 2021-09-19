@@ -62,7 +62,7 @@
         </form>
     </div>
     <div class="bg-white mt-2 lg:mt-0 border-t-8 w-full lg:w-1/2 border-gray-800 p-4 rounded h-full">
-        <div class="flex">
+        <div *ngIf="usuario" class="flex">
             <img *ngIf="usuarioForm.value.role === 'ADMIN_ROLE'" class="bg-green-100 w-32 h-32 rounded-full shadow" src="assets/img/usuarios/usuario_administrador.png" alt="Avatar de usuario">
             <img *ngIf="usuarioForm.value.role === 'USER_ROLE'" class="w-32 bg-orange-100 h-32 rounded-full shadow" src="assets/img/usuarios/usuario_estandar.png" alt="Avatar de usuario">
             <div class="ml-4 mt-2">

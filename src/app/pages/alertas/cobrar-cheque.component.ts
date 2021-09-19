@@ -17,6 +17,11 @@ import { MovimientosService } from '../../services/movimientos.service';
 })
 export class CobrarChequeComponent implements OnInit {
 
+  // Inicializando SIN ESPECIFICAR
+  public tipo_inicial = '';
+  public centro_inicial = '';
+  public cuenta_inicial = '';
+
   // MODAL
   public showModalDetalles = false;
   public showModalCobrarCheque = false;
@@ -88,11 +93,13 @@ export class CobrarChequeComponent implements OnInit {
     this.dataService.ubicacionActual = 'Dashboard - Alertas - Cheques'
     this.alertService.loading();
     this.alertasSistemaService.alertaChequesCobrar(this.ordenar.direccion, this.ordenar.columna).subscribe( ({ cheques }) => {
-      this.cheques = cheques;
-      this.centrosCostosService.listarCentrosCostos().subscribe(({ centros }) => {
-        this.centrosCostos = centros;
-        this.cuentaContableService.listarCuentasContables().subscribe(({ cuentasContables }) => {
-          this.cuentasContables = cuentasContables;
+      this.cheques = cheques.filter(cheque => (cheque.activo));
+      this.centrosCostosService.listarCentrosCostos().subscribe(({ centros, centro_sin_especificar }) => {
+        this.centrosCostos = centros.filter(centro => (centro.activo));
+        this.centro_inicial = centro_sin_especificar._id; 
+        this.cuentaContableService.listarCuentasContables().subscribe(({ cuentasContables, cuenta_sin_especificar }) => {
+          this.cuentasContables = cuentasContables.filter(cuenta => (cuenta.activo));
+          this.cuenta_inicial = cuenta_sin_especificar._id;
           this.alertService.close();
         },({error})=>{
           this.alertService.errorApi(error);
@@ -142,12 +149,13 @@ export class CobrarChequeComponent implements OnInit {
 
   // Modal: Cobrar cheque
   modalCobrarCheque(): void {
-    this.reiniciarSinEspecificar();
-    this.listarSaldos();
+    this.data.centro_costos = this.centro_inicial;
+    this.data.cuenta_contable = this.cuenta_inicial;
     this.data.fecha_cobrado = format(Date.now(), 'yyyy-MM-dd'),
     this.selectorSaldo = '';
     this.data.destino_saldo_descripcion = '';
     this.data.destino_saldo = '';
+    this.listarSaldos();
     this.showModalDetalles = false;
     this.showModalCobrarCheque = true;
   }
@@ -218,24 +226,9 @@ export class CobrarChequeComponent implements OnInit {
       activo: true,   
     }
     
-    this.reiniciarSinEspecificar();
+    this.data.centro_costos = this.centro_inicial;
+    this.data.cuenta_contable = this.cuenta_inicial;
   
-  }
-
-  reiniciarSinEspecificar(): void {
-    // Sin especificar - Centros costos
-    this.centrosCostos.forEach( centro => {
-      if(centro.descripcion === 'SIN ESPECIFICAR'){
-        this.data.centro_costos = centro._id; 
-      }
-    });
-
-    // Sin especificar - Cuenta contable
-    this.cuentasContables.forEach( cuenta => {
-      if(cuenta.descripcion === 'SIN ESPECIFICAR'){
-        this.data.cuenta_contable = cuenta._id;
-      }
-    });    
   }
 
   // Seleccionar cheque
