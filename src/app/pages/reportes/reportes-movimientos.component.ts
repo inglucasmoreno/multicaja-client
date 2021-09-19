@@ -6,6 +6,7 @@ import { TipoMovimientoService } from '../../services/tipo-movimiento.service';
 import { ExternosService } from '../../services/externos.service';
 import { EmpresasService } from 'src/app/services/empresas.service';
 import { ChequesService } from 'src/app/services/cheques.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-reportes-movimientos',
@@ -14,6 +15,10 @@ import { ChequesService } from 'src/app/services/cheques.service';
   ]
 })
 export class ReportesMovimientosComponent implements OnInit {
+
+  // Tipos especiales
+  public tipo_cheque_emitido = environment.tipo_emision_cheque;
+  public tipo_emitido_cobrado = environment.tipo_cheque_emitido_cobrado;
 
   // Flags
   public showDatosMovimiento = true;
@@ -125,6 +130,7 @@ export class ReportesMovimientosComponent implements OnInit {
 
   // Modal: Detalle de movimientos
   modalDetalles(movimiento): void {
+    window.scrollTo(0,0);
     this.showDatosMovimiento = true;
     this.showDatosCheque = false;
     this.movimientoSeleccionado = movimiento;

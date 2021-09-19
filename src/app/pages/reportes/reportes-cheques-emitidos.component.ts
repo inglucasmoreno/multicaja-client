@@ -102,6 +102,7 @@ export class ReportesChequesEmitidosComponent implements OnInit {
 
   // Modal: Abrir modal detalles
   modalDetalles(cheque: any): void {
+    window.scrollTo(0,0);
     this.chequeSeleccionado = cheque;
     this.showModalDetalles = true;
   }

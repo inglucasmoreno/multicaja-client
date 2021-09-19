@@ -20,6 +20,10 @@ import { CuentaContableService } from 'src/app/services/cuenta-contable.service'
 })
 export class MovimientosComponent implements OnInit {
 
+  // Tipos especiales
+  public tipo_cheque_emitido = environment.tipo_emision_cheque;
+  public tipo_emitido_cobrado = environment.tipo_cheque_emitido_cobrado;
+
   // Inicializando SIN ESPECIFICAR
   public tipo_inicial = '';
   public centro_inicial = '';
@@ -359,11 +363,14 @@ export class MovimientosComponent implements OnInit {
 
   // Abrir modal detalles
   abrirModalDetalles(id: string): void {
+    console.log(this.tipo_cheque_emitido);
+    console.log(this.tipo_emitido_cobrado);
     this.showDatosCheque = false;
     this.showDatosMovimiento = true;
     this.alertService.loading();
     this.movimientosService.getMovimiento(id).subscribe(({ movimiento }) => {
       this.movimientoSeleccionado = movimiento;
+      console.log(this.movimientoSeleccionado);
       if(movimiento.cheque !== null){
         this.chequesService.getCheques(movimiento.cheque).subscribe( ({cheque}) => {
           this.mostrarCheque = cheque;
