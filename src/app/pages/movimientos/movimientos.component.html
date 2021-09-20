@@ -43,7 +43,7 @@
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT (Emisor): </span> <span> {{ mostrarCheque.cuit === '' ? 'SIN ESPECIFICAR' : mostrarCheque.cuit }} </span> </p>
                 </div>
                 <div class="lg:flex items-center border-b">
-                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ (movimientoSeleccionado.tipo_movimiento._id == tipo_cheque_emitido || movimientoSeleccionado.tipo_movimiento._id == tipo_emitido_cobrado) ? "SIN ESPECIFICAR" : mostrarCheque.cliente_descripcion }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ (movimientoSeleccionado.tipo_movimiento._id == tipo_cheque_emitido || movimientoSeleccionado.tipo_movimiento._id == tipo_emitido_cobrado) ? "SIN ESPECIFICAR" : mostrarCheque.cliente_descripcion }} </span>                        </p>
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Destino: </span> <span> {{ mostrarCheque.destino_descripcion }} </span> </p>
                 </div>
                 <p class="p-2 border-b"> <span class="font-semibold"> Concepto: </span> <span> {{ mostrarCheque.concepto }} </span> </p>
