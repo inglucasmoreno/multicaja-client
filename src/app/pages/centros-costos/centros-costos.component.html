@@ -134,7 +134,7 @@
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <app-pastilla-estado *ngIf="centro.descripcion !== 'SIN ESPECIFICAR'" [activo]=centro.activo (click)="actualizarCentroCosto(centro)"></app-pastilla-estado>
+                                    <app-pastilla-estado [activo]=centro.activo (click)="actualizarCentroCosto(centro)"></app-pastilla-estado>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                                     <p *ngIf="centro.descripcion === 'SIN ESPECIFICAR'" class="p-4"></p>

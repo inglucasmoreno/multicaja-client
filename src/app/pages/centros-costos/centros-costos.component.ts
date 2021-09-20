@@ -143,6 +143,7 @@ export class CentrosCostosComponent implements OnInit {
 
   // Actualizar estado Activo/Inactivo
   actualizarCentroCosto(centro: any): void {
+    if(centro.descripcion == 'SIN ESPECIFICAR') return this.alertService.info('Este centro no puede ser dado de baja');
     const { _id, activo } = centro;
     this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
         .then(({isConfirmed}) => {  
