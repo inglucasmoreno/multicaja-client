@@ -4,6 +4,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { DataService } from 'src/app/services/data.service';
 import { EmpresasService } from 'src/app/services/empresas.service';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-saldos',
@@ -52,6 +53,7 @@ export class SaldosComponent implements OnInit {
   
   constructor(private alertService: AlertService,
               private dataService: DataService,
+              public authService: AuthService,
               private activatedRoute: ActivatedRoute,
               private fb: FormBuilder,
               private empresasService: EmpresasService) { }
@@ -157,19 +159,23 @@ export class SaldosComponent implements OnInit {
   
   // Actualizar estado Activo/Inactivo
   actualizarSaldo(saldo: any): void {
-  const { _id, activo } = saldo;
-    this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
-        .then(({isConfirmed}) => {  
-          if (isConfirmed) {
-            this.alertService.loading();
-            this.empresasService.actualizarSaldo(_id, { activo: !activo }).subscribe(() => {
-              this.alertService.loading();
-              this.listarSaldos();
-            }, ({error}) => {
-              this.alertService.errorApi(error.msg);
+    if(this.authService.usuario.role == 'ADMIN_ROLE'){
+      const { _id, activo } = saldo;
+        this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
+            .then(({isConfirmed}) => {  
+              if (isConfirmed) {
+                this.alertService.loading();
+                this.empresasService.actualizarSaldo(_id, { activo: !activo }).subscribe(() => {
+                  this.alertService.loading();
+                  this.listarSaldos();
+                }, ({error}) => {
+                  this.alertService.errorApi(error.msg);
+                });
+              }
             });
-          }
-        });
+    }else{
+      this.alertService.info('Usuario sin autorización');
+    }
   }
   
   // Reiniciar formulario
@@ -183,6 +189,7 @@ export class SaldosComponent implements OnInit {
   
   // Abrir modal
   abrirModal(tipo: string, id: string = null): void {
+    window.scrollTo(0,0);
     if(tipo === "crear"){          // Modal: Nuevo saldo
       this.reiniciarFormulario();
       this.flagEditando = false;
@@ -211,8 +218,4 @@ export class SaldosComponent implements OnInit {
     this.listarSaldos();
   } 
   
-
-  
-
-
 }

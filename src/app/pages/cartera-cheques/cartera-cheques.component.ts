@@ -10,6 +10,7 @@ import { MovimientosService } from 'src/app/services/movimientos.service';
 import { format } from 'date-fns';
 import { CentroCostosService } from '../../services/centro-costos.service';
 import { CuentaContableService } from '../../services/cuenta-contable.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-cartera-cheques',
@@ -129,6 +130,7 @@ export class CarteraChequesComponent implements OnInit {
   }
 
   constructor(private dataService: DataService,
+              public authService: AuthService,
               private empresasService: EmpresasService,
               private movimientosService: MovimientosService,
               private externosService: ExternosService,
@@ -441,6 +443,8 @@ export class CarteraChequesComponent implements OnInit {
   // Modal: Abrir detalles
   modalDetalles(cheque: any): void {
     
+    window.scrollTo(0,0);
+
     // Se selecciona el cheque
     this.chequeSeleccionado= cheque;
 
@@ -454,13 +458,16 @@ export class CarteraChequesComponent implements OnInit {
 
   // Modal: Abrir nuevo cheque
   modalNuevoCheque(): void {
+    window.scrollTo(0,0);
     this.reiniciarData();
     this.showNuevoCheque = true;
   }
   
   // Modal: Cobrar cheques
   modalCobrar(): void {
-
+   
+    window.scrollTo(0,0);
+  
     this.data.centro_costos = this.centro_inicial;
     this.data.cuenta_contable = this.cuenta_inicial;
 
@@ -474,6 +481,8 @@ export class CarteraChequesComponent implements OnInit {
 
   // Modal: Transferir cheque
   modalTransferir(): void {
+
+    window.scrollTo(0,0);
 
     this.data.centro_costos = this.centro_inicial;
     this.data.cuenta_contable = this.cuenta_inicial;

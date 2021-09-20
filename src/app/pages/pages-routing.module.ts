@@ -43,12 +43,12 @@ const routes: Routes = [
             { path: 'usuarios/password/:id', canActivate: [AdminGuard], component: EditarPasswordComponent },
             
             // Empresas
-            { path: 'empresas', canActivate: [AdminGuard], component: EmpresasComponent },
-            { path: 'empresas/saldos/:id', canActivate: [AdminGuard], component: SaldosComponent },
+            { path: 'empresas', component: EmpresasComponent },
+            { path: 'empresas/saldos/:id', component: SaldosComponent },
 
             // Cheques
-            { path: 'cheques/cartera/:id', canActivate: [AdminGuard], component: CarteraChequesComponent },
-            { path: 'cheques/emitidos/:id', canActivate: [AdminGuard], component: ChequesEmitidosComponent },
+            { path: 'cheques/cartera/:id', component: CarteraChequesComponent },
+            { path: 'cheques/emitidos/:id', component: ChequesEmitidosComponent },
                 
             // Externos
             { path: 'externos', canActivate: [AdminGuard], component: ExternosComponent },
@@ -66,14 +66,14 @@ const routes: Routes = [
             { path: 'cuentas-contables', canActivate: [AdminGuard], component: CuentasContablesComponent},
 
             // Reportes
-            { path: 'reportes', canActivate: [AdminGuard], component:  ReportesComponent},
-            { path: 'reportes/movimientos', canActivate: [AdminGuard], component:  ReportesMovimientosComponent},
-            { path: 'reportes/cheques-emitidos', canActivate: [AdminGuard], component:  ReportesChequesEmitidosComponent},
-            { path: 'reportes/evolucion-saldos', canActivate: [AdminGuard], component:  ReportesEvolucionSaldosComponent},
+            { path: 'reportes', component:  ReportesComponent},
+            { path: 'reportes/movimientos', component:  ReportesMovimientosComponent},
+            { path: 'reportes/cheques-emitidos', component:  ReportesChequesEmitidosComponent},
+            { path: 'reportes/evolucion-saldos', component:  ReportesEvolucionSaldosComponent},
 
             
             // Alertas
-            { path: 'alertas/cobrar-cheques', canActivate: [AdminGuard], component: CobrarChequeComponent},
+            { path: 'alertas/cobrar-cheques', component: CobrarChequeComponent},
 
         ]
     }

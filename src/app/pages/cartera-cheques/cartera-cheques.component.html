@@ -331,7 +331,7 @@
                         class="text-sm px-1 rounded border font-semibold"> {{ chequeSeleccionado.estado === 'Transferido' ? 'Endosado' : chequeSeleccionado.estado }} </span> </p>
                 <p class="py-2 border-b border-l border-r bg-gray-100 flex items-center justify-between px-2"> <span class="font-semibold"> Importe </span> <span class="font-semibold"> ${{ chequeSeleccionado.importe | moneda }} </span> </p>
             </div>
-            <div *ngIf="chequeSeleccionado.activo" class="flex items-center">
+            <div *ngIf="chequeSeleccionado.activo && authService.usuario.role == 'ADMIN_ROLE'" class="flex items-center">
                 <button (click)="modalCobrar()" class="w-1/2 p-1 focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100"> Cobrar </button>
                 <button (click)="modalTransferir()" class="w-1/2 p-1 focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100 ml-2"> Endosar </button>
             </div>
@@ -378,7 +378,7 @@
                         />
                     </div>
                 </div>
-                <div class="flex items-center">
+                <div *ngIf="authService.usuario.role == 'ADMIN_ROLE'" class="flex items-center">
                     <app-boton-generico (click)="modalNuevoCheque()"> Recibir cheque </app-boton-generico>
                 </div>
             </div>

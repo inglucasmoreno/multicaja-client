@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { DataService } from 'src/app/services/data.service';
 import { AlertService } from '../../services/alert.service';
 import { EmpresasService } from '../../services/empresas.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-empresas',
@@ -34,7 +35,7 @@ export class EmpresasComponent implements OnInit {
   // Ordenar
   public ordenar = {
     direccion: 1,  // Asc (1) | Desc (-1)
-    columna: 'createdAt'
+    columna: 'razon_social'
   }
 
   // Modelo reactivo
@@ -47,12 +48,13 @@ export class EmpresasComponent implements OnInit {
   });
 
   constructor(private alertService: AlertService,
+              public authService: AuthService,
               private dataService: DataService,
               private fb: FormBuilder,
               private empresasService: EmpresasService) { }
 
   ngOnInit(): void {
-    this.dataService.ubicacionActual = "Dashboard - Empresas"
+    this.dataService.ubicacionActual = "Dashboard - Empresas";
     this.listarEmpresas();
   }
 
@@ -139,19 +141,23 @@ export class EmpresasComponent implements OnInit {
 
   // Actualizar estado Activo/Inactivo
   actualizarEstado(empresa: any): void {
-  const { _id, activo } = empresa;
-    this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
-        .then(({isConfirmed}) => {  
-          if (isConfirmed) {
-            this.alertService.loading();
-            this.empresasService.actualizarEmpresa(_id, { activo: !activo }).subscribe(() => {
-              this.alertService.loading();
-              this.listarEmpresas();
-            }, ({error}) => {
-              this.alertService.errorApi(error.msg);
+    if(this.authService.usuario.role === 'ADMIN_ROLE'){
+      const { _id, activo } = empresa;
+        this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
+            .then(({isConfirmed}) => {  
+              if (isConfirmed) {
+                this.alertService.loading();
+                this.empresasService.actualizarEmpresa(_id, { activo: !activo }).subscribe(() => {
+                  this.alertService.loading();
+                  this.listarEmpresas();
+                }, ({error}) => {
+                  this.alertService.errorApi(error.msg);
+                });
+              }
             });
-          }
-        });
+    }else{
+      this.alertService.info('Usuario sin autorizacion');
+    }
   }
   
   // Reiniciar formulario
@@ -167,6 +173,7 @@ export class EmpresasComponent implements OnInit {
 
   // Abrir modal
   abrirModal(tipo: string, id: string = null): void {
+    window.scrollTo(0,0);
     if(tipo === "crear"){          // Modal: Nueva empresa
       this.reiniciarFormulario();
       this.flagEditando = false;

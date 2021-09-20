@@ -13,7 +13,14 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col lg:flex-row">
+            <div *ngIf="!flagEditando || (
+                        idTipo !== this.globales.tipo_cheque &&
+                        idTipo !== this.globales.tipo_ingreso_cheque &&
+                        idTipo !== this.globales.tipo_transferencia_cheque &&
+                        idTipo !== this.globales.tipo_cobro_cheque &&
+                        idTipo !== this.globales.tipo_emision_cheque &&
+                        idTipo !== this.globales.tipo_cheque_emitido_cobrado &&
+                        idTipo !== this.globales.tipo_cheque)" class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
                     <div class="font-semibold mt-3 text-gray-600 text-sm">
                         <span class="text-red-500"> * </span> Estado
@@ -134,7 +141,7 @@
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <app-pastilla-estado *ngIf="tipo.descripcion !== 'SIN ESPECIFICAR'" [activo]=tipo.activo (click)="actualizarTipos(tipo)"></app-pastilla-estado>
+                                    <app-pastilla-estado [activo]=tipo.activo (click)="actualizarTipos(tipo)"></app-pastilla-estado>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                                     <p *ngIf="tipo.descripcion === 'SIN ESPECIFICAR'" class="p-4"></p>

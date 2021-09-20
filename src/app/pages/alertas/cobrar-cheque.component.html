@@ -29,7 +29,7 @@
                         class="text-sm px-1 rounded border font-semibold"> {{ chequeSeleccionado.estado === 'Transferido' ? 'Endosado' : chequeSeleccionado.estado }} </span> </p>
                 <p class="py-2 border-b border-l border-r bg-gray-100 flex items-center justify-between px-2"> <span class="font-semibold"> Importe </span> <span class="font-semibold"> ${{ chequeSeleccionado.importe | moneda }} </span> </p>
             </div>
-            <div *ngIf="chequeSeleccionado.activo" class="flex items-center px-2">
+            <div *ngIf="chequeSeleccionado.activo && authService.usuario.role =='ADMIN_ROLE'" class="flex items-center px-2">
                 <button (click)="modalCobrarCheque()" class="w-full p-1 focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100"> Cobrar cheque </button>
             </div>
         </div>
@@ -45,9 +45,9 @@
         </div>
         <div *ngIf="chequeSeleccionado" class="p-2">
             <div class="p-2 border bg-gray-100">
-                <h1 class="text-sm font-semibold text-gray-800 p-1 text-gray-800"> En poder de: <span class="font-normal"> {{ chequeSeleccionado.destino_descripcion }} </span> </h1>
-                <h1 class="text-sm font-semibold text-gray-800 p-1 text-gray-800"> Nro de cheque: <span class="font-normal"> {{ chequeSeleccionado.nro_cheque }} </span> </h1>
-                <h1 class="text-sm font-semibold text-gray-800 p-1 text-gray-800"> Importe: <span class="font-normal"> ${{ chequeSeleccionado.importe | moneda }} </span> </h1>
+                <h1 class="text-sm font-semibold text-gray-800 p-1"> En poder de: <span class="font-normal"> {{ chequeSeleccionado.destino_descripcion }} </span> </h1>
+                <h1 class="text-sm font-semibold text-gray-800 p-1"> Nro de cheque: <span class="font-normal"> {{ chequeSeleccionado.nro_cheque }} </span> </h1>
+                <h1 class="text-sm font-semibold text-gray-800 p-1"> Importe: <span class="font-normal"> ${{ chequeSeleccionado.importe | moneda }} </span> </h1>
             </div>
         </div>
         <div class="px-2">

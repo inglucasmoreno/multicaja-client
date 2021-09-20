@@ -9,4 +9,3 @@ export const environment = {
   tipo_emision_cheque: '614655fd6db54147157b0ac5',
   tipo_cheque_emitido_cobrado: '614656096db54147157b0ac6',
 };
-

@@ -168,6 +168,7 @@ export class ExternosComponent implements OnInit {
   
   // Abrir modal
   abrirModal(tipo: string, id: string = null): void {
+  window.scrollTo(0,0);
   if(tipo === "crear"){          // Modal: Nuevo externo
     this.reiniciarFormulario();
     this.flagEditando = false;

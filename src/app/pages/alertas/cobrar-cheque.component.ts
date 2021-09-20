@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { format } from 'date-fns';
 import { AlertService } from 'src/app/services/alert.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
 import { environment } from 'src/environments/environment';
 import { AlertasSistemaService } from '../../services/alertas-sistema.service';
@@ -83,6 +84,7 @@ export class CobrarChequeComponent implements OnInit {
 
   constructor(private dataService: DataService,
               private alertasSistemaService: AlertasSistemaService,
+              public authService: AuthService,
               private centrosCostosService: CentroCostosService,
               private cuentaContableService: CuentaContableService,
               private movimientosService: MovimientosService,

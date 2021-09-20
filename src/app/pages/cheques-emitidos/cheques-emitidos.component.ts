@@ -9,6 +9,7 @@ import { environment } from '../../../environments/environment';
 import { ChequesService } from 'src/app/services/cheques.service';
 import { CentroCostosService } from '../../services/centro-costos.service';
 import { CuentaContableService } from '../../services/cuenta-contable.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-cheques-emitidos',
@@ -122,6 +123,7 @@ export class ChequesEmitidosComponent implements OnInit {
 
   constructor(private alertService: AlertService,
               private dataService: DataService,
+              public authService: AuthService,
               private activatedRoute: ActivatedRoute,
               private empresasService: EmpresasService,
               private chequesService: ChequesService,
@@ -369,6 +371,7 @@ export class ChequesEmitidosComponent implements OnInit {
   
   // Modal - Emitir cheque
   modalEmitirCheque(): void {
+    window.scrollTo(0,0);
     this.reiniciarFormulario();
     this.listarExternos();
     this.nuevoCheque.cliente = this.empresa._id;
@@ -379,6 +382,7 @@ export class ChequesEmitidosComponent implements OnInit {
 
   // Modal - Detalles
   modalDetalles(id: string): void {
+    window.scrollTo(0,0);
     this.showModalDetalles = true;
     this.alertService.loading();
     this.chequesService.getCheques(id).subscribe(({cheque}) => {
@@ -391,6 +395,7 @@ export class ChequesEmitidosComponent implements OnInit {
 
   // Modal - Cobrar cheque
   modalCobrarCheque(): void {
+    window.scrollTo(0,0);
     // this.reiniciarSinEspecificar();
     this.data.centro_costos = this.centro_inicial;
     this.data.cuenta_contable = this.cuenta_inicial;   
@@ -401,6 +406,7 @@ export class ChequesEmitidosComponent implements OnInit {
 
   // Regresar a detalles
   regresarDetalles(): void {
+    window.scrollTo(0,0);
     this.showModalDetalles = true;
     this.showModalCobrarCheque = false; 
     this.showModalTransferirCheque = false; 

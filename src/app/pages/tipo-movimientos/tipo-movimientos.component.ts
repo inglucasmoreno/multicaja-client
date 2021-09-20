@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { TipoMovimientos } from 'src/app/models/tipo-movimientos.model';
 import { AlertService } from 'src/app/services/alert.service';
 import { DataService } from 'src/app/services/data.service';
+import { environment } from 'src/environments/environment';
 import { TipoMovimientoService } from '../../services/tipo-movimiento.service';
 
 @Component({
@@ -12,6 +13,8 @@ import { TipoMovimientoService } from '../../services/tipo-movimiento.service';
   ]
 })
 export class TipoMovimientosComponent implements OnInit {
+
+  public globales = environment;
 
   // Modal
   public showModal = false;
@@ -50,6 +53,7 @@ export class TipoMovimientosComponent implements OnInit {
               private dataService: DataService) { }
   
   ngOnInit(): void {
+    console.log(this.globales.tipo_ingreso_cheque);
     this.dataService.ubicacionActual = "Dashboard - Tipo de movimientos";
     this.listarTipos();
   }
@@ -144,19 +148,35 @@ export class TipoMovimientosComponent implements OnInit {
   
   // Actualizar estado Activo/Inactivo
   actualizarTipos(tipo: any): void {
-    const { _id, activo } = tipo;
-    this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
-        .then(({isConfirmed}) => {  
-          if (isConfirmed) {
-            this.alertService.loading();
-            this.tipoMovimientosService.actualizarTipo(_id, { activo: !activo }).subscribe(() => {
+    
+    const verificacion = tipo.descripcion !== 'SIN ESPECIFICAR' && 
+                         tipo._id !== this.globales.tipo_cheque &&
+                         tipo._id !== this.globales.tipo_ingreso_cheque &&
+                         tipo._id !== this.globales.tipo_transferencia_cheque &&
+                         tipo._id !== this.globales.tipo_cobro_cheque &&
+                         tipo._id !== this.globales.tipo_emision_cheque &&
+                         tipo._id !== this.globales.tipo_cheque_emitido_cobrado &&
+                         tipo._id !== this.globales.tipo_cheque;
+    
+    if(verificacion){
+      const { _id, activo } = tipo;
+      this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
+          .then(({isConfirmed}) => {  
+            if (isConfirmed) {
               this.alertService.loading();
-              this.listarTipos();
-            }, ({error}) => {
-              this.alertService.errorApi(error.msg);
-            });
-          }
-        });
+              this.tipoMovimientosService.actualizarTipo(_id, { activo: !activo }).subscribe(() => {
+                this.alertService.loading();
+                this.listarTipos();
+              }, ({error}) => {
+                this.alertService.errorApi(error.msg);
+              });
+            }
+          });
+    }else{
+      this.alertService.info('Este tipo no puede ser dado de baja');
+    }
+
+
   }
   
   // Reiniciar formulario
@@ -169,6 +189,7 @@ export class TipoMovimientosComponent implements OnInit {
   
   // Abrir modal
   abrirModal(tipo: string, id: string = null): void {
+    window.scrollTo(0,0);
     if(tipo === "crear"){          // Modal: Nuevo tipo
       this.reiniciarFormulario();
       this.flagEditando = false;

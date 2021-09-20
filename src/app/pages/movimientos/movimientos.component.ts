@@ -357,12 +357,14 @@ export class MovimientosComponent implements OnInit {
 
   // Abrir modal
   abrirModal(): void {
+    window.scrollTo(0,0);
     this.reiniciarFormulario();
     this.showModal = true;
   }
 
   // Abrir modal detalles
   abrirModalDetalles(id: string): void {
+    window.scrollTo(0,0);
     console.log(this.tipo_cheque_emitido);
     console.log(this.tipo_emitido_cobrado);
     this.showDatosCheque = false;
@@ -387,6 +389,7 @@ export class MovimientosComponent implements OnInit {
 
   // Regresar al modal - Nuevo tipo
   regresar(): void {
+    window.scrollTo(0,0);
     this.showModalCheque = false;
     this.showModal = true;
   }
