@@ -178,7 +178,7 @@
                                     <app-pastilla-estado [activo]=saldo.activo (click)="actualizarSaldo(saldo)"></app-pastilla-estado>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
-                                    <p *ngIf="authService.usuario.role === 'ADMIN_ROLE'" class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
+                                    <p *ngIf="authService.usuario.role === 'ADMIN_ROLE' && saldo._id != this.empresa.saldos_especiales.caja && saldo._id != this.empresa.saldos_especiales.cheques" class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
                                         <app-boton-tabla class="ml-2" (click)="abrirModal('editar', saldo._id)" title="Editar saldo">
                                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                                         </app-boton-tabla>
