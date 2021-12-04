@@ -43,7 +43,7 @@
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT (Emisor): </span> <span> {{ this.chequeSeleccionado.cuit === '' ? 'SIN ESPECIFICAR' : this.chequeSeleccionado.cuit }} </span> </p>
                 </div>
                 <div class="lg:flex items-center border-b">
-                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ (movimientoSeleccionado.tipo_movimiento._id == tipo_cheque_emitido || movimientoSeleccionado.tipo_movimiento._id == tipo_emitido_cobrado) ? "SIN ESPECIFICAR" : chequeSeleccionado.cliente_descripcion }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ (movimientoSeleccionado.tipo_movimiento._id == tipo_cheque_emitido || movimientoSeleccionado.tipo_movimiento._id == tipo_emitido_cobrado) ? "SIN ESPECIFICAR" : chequeSeleccionado.cliente_descripcion }} </span>                        </p>
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Destino: </span> <span> {{ this.chequeSeleccionado.destino_descripcion }} </span> </p>
                 </div>
                 <p class="p-2 border-b"> <span class="font-semibold"> Concepto: </span> <span> {{ this.chequeSeleccionado.concepto }} </span> </p>
@@ -101,7 +101,7 @@
 
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Empresa </p>
-                <select (change)="cambiarEmpresa()" [(ngModel)]="filtroSaldos.empresa" name="emisor" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select (change)="cambiarEmpresa()" [(ngModel)]="filtroSaldos.empresa" name="emisor" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> Debe elegir una empresa </option>
                     <option *ngFor="let empresa of empresas" [value]="empresa._id"> {{ empresa.razon_social }} </option>
                 </select>
@@ -109,7 +109,7 @@
 
             <div *ngIf="filtroSaldos.empresa !== ''" class="bg-white my-3">
                 <p class="text-sm font-semibold"> Saldos </p>
-                <select [(ngModel)]="filtroSaldos.saldo" name="tipo_destino" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroSaldos.saldo" name="tipo_destino" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> Debe elegir un saldo </option>
                     <option *ngFor="let saldo of saldos" [value]='saldo._id'> {{ saldo.descripcion }} </option>
                 </select>

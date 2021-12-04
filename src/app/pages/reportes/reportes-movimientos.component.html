@@ -43,7 +43,7 @@
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> CUIT (Emisor): </span> <span> {{ this.mostrarCheque.cuit === '' ? 'SIN ESPECIFICAR' : this.mostrarCheque.cuit }} </span> </p>
                 </div>
                 <div class="lg:flex items-center border-b">
-                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ (movimientoSeleccionado.tipo_movimiento._id == tipo_cheque_emitido || movimientoSeleccionado.tipo_movimiento._id == tipo_emitido_cobrado) ? "SIN ESPECIFICAR" : mostrarCheque.cliente_descripcion }} </span> </p>
+                    <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Cliente: </span> <span> {{ (movimientoSeleccionado.tipo_movimiento._id == tipo_cheque_emitido || movimientoSeleccionado.tipo_movimiento._id == tipo_emitido_cobrado) ? "SIN ESPECIFICAR" : mostrarCheque.cliente_descripcion }} </span>                        </p>
                     <p class="p-2 lg:w-1/2"> <span class="font-semibold"> Destino: </span> <span> {{ this.mostrarCheque.destino_descripcion }} </span> </p>
                 </div>
                 <p class="p-2 border-b"> <span class="font-semibold"> Concepto: </span> <span> {{ this.mostrarCheque.concepto }} </span> </p>
@@ -92,19 +92,19 @@
             </div>
             <div class="w-full">
                 <div class="bg-white my-2 flex">
-                    <input [(ngModel)]="filtroMovimientos.hasta" type="date" class="border rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                    <input [(ngModel)]="filtroMovimientos.hasta" type="date" class="border bg-white rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
                 </div>
             </div>
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Tipo de movimiento </p>
-                <select [(ngModel)]="filtroMovimientos.tipo_movimiento" name="tipo_movimiento" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroMovimientos.tipo_movimiento" name="tipo_movimiento" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> Todos los tipos </option>
                     <option *ngFor="let tipo of tipoMovimientos" [value]='tipo._id'> {{ tipo.descripcion }} </option>
                 </select>
             </div>
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Tipo de origen </p>
-                <select (change)="cambiarOrigen()" [(ngModel)]="filtroMovimientos.tipo_origen" name="tipo_origen" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select (change)="cambiarOrigen()" [(ngModel)]="filtroMovimientos.tipo_origen" name="tipo_origen" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''>  Todos los origenes </option>
                     <option value='Interno'> Interno </option>
                     <option value='Externo'> Externo </option>
@@ -112,14 +112,14 @@
             </div>
             <div *ngIf="filtroMovimientos.tipo_origen !== ''" class="bg-white my-3">
                 <p class="text-sm font-semibold"> Origen </p>
-                <select [(ngModel)]="filtroMovimientos.origen" name="origen" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroMovimientos.origen" name="origen" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> {{ filtroMovimientos.tipo_origen === 'Interno' ? 'Todos los internos' : 'Todos los externos' }} </option>
                     <option *ngFor="let origen of origenes" [value]="origen._id"> {{ origen.descripcion ? origen.descripcion : origen.razon_social }} </option>
                 </select>
             </div>
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Tipo de destino </p>
-                <select (change)="cambiarDestino()" [(ngModel)]="filtroMovimientos.tipo_destino" name="tipo_destino" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select (change)="cambiarDestino()" [(ngModel)]="filtroMovimientos.tipo_destino" name="tipo_destino" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> Todos los destinos </option>
                     <option value='Interno'> Interno </option>
                     <option value='Externo'> Externo </option>
@@ -127,7 +127,7 @@
             </div>
             <div *ngIf="filtroMovimientos.tipo_destino !== ''" class="bg-white my-3">
                 <p class="text-sm font-semibold"> Destino </p>
-                <select [(ngModel)]="filtroMovimientos.destino" name="destino" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroMovimientos.destino" name="destino" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> {{ filtroMovimientos.tipo_destino === 'Interno' ? 'Todos los internos' : 'Todos los externos' }} </option>
                     <option *ngFor="let destino of destinos" [value]="destino._id"> {{ destino.descripcion ? destino.descripcion : destino.razon_social }} </option>
                 </select>

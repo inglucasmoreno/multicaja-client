@@ -23,7 +23,7 @@
                         Centro de costos
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select [(ngModel)]="data.centro_costos" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
+                        <select [(ngModel)]="data.centro_costos" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
                             <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
                         </select>
                     </div>
@@ -34,7 +34,7 @@
                             Cuenta contable
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select [(ngModel)]="data.cuenta_contable" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
+                            <select [(ngModel)]="data.cuenta_contable" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
                                 <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
                             </select>
                         </div>
@@ -110,7 +110,7 @@
                         Centro de costos
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select [(ngModel)]="data.centro_costos" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
+                        <select [(ngModel)]="data.centro_costos" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
                             <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
                         </select>
                     </div>
@@ -121,7 +121,7 @@
                             Cuenta contable
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select [(ngModel)]="data.cuenta_contable" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
+                            <select [(ngModel)]="data.cuenta_contable" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
                                 <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
                             </select>
                         </div>
@@ -192,7 +192,7 @@
                             <span class="text-red-500"> * </span> Tipo destino
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select (change)="actualizarDestino()" [(ngModel)]="data.tipo_destino" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
+                            <select (change)="actualizarDestino()" [(ngModel)]="data.tipo_destino" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
                                 <option value="Externo"> Externo </option>
                                 <option value="Interno"> Interno </option>
                             </select>
@@ -203,7 +203,7 @@
                             <span class="text-red-500"> * </span> Destino
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select [(ngModel)]="nuevoCheque.destino" class="border border-gray-200 rounded p-1 w-full shadow text-sm focus:outline-none">
+                            <select [(ngModel)]="nuevoCheque.destino" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
                                 <option value=""> Seleccionar destino </option>
                                 <option *ngFor="let destino of destinos" [value]="destino._id"> {{ data.tipo_destino === 'Externo' ? destino.descripcion : destino.razon_social}} </option>
                             </select>
@@ -223,7 +223,7 @@
                         <div class="text-gray-800 text-sm">
                             <span class="font-semibold"> Banco </span> <span class="text-gray-500"> (Saldo de emisor) </span>
                         </div>
-                        <select [(ngModel)]="nuevoCheque.banco_id" class="border border-gray-200 rounded p-1 mt-2 w-full shadow text-sm focus:outline-none">
+                        <select [(ngModel)]="nuevoCheque.banco_id" class="border border-gray-200 bg-white rounded p-1 mt-2 w-full shadow text-sm focus:outline-none">
                             <option value=""> Seleccionar banco </option>
                             <option *ngFor="let saldo of saldos" [value]="saldo._id"> {{ saldo.descripcion }} - ${{ saldo.monto | moneda }} </option>
                         </select>
@@ -237,6 +237,7 @@
         </div>
     </div>
 </app-modal>
+
 <!-- Tarjeta principal -->
 <app-tarjeta-lista>
     <div class="container mx-auto px-4 sm:px-8">

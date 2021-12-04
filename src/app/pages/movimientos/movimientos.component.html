@@ -84,7 +84,7 @@
                         Tipo de movimiento
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select name="tipo" [(ngModel)]="data.tipo_movimiento" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                        <select name="tipo" [(ngModel)]="data.tipo_movimiento" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                             <option *ngFor="let tipo of tipos" [value]="tipo._id"> {{ tipo.descripcion }} </option>
                         </select>
                     </div>
@@ -94,7 +94,7 @@
                         Centro de costos
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select name="centro_costos" [(ngModel)]="data.centro_costos" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                        <select name="centro_costos" [(ngModel)]="data.centro_costos" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                             <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
                         </select>
                     </div>
@@ -106,7 +106,7 @@
                         Cuenta contable
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select name="cuenta_contable" [(ngModel)]="data.cuenta_contable" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                        <select name="cuenta_contable" [(ngModel)]="data.cuenta_contable" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                             <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
                         </select>
                     </div>
@@ -147,7 +147,7 @@
                                 <span class="text-red-500"> * </span> Tipo de origen
                             </div>
                             <div class="bg-white my-2 flex">
-                                <select name="tipo_origen" [(ngModel)]="data.tipo_origen" (change)="actualizarTipo('Origen', txtOrigen.value)" #txtOrigen class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                                <select name="tipo_origen" [(ngModel)]="data.tipo_origen" (change)="actualizarTipo('Origen', txtOrigen.value)" #txtOrigen class="border bg-white border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                                     <option value='Externo'> Externo </option>
                                     <option value='Interno'> Interno </option>
                                 </select>
@@ -161,7 +161,7 @@
                             <span class="text-red-500"> * </span> Origen
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select name="origen" (change)="actualizarElemento('Origen', txtOrigenValor.value, txtOrigenValor)" #txtOrigenValor [(ngModel)]="data.origen" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <select name="origen" (change)="actualizarElemento('Origen', txtOrigenValor.value, txtOrigenValor)" #txtOrigenValor [(ngModel)]="data.origen" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                                 <option value=""> Seleccionar origen </option>
                                 <option *ngFor="let elemento of elementosOrigen" [value]="elemento._id"> {{ !elemento.descripcion ? elemento.razon_social : elemento.descripcion }} </option>
                             </select>
@@ -172,7 +172,7 @@
                             <span class="text-red-500"> * </span> Saldo
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select name="origen_saldo" [(ngModel)]="data.origen_saldo" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <select name="origen_saldo" [(ngModel)]="data.origen_saldo" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                                 <option value=""> Seleccionar saldo </option>
                                 <option *ngFor="let elemento of saldos_origen" [value]="elemento._id"> {{ elemento.descripcion + ' - Disponible: ' +  '$' + (elemento.monto | moneda) }} </option>
                             </select>
@@ -187,7 +187,7 @@
                                 <span class="text-red-500"> * </span> Tipo de destino
                             </div>
                             <div class="bg-white my-2 flex">
-                                <select name="tipo_destino" [(ngModel)]="data.tipo_destino" (change)="actualizarTipo('Destino', txtDestino.value)" #txtDestino class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                                <select name="tipo_destino" [(ngModel)]="data.tipo_destino" (change)="actualizarTipo('Destino', txtDestino.value)" #txtDestino class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                                     <option value='Externo'> Externo </option>
                                     <option value='Interno'> Interno </option>
                                 </select>
@@ -200,7 +200,7 @@
                             <span class="text-red-500"> * </span> Destino
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select name="destino" (change)="actualizarElemento('Destino', txtDestinoValor.value, txtDestinoValor)" #txtDestinoValor [(ngModel)]="data.destino" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <select name="destino" (change)="actualizarElemento('Destino', txtDestinoValor.value, txtDestinoValor)" #txtDestinoValor [(ngModel)]="data.destino" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
                                 <option value=""> Seleccionar destino </option>
                                 <option *ngFor="let elemento of elementosDestino" [value]="elemento._id"> {{ !elemento.descripcion ? elemento.razon_social : elemento.descripcion }} </option>
                             </select>

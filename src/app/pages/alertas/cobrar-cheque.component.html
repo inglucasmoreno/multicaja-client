@@ -57,7 +57,7 @@
                     <div class="font-semibold text-gray-800 text-sm">
                         Centro de costos
                     </div>
-                    <select [(ngModel)]="data.centro_costos" class="border border-gray-200 rounded p-1 w-full shadow text-sm mt-2 focus:outline-none">
+                    <select [(ngModel)]="data.centro_costos" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm mt-2 focus:outline-none">
                         <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
                     </select>
                 </div>
@@ -65,7 +65,7 @@
                     <div class="font-semibold text-gray-800 text-sm">
                         Cuenta contable
                     </div>
-                    <select [(ngModel)]="data.cuenta_contable" class="border border-gray-200 rounded p-1 w-full shadow text-sm mt-2 focus:outline-none">
+                    <select [(ngModel)]="data.cuenta_contable" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm mt-2 focus:outline-none">
                         <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
                     </select>
                 </div>
@@ -89,7 +89,7 @@
                         Saldo destino
                     </div>
                     <div class="bg-white flex">
-                        <select [(ngModel)]="selectorSaldo" #txtSaldo class="border border-gray-200 rounded p-1 w-full shadow text-sm mt-2 focus:outline-none">
+                        <select [(ngModel)]="selectorSaldo" #txtSaldo class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm mt-2 focus:outline-none">
                             <option value=""> Seleccionar saldo a impactar </option>
                             <option *ngFor="let saldo of saldos" [value]="saldo._id"> {{ saldo.descripcion }} - ${{ saldo.monto | moneda}} </option>
                         </select>

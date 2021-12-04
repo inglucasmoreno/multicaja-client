@@ -41,7 +41,7 @@
                         <span class="text-red-500"> * </span> Rol
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select class="border rounded focus:outline-none p-1 py-2 w-full shadow text-sm" formControlName="role">
+                        <select class="border rounded bg-white focus:outline-none p-1 py-2 w-full shadow text-sm" formControlName="role">
                             <option value="USER_ROLE"> Estandar </option>
                             <option value="ADMIN_ROLE"> Administrador </option>
                         </select>
@@ -52,7 +52,7 @@
                         <span class="text-red-500"> * </span> Estado
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select class="border rounded focus:outline-none p-1 py-2 w-full shadow text-sm" formControlName="activo">
+                        <select class="border rounded bg-white focus:outline-none p-1 py-2 w-full shadow text-sm" formControlName="activo">
                             <option value=true> Activo </option>
                             <option value=false> Inactivo </option>
                         </select>
@@ -63,8 +63,12 @@
     </div>
     <div class="bg-white mt-2 lg:mt-0 border-t-8 w-full lg:w-1/2 border-gray-800 p-4 rounded h-full">
         <div *ngIf="usuario" class="flex">
-            <img *ngIf="usuarioForm.value.role === 'ADMIN_ROLE'" class="bg-green-100 w-32 h-32 rounded-full shadow" src="assets/img/usuarios/usuario_administrador.png" alt="Avatar de usuario">
-            <img *ngIf="usuarioForm.value.role === 'USER_ROLE'" class="w-32 bg-orange-100 h-32 rounded-full shadow" src="assets/img/usuarios/usuario_estandar.png" alt="Avatar de usuario">
+            <div *ngIf="usuarioForm.value.role === 'ADMIN_ROLE'" class="flex items-center justify-center bg-green-100 w-32 h-32 rounded-full shadow border border-green-200">
+                <p class="font-semibold text-green-700 text-6xl"> A </p>
+            </div>
+            <div *ngIf="usuarioForm.value.role === 'USER_ROLE'" class="flex items-center justify-center bg-orange-100 w-32 h-32 rounded-full shadow border border-orange-200">
+                <p class="font-semibold text-orange-700 text-6xl"> E </p>
+            </div>
             <div class="ml-4 mt-2">
                 <div class="mt-1">
 
@@ -76,13 +80,13 @@
 
                     <!-- Apellido y Nombre -->
                     <div class="text-md lg:text-2xl">
-                        <p *ngIf="usuarioForm.value.nombre.trim() || usuarioForm.value.apellido.trim()"> {{ usuarioForm.value.nombre.toUpperCase() }} {{ usuarioForm.value.apellido.toUpperCase() }} </p>
+                        <p class="capitalize" *ngIf="usuarioForm.value.nombre.trim() || usuarioForm.value.apellido.trim()"> {{ usuarioForm.value.nombre.toLowerCase() }} {{ usuarioForm.value.apellido.toLowerCase() }} </p>
                         <p class="text-gray-400" *ngIf="usuarioForm.value.nombre.trim() == '' && usuarioForm.value.apellido.trim() == ''"> Apellido y Nombre </p>
                     </div>
 
                     <!-- Correo electronico -->
                     <div class="text-xs lg:text-lg italic text-gray-400">
-                        <p *ngIf="usuarioForm.value.email.trim() !== ''"> {{ usuarioForm.value.email.toUpperCase() }} </p>
+                        <p *ngIf="usuarioForm.value.email.trim() !== ''"> {{ usuarioForm.value.email.toLowerCase() }} </p>
                         <p *ngIf="usuarioForm.value.email.trim() == ''"> Correo electrónico </p>
                     </div>
 

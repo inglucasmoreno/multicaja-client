@@ -19,7 +19,7 @@
                         <span class="text-red-500"> * </span> Estado
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select formControlName="activo" class="border border-gray-200 rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                        <select formControlName="activo" class="border bg-white border-gray-300 rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
                             <option value=true> Activo </option>
                             <option value=false> Inactivo </option>
                         </select>
@@ -124,7 +124,7 @@
                         <tbody *ngIf="centrosCostos">
                             <tr class="animate__animated animate__fadeIn" *ngFor="let centro of centrosCostos | filtroTipoMovimiento:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
+                                    <p class="text-gray-900 whitespace-no-wrap capitalize">
                                         {{ centro.descripcion }}
                                     </p>
                                 </td>

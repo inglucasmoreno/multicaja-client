@@ -96,18 +96,6 @@
                                         </span>
                                     </div>
                                 </th>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    <div (click)="ordenarPorColumna('createdAt')" class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
-                                        <span>
-                                            Fecha de creación                                                
-                                        </span>
-                                        <span class="ml-2">
-                                            <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>                                   
-                                            <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                            <svg *ngIf="ordenar.columna != 'createdAt'" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                        </span>
-                                    </div>
-                                </th>
                                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     <div (click)="ordenarPorColumna('activo')" class="cursor-pointer flex items-center focus:outline-none">
                                         <span>
@@ -128,19 +116,23 @@
                         <tbody *ngIf="usuarios">
                             <tr class="animate__animated animate__fadeIn" *ngFor="let usuario of usuarios | filtroUsuarios:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        <img *ngIf="usuario.role == 'USER_ROLE'" class="rounded-full bg-orange-100 shadow w-10 h-10" src="assets/img/usuarios/usuario_estandar.png" alt="Avatar">
-                                        <img *ngIf="usuario.role == 'ADMIN_ROLE'" class="rounded-full bg-green-100 shadow w-10 h-10" src="assets/img/usuarios/usuario_administrador.png" alt="Avatar">
+                                    <div class="text-gray-900 whitespace-no-wrap">
+                                        <div *ngIf="usuario.role === 'ADMIN_ROLE'" class="flex items-center justify-center bg-green-100 w-10 h-10 rounded-full shadow border border-green-200">
+                                            <p class="font-semibold text-green-700 text-lg"> A </p>
+                                        </div>
+                                        <div *ngIf="usuario.role === 'USER_ROLE'" class="flex items-center justify-center bg-orange-100 w-10 h-10 rounded-full shadow border border-orange-200">
+                                            <p class="font-semibold text-orange-700 text-lg"> E </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                    <p class="text-gray-900 whitespace-no-wrap capitalize">
+                                        {{ usuario.apellido.toLowerCase() }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ usuario.apellido }}
-                                    </p>
-                                </td>
-                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ usuario.nombre }}
+                                    <p class="text-gray-900 whitespace-no-wrap capitalize">
+                                        {{ usuario.nombre.toLowerCase() }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
@@ -151,11 +143,6 @@
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                     <p class="text-gray-900 whitespace-no-wrap">
                                         {{ usuario.role | rol }}
-                                    </p>
-                                </td>
-                                <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ usuario.createdAt | fecha }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-2 border-b border-gray-200 text-xs">

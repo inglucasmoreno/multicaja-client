@@ -46,12 +46,12 @@
             </div>
             <div class="w-full">
                 <div class="bg-white my-2 flex">
-                    <input [(ngModel)]="filtroCheques.fechaHasta" type="date" class="border rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                    <input [(ngModel)]="filtroCheques.fechaHasta" type="date" class="border bg-white rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
                 </div>
             </div>
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Estado de cheque </p>
-                <select [(ngModel)]="filtroCheques.estado" name="estado" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroCheques.estado" name="estado" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> Emitidos </option>
                     <option value='true'> Emitidos - No cobrados </option>
                     <option value='false'> Emitidos - Cobrados </option>
@@ -59,14 +59,14 @@
             </div>
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Emisor </p>
-                <select [(ngModel)]="filtroCheques.cliente" name="emisor" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroCheques.cliente" name="emisor" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> Todos los emisores </option>
                     <option *ngFor="let emisor of emisores" [value]='emisor._id'> {{ emisor.razon_social }} </option>
                 </select>
             </div>
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Tipo de destino </p>
-                <select (change)="cambiarDestinos()" [(ngModel)]="filtroCheques.tipoDestino" name="tipo_destino" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select (change)="cambiarDestinos()" [(ngModel)]="filtroCheques.tipoDestino" name="tipo_destino" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> Todos los tipos de destino </option>
                     <option value='Interno'> Interno </option>
                     <option value='Externo'> Externo </option>
@@ -74,7 +74,7 @@
             </div>
             <div *ngIf="filtroCheques.tipoDestino !== ''" class="bg-white my-3">
                 <p class="text-sm font-semibold"> Destino </p>
-                <select [(ngModel)]="filtroCheques.destino" name="destino" class="border rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroCheques.destino" name="destino" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
                     <option value=''> {{ filtroCheques.tipoDestino === 'Interno' ? 'Todos los internos' : 'Todos los externos' }} </option>
                     <option *ngFor="let destino of destinos" [value]='destino._id'> {{ destino.razon_social ? destino.razon_social : destino.descripcion }} </option>
                 </select>
