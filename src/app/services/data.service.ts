@@ -7,6 +7,7 @@ import { AlertasSistemaService } from './alertas-sistema.service';
 export class DataService {
   
   public ubicacionActual: string = 'Dashboard';
+  public showMenu: Boolean = true;               // Header - Controla la visualizacion de la barra de navegacion
   public cobrarHoyAlert = false;
   public chequesCobrar: any = [];
 

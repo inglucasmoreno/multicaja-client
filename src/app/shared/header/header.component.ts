@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/services/data.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -9,25 +10,14 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
-  // Dropdown
-  public showUsuarios = false;
 
-  public showMenu = true;
-  public openAdmin = true;
+  constructor( public authService: AuthService,
+               public dataService: DataService ) { }
 
-  constructor( public authService: AuthService ) { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   // Metodo: Cerrar sesion
-  logout(): void{
-    this.authService.logout();
-  }
+  logout(): void{ this.authService.logout(); }
 
-  // Metodo
-  toggleMenu(): void{
-    this.showMenu ? this.showMenu = false : this.showMenu = true;
-  }
 
 }

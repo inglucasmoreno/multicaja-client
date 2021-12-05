@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import gsap from 'gsap';
 
 import { AlertService } from '../../services/alert.service';
 
@@ -23,7 +24,12 @@ export class LoginComponent implements OnInit {
               private router: Router  
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    var tl = gsap.timeline({ defaults: { duration: 0.1 } });
+    tl.from('.gsap-formulario', { y:-100, opacity: 0, duration: .5 })
+      .from('.gsap-fondo', { y:100, opacity: 0, duration: .5 })
+      .from('.gsap-imagen', { y:100, opacity: 0, duration: .5 });
+  }
 
   login(): void {
     // Verificacion - Datos de acceso
