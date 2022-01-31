@@ -1,7 +1,7 @@
 <!-- Modal: Detalle de movimiento -->
 <app-modal-medium *ngIf="movimientoSeleccionado" [showModal]="showModalDetalles">
-    <div class="flex items-center justify-between text-white bg-gray-800 rounded-t p-1">
-        <h1 class="px-2"> Detalles de movimiento </h1>
+    <div class="flex items-center justify-between text-white bg-gray-800 rounded-t px-3 py-2">
+        <h1 class="text-xl"> Detalles de movimiento </h1>
         <svg (click)="showModalDetalles = !showModalDetalles" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </div>
     <div class="p-2">
@@ -52,7 +52,7 @@
         </div>
         <div class="bg-white lg:flex mt-2">
             <div class="lg:w-1/2 w-full h-full text-sm">
-                <p class="font-semibold bg-orange-700 text-white py-1 px-2 rounded text-center"> Datos de origen </p>
+                <p class="font-semibold bg-orange-100 text-orange-700 border border-orange-200 p-2 rounded text-center"> Datos de origen </p>
                 <div class="p-1">
                     <p class="p-1"> <span class="font-semibold"> Origen: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.origen_descripcion }} </span> </p>
                     <p class="p-1"> <span class="font-semibold"> Saldo impactado: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_origen === 'Interno' ? this.movimientoSeleccionado.origen_saldo.descripcion : 'Externo'}} </span> </p>
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="lg:w-1/2 w-full h-full ml-1 text-sm">
-                <p class="font-semibold bg-green-700 text-white py-1 px-2 rounded text-center"> Datos de destino </p>
+                <p class="font-semibold bg-green-100 text-green-700 border border-green-200 p-2 rounded text-center"> Datos de destino </p>
                 <div class="p-1">
                     <p class="p-1"> <span class="font-semibold"> Destino: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.destino_descripcion }} </span> </p>
                     <p class="p-1"> <span class="font-semibold"> Saldo impactado: </span> <span class="text-sm"> {{ this.movimientoSeleccionado.tipo_destino === 'Interno' ? this.movimientoSeleccionado.destino_saldo.descripcion : 'Externo'}} </span> </p>
@@ -83,8 +83,8 @@
                     <div class="font-semibold text-gray-600 text-sm">
                         Tipo de movimiento
                     </div>
-                    <div class="bg-white my-2 flex">
-                        <select name="tipo" [(ngModel)]="data.tipo_movimiento" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                    <div class="bg-white flex">
+                        <select name="tipo" [(ngModel)]="data.tipo_movimiento" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                             <option *ngFor="let tipo of tipos" [value]="tipo._id"> {{ tipo.descripcion }} </option>
                         </select>
                     </div>
@@ -93,30 +93,30 @@
                     <div class="font-semibold text-gray-600 text-sm">
                         Centro de costos
                     </div>
-                    <div class="bg-white my-2 flex">
-                        <select name="centro_costos" [(ngModel)]="data.centro_costos" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                    <div class="bg-white flex">
+                        <select name="centro_costos" [(ngModel)]="data.centro_costos" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                             <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="lg:flex">
-                <div class="px-2 mt-2 w-full lg:w-1/2">
+                <div class="px-2 mt-4 w-full lg:w-1/2">
                     <div class="font-semibold text-gray-600 text-sm">
                         Cuenta contable
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select name="cuenta_contable" [(ngModel)]="data.cuenta_contable" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                        <select name="cuenta_contable" [(ngModel)]="data.cuenta_contable" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                             <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
                         </select>
                     </div>
                 </div>
-                <div class="px-2 mt-2 w-full lg:w-1/2">
+                <div class="px-2 mt-4 w-full lg:w-1/2">
                     <div class="font-semibold text-gray-600 text-sm">
                         Concepto/Observación
                     </div>
                     <div class="bg-white my-2 flex">
-                        <input name="concepto" [(ngModel)]="data.concepto" placeholder="Ej. Pago de sueldo" class="border px-2 border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                        <input name="concepto" [(ngModel)]="data.concepto" placeholder="Ej. Pago de sueldo" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     </div>
                 </div>
             </div>
@@ -125,29 +125,29 @@
                     <div class="font-semibold text-gray-600 text-sm">
                         Comprobante
                     </div>
-                    <div class="bg-white my-2 flex">
-                        <input name="comprobante" [(ngModel)]="data.comprobante" placeholder="Ej. Cobertura cuenta" class="border px-2 border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                    <div class="bg-white flex">
+                        <input name="comprobante" [(ngModel)]="data.comprobante" placeholder="Ej. Cobertura cuenta" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     </div>
                 </div>
                 <div class="w-full lg:w-1/2">
-                    <div class="font-semibold text-gray-600 text-sm">
+                    <div class="font-semibold text-gray-600 text-sm mt-2">
                         <span class="text-red-500"> * </span> Monto ($)
                     </div>
-                    <div class="font-semibold mx-2 mt-2">
-                        <input type="number" name="monto" [(ngModel)]="data.monto" placeholder="Ingresar monto" class="border p-1 px-3 w-full rounded focus:outline-none text-sm">
+                    <div class="font-semibold mx-2">
+                        <input type="number" name="monto" [(ngModel)]="data.monto" placeholder="Ingresar monto" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     </div>
                 </div>
             </div>
             <div class="lg:flex mt-2">
                 <div class="w-full lg:w-1/2 h-full mr-2">
-                    <h1 class="bg-orange-700 text-white p-1 rounded font-semibold text-center mt-1 text-sm "> Datos de origen </h1>
+                    <h1 class="bg-orange-100 text-orange-700 border border-orange-200 p-2 rounded font-semibold text-center mt-1 text-sm "> Datos de origen </h1>
                     <div class="flex flex-col lg:flex-row">
                         <div class="w-full flex-1">
                             <div class="font-semibold mt-3 text-gray-600 text-sm">
                                 <span class="text-red-500"> * </span> Tipo de origen
                             </div>
-                            <div class="bg-white my-2 flex">
-                                <select name="tipo_origen" [(ngModel)]="data.tipo_origen" (change)="actualizarTipo('Origen', txtOrigen.value)" #txtOrigen class="border bg-white border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <div class="bg-white flex">
+                                <select name="tipo_origen" [(ngModel)]="data.tipo_origen" (change)="actualizarTipo('Origen', txtOrigen.value)" #txtOrigen class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                                     <option value='Externo'> Externo </option>
                                     <option value='Interno'> Interno </option>
                                 </select>
@@ -157,22 +157,22 @@
                         </div>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-600 text-sm">
+                        <div class="font-semibold text-gray-600 text-sm mt-4">
                             <span class="text-red-500"> * </span> Origen
                         </div>
-                        <div class="bg-white my-2 flex">
-                            <select name="origen" (change)="actualizarElemento('Origen', txtOrigenValor.value, txtOrigenValor)" #txtOrigenValor [(ngModel)]="data.origen" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                        <div class="bg-white flex">
+                            <select name="origen" (change)="actualizarElemento('Origen', txtOrigenValor.value, txtOrigenValor)" #txtOrigenValor [(ngModel)]="data.origen" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                                 <option value=""> Seleccionar origen </option>
                                 <option *ngFor="let elemento of elementosOrigen" [value]="elemento._id"> {{ !elemento.descripcion ? elemento.razon_social : elemento.descripcion }} </option>
                             </select>
                         </div>
                     </div>
                     <div *ngIf="data.tipo_origen == 'Interno' && data.origen !== ''">
-                        <div class="font-semibold text-gray-600 text-sm">
+                        <div class="font-semibold text-gray-600 text-sm mt-4">
                             <span class="text-red-500"> * </span> Saldo
                         </div>
-                        <div class="bg-white my-2 flex">
-                            <select name="origen_saldo" [(ngModel)]="data.origen_saldo" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                        <div class="bg-white flex">
+                            <select name="origen_saldo" [(ngModel)]="data.origen_saldo" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                                 <option value=""> Seleccionar saldo </option>
                                 <option *ngFor="let elemento of saldos_origen" [value]="elemento._id"> {{ elemento.descripcion + ' - Disponible: ' +  '$' + (elemento.monto | moneda) }} </option>
                             </select>
@@ -180,14 +180,14 @@
                     </div>
                 </div>
                 <div class="w-full lg:w-1/2 h-full">
-                    <h1 class="bg-green-700 text-white p-1 rounded font-semibold text-center mt-1 text-sm"> Datos de destino </h1>
+                    <h1 class="bg-green-100 text-green-700 border border-green-200 p-2 rounded font-semibold text-center mt-1 text-sm"> Datos de destino </h1>
                     <div class="flex flex-col lg:flex-row">
                         <div class="w-full flex-1">
                             <div class="font-semibold mt-3 text-gray-600 text-sm">
                                 <span class="text-red-500"> * </span> Tipo de destino
                             </div>
-                            <div class="bg-white my-2 flex">
-                                <select name="tipo_destino" [(ngModel)]="data.tipo_destino" (change)="actualizarTipo('Destino', txtDestino.value)" #txtDestino class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                            <div class="bg-white flex">
+                                <select name="tipo_destino" [(ngModel)]="data.tipo_destino" (change)="actualizarTipo('Destino', txtDestino.value)" #txtDestino class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                                     <option value='Externo'> Externo </option>
                                     <option value='Interno'> Interno </option>
                                 </select>
@@ -196,22 +196,22 @@
                         <div class="w-full flex-1 svelte-1l8159u"></div>
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-600 text-sm">
+                        <div class="font-semibold text-gray-600 text-sm mt-4">
                             <span class="text-red-500"> * </span> Destino
                         </div>
-                        <div class="bg-white my-2 flex">
-                            <select name="destino" (change)="actualizarElemento('Destino', txtDestinoValor.value, txtDestinoValor)" #txtDestinoValor [(ngModel)]="data.destino" class="border border-gray-200 bg-white rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                        <div class="bg-white flex">
+                            <select name="destino" (change)="actualizarElemento('Destino', txtDestinoValor.value, txtDestinoValor)" #txtDestinoValor [(ngModel)]="data.destino" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                                 <option value=""> Seleccionar destino </option>
                                 <option *ngFor="let elemento of elementosDestino" [value]="elemento._id"> {{ !elemento.descripcion ? elemento.razon_social : elemento.descripcion }} </option>
                             </select>
                         </div>
                     </div>
                     <div *ngIf="data.tipo_destino == 'Interno' && data.destino !== ''">
-                        <div class="font-semibold text-gray-600 text-sm">
+                        <div class="font-semibold text-gray-600 text-sm mt-4">
                             <span class="text-red-500"> * </span> Saldo
                         </div>
-                        <div class="bg-white my-2 flex">
-                            <select name="destino_saldo" [(ngModel)]="data.destino_saldo" class="border border-gray-200 rounded p-1 py-1 w-full shadow text-sm focus:outline-none">
+                        <div class="bg-white flex">
+                            <select name="destino_saldo" [(ngModel)]="data.destino_saldo" class="transform duration-500 py-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                                 <option value=""> Seleccionar saldo </option>
                                 <option *ngFor="let elemento of saldos_destino" [value]="elemento._id"> {{ elemento.descripcion + ' - Disponible: ' +  '$' + (elemento.monto | moneda) }} </option>
                             </select>
@@ -220,9 +220,9 @@
                 </div>
             </div>
         </form>
-        <div class="lg:flex lg:items-center mt-6">
-            <button (click)="crearMovimiento()" class="w-full focus:outline-none lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
-            <button (click)="showModal= !showModal" class="w-full lg:w-1/2 focus:outline-none bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
+        <div class="lg:flex lg:items-center mt-8">
+            <button (click)="crearMovimiento()" class="w-full focus:outline-none lg:w-1/2 bg-gray-100 hover:text-green-700 border font-semibold text-gray-900 rounded shadow p-2"> Crear movimiento </button>
+            <button (click)="showModal= !showModal" class="w-full lg:w-1/2 focus:outline-none bg-gray-100 hover:text-green-700 font-semibold border text-gray-900 rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
         </div>
     </div>
 </app-modal-medium>

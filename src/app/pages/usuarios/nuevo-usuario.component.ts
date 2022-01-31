@@ -6,6 +6,8 @@ import { DataService } from 'src/app/services/data.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { AlertService } from '../../services/alert.service';
 
+import gsap from 'gsap';
+
 @Component({
   selector: 'app-nuevo-usuario',
   templateUrl: './nuevo-usuario.component.html',
@@ -21,7 +23,8 @@ export class NuevoUsuarioComponent implements OnInit {
     usuario: ['', Validators.required],
     apellido: ['', Validators.required],
     nombre: ['', Validators.required],
-    email: ['', Validators.required],
+    dni: ['', Validators.required],
+    email: [''],
     password: ['', Validators.required],
     repetir: ['', Validators.required],
     role: ['ADMIN_ROLE', Validators.required],
@@ -36,20 +39,21 @@ export class NuevoUsuarioComponent implements OnInit {
               ) { }
 
   ngOnInit(): void {
-    this.dataService.ubicacionActual = 'Dashboard - Usuarios - Creando'
+    this.dataService.ubicacionActual = 'Dashboard - Usuarios - Creando';
+    gsap.from(".gsap-contenido", { duration: 0.2, y: 100, opacity: 0.2 });
   }
   
   // Crear nuevo usuario
   nuevoUsuario(): void {
 
     const { status } = this.usuarioForm;
-    const {usuario, apellido, nombre, email, password, repetir} = this.usuarioForm.value;
+    const {usuario, apellido, nombre, dni, password, repetir} = this.usuarioForm.value;
     
     // Se verifica que los campos no tengan un espacio vacio
     const campoVacio = usuario.trim() === '' || 
                        apellido.trim() === '' || 
-                       email.trim() === '' || 
                        nombre.trim() === '' ||
+                       dni.trim() === '' ||
                        password.trim() === '' ||
                        repetir.trim() === '';
 

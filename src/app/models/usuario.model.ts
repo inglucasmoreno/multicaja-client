@@ -5,6 +5,7 @@ export class Usuario {
         public usuario: string,
         public apellido: string,
         public nombre: string,
+        public dni: string,
         public email: string,
         public role?: string,
         public activo?: boolean,

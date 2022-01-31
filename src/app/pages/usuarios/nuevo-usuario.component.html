@@ -1,6 +1,6 @@
 <div class="lg:flex p-4">
 
-    <div class="w-full lg:w-1/2 bg-white mr-2 shadow rounded border-t-8 border-gray-800">
+    <div class="w-full gsap-contenido lg:w-1/2 bg-white mr-2 shadow rounded border-t-8 border-gray-800">
         <!-- Encabezado de formulario -->
         <app-encabezado-formulario titulo="Usuarios" subTitulo="Nuevo usuario" dirRegresar="/dashboard/usuarios">
         </app-encabezado-formulario>
@@ -12,50 +12,46 @@
                     <div class="font-semibold bold mt-3 text-gray-600 text-sm">
                         <span class="text-red-500"> * </span> Nombre de usuario
                     </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input placeholder="Ej. lmoreno" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm" formControlName="usuario"></div>
-                </div>
-                <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm">
-                        <span class="text-red-500"> * </span> Email
-                    </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input type="email" formControlName="email" placeholder="Ej. lucasmoreno@gmail.com" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
-                </div>
+                    <input placeholder="Ej. lmoreno" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 appearance-none outline-none w-full text-gray-800 text-sm" formControlName="usuario"></div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm">
                         <span class="text-red-500"> * </span> Apellido
                     </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input placeholder="Ej. Moreno" formControlName="apellido" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm">
-                    </div>
+                    <input placeholder="Ej. Moreno" formControlName="apellido" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 appearance-none outline-none w-full text-gray-800 text-sm">
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm">
                         <span class="text-red-500"> * </span> Nombre
                     </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input placeholder="Ej. Lucas" formControlName="nombre" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
-                </div>
+                    <input placeholder="Ej. Lucas" formControlName="nombre" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold bold mt-3 text-gray-600 text-sm">
+                        <span class="text-red-500"> * </span> DNI
+                    </div>
+                    <input placeholder="Ej. 34060398" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 appearance-none outline-none w-full text-gray-800 text-sm" formControlName="dni"></div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm">
+                        Email
+                    </div>
+                    <input type="email" formControlName="email" placeholder="Ej. lucasmoreno@gmail.com" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
                     <div class="font-semibold mt-3 text-gray-600 text-sm">
                         <span class="text-red-500"> * </span> Contraseña
                     </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input type="password" formControlName="password" placeholder="******" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm">
-                    </div>
+                    <input type="password" formControlName="password" placeholder="******" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 appearance-none outline-none w-full text-gray-800 text-sm">
                 </div>
                 <div class="w-full mx-2 flex-1">
                     <div class="font-semibold mt-3 text-gray-600 text-sm">
                         <span class="text-red-500"> * </span> Repetir contraseña
                     </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input type="password" formControlName="repetir" placeholder="******" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
-                </div>
+                    <input type="password" formControlName="repetir" placeholder="******" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
@@ -63,7 +59,7 @@
                         <span class="text-red-500"> * </span> Rol
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select class="border rounded bg-white p-1 py-2 w-full shadow text-sm focus:outline-none" formControlName="role">
+                        <select class="px-2 transform duration-500 p-2 bg-white focus:border-green-700 border-b-2 outline-none w-full text-gray-800 text-sm" formControlName="role">
                             <option value="USER_ROLE"> Estandar </option>
                             <option value="ADMIN_ROLE"> Administrador </option>
                         </select>
@@ -74,7 +70,7 @@
                         <span class="text-red-500"> * </span> Estado
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select class="border rounded p-1 py-2 w-full bg-white shadow text-sm focus:outline-none" formControlName="activo">
+                        <select class="px-2 transform duration-500 p-2 bg-white focus:border-green-700 border-b-2 outline-none w-full text-gray-800 text-sm" formControlName="activo">
                             <option value=true> Activo </option>
                             <option value=false> Inactivo </option>
                         </select>
@@ -84,7 +80,7 @@
         </form>
     </div>
 
-    <div class="bg-white mt-2 lg:mt-0 border-t-8 w-full lg:w-1/2 border-gray-800 p-4 rounded h-full">
+    <div class="bg-white gsap-contenido mt-2 lg:mt-0 border-t-8 w-full lg:w-1/2 border-gray-800 p-4 rounded shadow h-full">
         <div class="flex">
             <div *ngIf="usuarioForm.value.role === 'ADMIN_ROLE'" class="flex items-center justify-center bg-green-100 w-32 h-32 rounded-full shadow border border-green-200">
                 <p class="font-semibold text-green-700 text-6xl"> A </p>
@@ -116,13 +112,7 @@
                 </div>
             </div>
         </div>
-        <div>
-            <div class="w-full mt-2">
-                <app-boton-formulario (click)="nuevoUsuario()">
-                    Crear este usuario
-                </app-boton-formulario>
-            </div>
-        </div>
+        <app-boton-formulario [deshabilitado]="!usuarioForm.valid || usuarioForm.value.password !== usuarioForm.value.repetir" texto="Crear este usuario" (click)="nuevoUsuario()"></app-boton-formulario>
     </div>
 
 </div>

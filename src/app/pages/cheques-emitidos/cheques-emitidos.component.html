@@ -1,8 +1,8 @@
 <!-- Modal: Cobrar cheque -->
 <app-modal-small [showModal]="showModalCobrarCheque">
     <div class="bg-white rounded">
-        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
-            <h1 class="py-1 px-2"> Cheque cobrado </h1>
+        <div class="flex items-center rounded-t bg-gray-800 py-2 px-3  justify-between text-white">
+            <h1 class="text-xl"> Cheque cobrado </h1>
             <svg (click)="regresarDetalles()" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
         <div *ngIf="chequeSeleccionado" class="p-2">
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="px-2">
-            <div class="font-semibold border-b pb-2 px-2">
+            <div class="font-semibold border bg-gray-100 rounded p-2">
                 Datos de movimiento
             </div>
             <div class="mt-2">
@@ -22,39 +22,33 @@
                     <div class="font-semibold text-gray-800 text-sm">
                         Centro de costos
                     </div>
-                    <div class="bg-white my-2 flex">
-                        <select [(ngModel)]="data.centro_costos" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
-                            <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
-                        </select>
-                    </div>
+                    <select [(ngModel)]="data.centro_costos" class="transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
+                        <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
+                    </select>
                 </div>
-                <div class="w-full flex-1 svelte-1l8159u px-2">
+                <div class="w-full flex-1 svelte-1l8159u mt-2 px-2">
                     <div class="w-full flex-1">
                         <div class="font-semibold text-gray-800 text-sm">
                             Cuenta contable
                         </div>
-                        <div class="bg-white my-2 flex">
-                            <select [(ngModel)]="data.cuenta_contable" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
-                                <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
-                            </select>
-                        </div>
+                        <select [(ngModel)]="data.cuenta_contable" class="transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
+                            <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
+                        </select>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="px-2 mt-2">
-            <div class="font-semibold border-b pb-2 px-2">
+        <div class="px-2 mt-3">
+            <div class="font-semibold border bg-gray-100 p-2 rounded">
                 Datos de cheque
             </div>
             <div class="px-2">
                 <div class="font-semibold text-gray-800 text-sm mt-2">
                     Fue cobrado el
                 </div>
-                <div class="bg-whsite my-2 p-1 flex border border-gray-200 rounded shadow mt-2">
-                    <input type="date" [(ngModel)]="nuevoCheque.fecha_cobrado" class="p-1 px-1 appearance-none outline-none w-full text-gray-800 text-sm">
-                </div>
+                <input type="date" [(ngModel)]="nuevoCheque.fecha_cobrado" class="transform outline-none duration-500 p-2 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
             </div>
-            <button (click)="chequeCobrado()" class="border p-1 w-full mt-4 rounded focus:outline-none hover:text-green-700 mb-2 bg-gray-100 font-semibold"> Cheque cobrado </button>
+            <button (click)="chequeCobrado()" class="border p-2 w-full mt-4 rounded focus:outline-none hover:text-green-700 mb-2 bg-gray-100 font-semibold"> Cheque cobrado </button>
         </div>
     </div>
 </app-modal-small>
@@ -62,8 +56,8 @@
 <!-- Modal: Detalles de cheque -->
 <app-modal *ngIf="chequeSeleccionado" [showModal]="showModalDetalles">
     <div class="bg-white rounded">
-        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
-            <h1 class="py-1 px-2"> Detalles de cheque </h1>
+        <div class="flex items-center rounded-t bg-gray-800 px-3 py-2 justify-between text-white">
+            <h1 class="text-xl"> Detalles de cheque </h1>
             <svg (click)="showModalDetalles = false" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
         <div class="p-2">
@@ -85,7 +79,7 @@
                         class="text-sm px-1 rounded border font-semibold"> {{ chequeSeleccionado.activo === true ? chequeSeleccionado.estado : 'Emitido y cobrado' }} </span> </p>
                 <p class="py-2 border-b border-l border-r bg-gray-100 flex items-center justify-between px-2"> <span class="font-semibold"> Importe </span> <span class="font-semibold"> ${{ chequeSeleccionado.importe | moneda }} </span> </p>
             </div>
-            <div *ngIf="chequeSeleccionado.activo && authService.usuario.role == 'ADMIN_ROLE'" class="flex items-center">
+            <div *ngIf="chequeSeleccionado.activo && authService.usuario.role == 'ADMIN_ROLE'" class="flex items-center px-2">
                 <button (click)="modalCobrarCheque()" class="p-2 w-full focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100"> El cheque fue cobrado </button>
             </div>
         </div>
@@ -97,11 +91,11 @@
 <app-modal [showModal]="showNuevoCheque">
     <div *ngIf="empresa">
         <div class="flex items-center justify-between bg-gray-800 py-2 px-3 rounded-t">
-            <h1 class="text-white font-semibold text-md"> Emitiendo nuevo cheque </h1>
-            <svg width="20" height="20" (click)="showNuevoCheque = false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white cursor-pointer pr-1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <h1 class="text-white text-xl"> Emitiendo nuevo cheque </h1>
+            <svg width="22" height="22" (click)="showNuevoCheque = false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white cursor-pointer pr-1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
         <div class="p-2 w-11/12 lg:w-full">
-            <div class="font-semibold border-b pb-2 px-2 mt-2">
+            <div class="font-semibold border bg-gray-100 rounded p-2 px-2 mt-2">
                 Datos de movimiento
             </div>
             <div class="flex flex-col lg:flex-row mt-2">
@@ -110,7 +104,7 @@
                         Centro de costos
                     </div>
                     <div class="bg-white my-2 flex">
-                        <select [(ngModel)]="data.centro_costos" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
+                        <select [(ngModel)]="data.centro_costos" class="transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                             <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
                         </select>
                     </div>
@@ -121,7 +115,7 @@
                             Cuenta contable
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select [(ngModel)]="data.cuenta_contable" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
+                            <select [(ngModel)]="data.cuenta_contable" class="transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                                 <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
                             </select>
                         </div>
@@ -129,7 +123,7 @@
                 </div>
             </div>
             <div>
-                <div class="font-semibold border-b pb-2 px-2 mt-2">
+                <div class="font-semibold border bg-gray-100 rounded p-2 px-2 mt-2">
                     Datos de cheque
                 </div>
                 <div class="flex flex-col lg:flex-row">
@@ -138,7 +132,7 @@
                             <span class="text-red-500"> * </span> Fecha emisión
                         </div>
                         <div class="bg-white my-2 flex">
-                            <input type="Date" [(ngModel)]="nuevoCheque.fecha_emision" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                            <input type="Date" [(ngModel)]="nuevoCheque.fecha_emision" class="transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                         </div>
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
@@ -146,7 +140,7 @@
                             Fecha de cobro
                         </div>
                         <div class="bg-white my-2 flex">
-                            <input type="Date" [(ngModel)]="nuevoCheque.fecha_cobro" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                            <input type="Date" [(ngModel)]="nuevoCheque.fecha_cobro" class="transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                         </div>
                     </div>
                 </div>
@@ -156,7 +150,7 @@
                             <span class="text-red-500"> * </span> Nro. de cheque
                         </div>
                         <div class="bg-white my-2 flex">
-                            <input [(ngModel)]="nuevoCheque.nro_cheque" placeholder="Ej. 7ZEPN6GMWLQ2Q0M" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                            <input [(ngModel)]="nuevoCheque.nro_cheque" placeholder="Ej. 7ZEPN6GMWLQ2Q0M" class="transform duration-500 p-2 outline-none focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                         </div>
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
@@ -164,7 +158,7 @@
                             <span class="text-red-500"> * </span> Concepto
                         </div>
                         <div class="bg-white my-2 flex">
-                            <input [(ngModel)]="nuevoCheque.concepto" placeholder="Ej. Pago por servicio" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                            <input [(ngModel)]="nuevoCheque.concepto" placeholder="Ej. Pago por servicio" class="transform duration-500 p-2 outline-none focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                         </div>
                     </div>
                 </div>
@@ -174,7 +168,7 @@
                             Emisor
                         </div>
                         <div class="bg-white my-2 flex">
-                            <div class="border border-gray-200 bg-gray-100 rounded px-2 py-1 w-full shadow text-sm focus:outline-none"> {{ nuevoCheque.emisor }} </div>
+                            <div class="border border-gray-200 bg-gray-100 rounded px-2 py-2 w-full shadow text-sm focus:outline-none"> {{ nuevoCheque.emisor }} </div>
                         </div>
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
@@ -182,7 +176,7 @@
                             CUIT (Emisor)
                         </div>
                         <div class="bg-white my-2 flex">
-                            <div class="border border-gray-200 bg-gray-100 rounded px-2 py-1 w-full shadow text-sm focus:outline-none"> {{ nuevoCheque.cuit === '' ? 'Sin especificar' : nuevoCheque.cuit }} </div>
+                            <div class="border border-gray-200 bg-gray-100 rounded px-2 py-2 w-full shadow text-sm focus:outline-none"> {{ nuevoCheque.cuit === '' ? 'Sin especificar' : nuevoCheque.cuit }} </div>
                         </div>
                     </div>
                 </div>
@@ -192,7 +186,7 @@
                             <span class="text-red-500"> * </span> Tipo destino
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select (change)="actualizarDestino()" [(ngModel)]="data.tipo_destino" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
+                            <select (change)="actualizarDestino()" [(ngModel)]="data.tipo_destino" class="transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                                 <option value="Externo"> Externo </option>
                                 <option value="Interno"> Interno </option>
                             </select>
@@ -203,7 +197,7 @@
                             <span class="text-red-500"> * </span> Destino
                         </div>
                         <div class="bg-white my-2 flex">
-                            <select [(ngModel)]="nuevoCheque.destino" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm focus:outline-none">
+                            <select [(ngModel)]="nuevoCheque.destino" class="transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                                 <option value=""> Seleccionar destino </option>
                                 <option *ngFor="let destino of destinos" [value]="destino._id"> {{ data.tipo_destino === 'Externo' ? destino.descripcion : destino.razon_social}} </option>
                             </select>
@@ -216,14 +210,14 @@
                             <span class="text-red-500"> * </span> Importe
                         </div>
                         <div class="bg-white my-2 flex">
-                            <input [(ngModel)]="nuevoCheque.importe" placeholder="Ej. 15000" type="number" class="border border-gray-200 rounded px-2 py-1 w-full shadow text-sm focus:outline-none">
+                            <input [(ngModel)]="nuevoCheque.importe" placeholder="Ej. 15000" type="number" class="transform duration-500 p-2 outline-none focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                         </div>
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
                         <div class="text-gray-800 text-sm">
                             <span class="font-semibold"> Banco </span> <span class="text-gray-500"> (Saldo de emisor) </span>
                         </div>
-                        <select [(ngModel)]="nuevoCheque.banco_id" class="border border-gray-200 bg-white rounded p-1 mt-2 w-full shadow text-sm focus:outline-none">
+                        <select [(ngModel)]="nuevoCheque.banco_id" class="transform duration-500 px-2 py-3 focus:border-green-700 border-b-2 bg-white w-full text-gray-800 text-sm">
                             <option value=""> Seleccionar banco </option>
                             <option *ngFor="let saldo of saldos" [value]="saldo._id"> {{ saldo.descripcion }} - ${{ saldo.monto | moneda }} </option>
                         </select>
@@ -232,8 +226,8 @@
             </div>
         </div>
         <div class="w-full lg:flex lg:items-center mt-6 px-3 pb-5">
-            <button (click)="emitirCheque()" class="w-full lg:w-1/2 focus:outline-none bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Emitir </button>
-            <button (click)="showNuevoCheque = false" class="w-full lg:w-1/2 focus:outline-none bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
+            <button (click)="emitirCheque()" class="w-full lg:w-1/2 focus:outline-none bg-gray-100 hover:text-green-700 text-gray-900 border font-semibold rounded shadow p-2"> Emitir </button>
+            <button (click)="showNuevoCheque = false" class="w-full lg:w-1/2 focus:outline-none bg-gray-100 hover:text-green-700 border text-gray-900 rounded font-semibold shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
         </div>
     </div>
 </app-modal>

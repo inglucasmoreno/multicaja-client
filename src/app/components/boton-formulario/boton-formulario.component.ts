@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-boton-formulario',
@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class BotonFormularioComponent implements OnInit {
+
+  @Input() texto: string;
+  @Input() deshabilitado: boolean = false;
 
   constructor() { }
 

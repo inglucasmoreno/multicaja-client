@@ -56,7 +56,7 @@ export class ReportesEvolucionSaldosComponent implements OnInit {
   
   // Paginacion
   public paginaActual: number = 1;
-  public cantidadItems: number = 5;
+  public cantidadItems: number = 10;
 
   constructor(private dataService: DataService,
               private alertService: AlertService,

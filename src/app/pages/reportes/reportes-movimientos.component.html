@@ -83,7 +83,7 @@
             </div>
             <div class="w-full">
                 <div class="bg-white my-2 flex">
-                    <input [(ngModel)]="filtroMovimientos.desde" type="date" class="border rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                    <input [(ngModel)]="filtroMovimientos.desde" type="date" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 appearance-none outline-none w-full text-gray-800 text-sm">
                 </div>
             </div>
             <div class="flex items-center text-sm mt-4">
@@ -92,19 +92,19 @@
             </div>
             <div class="w-full">
                 <div class="bg-white my-2 flex">
-                    <input [(ngModel)]="filtroMovimientos.hasta" type="date" class="border bg-white rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                    <input [(ngModel)]="filtroMovimientos.hasta" type="date" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 appearance-none outline-none w-full text-gray-800 text-sm">
                 </div>
             </div>
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Tipo de movimiento </p>
-                <select [(ngModel)]="filtroMovimientos.tipo_movimiento" name="tipo_movimiento" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroMovimientos.tipo_movimiento" name="tipo_movimiento" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     <option value=''> Todos los tipos </option>
                     <option *ngFor="let tipo of tipoMovimientos" [value]='tipo._id'> {{ tipo.descripcion }} </option>
                 </select>
             </div>
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Tipo de origen </p>
-                <select (change)="cambiarOrigen()" [(ngModel)]="filtroMovimientos.tipo_origen" name="tipo_origen" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select (change)="cambiarOrigen()" [(ngModel)]="filtroMovimientos.tipo_origen" name="tipo_origen" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     <option value=''>  Todos los origenes </option>
                     <option value='Interno'> Interno </option>
                     <option value='Externo'> Externo </option>
@@ -112,14 +112,14 @@
             </div>
             <div *ngIf="filtroMovimientos.tipo_origen !== ''" class="bg-white my-3">
                 <p class="text-sm font-semibold"> Origen </p>
-                <select [(ngModel)]="filtroMovimientos.origen" name="origen" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroMovimientos.origen" name="origen" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     <option value=''> {{ filtroMovimientos.tipo_origen === 'Interno' ? 'Todos los internos' : 'Todos los externos' }} </option>
                     <option *ngFor="let origen of origenes" [value]="origen._id"> {{ origen.descripcion ? origen.descripcion : origen.razon_social }} </option>
                 </select>
             </div>
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Tipo de destino </p>
-                <select (change)="cambiarDestino()" [(ngModel)]="filtroMovimientos.tipo_destino" name="tipo_destino" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select (change)="cambiarDestino()" [(ngModel)]="filtroMovimientos.tipo_destino" name="tipo_destino" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     <option value=''> Todos los destinos </option>
                     <option value='Interno'> Interno </option>
                     <option value='Externo'> Externo </option>
@@ -127,18 +127,15 @@
             </div>
             <div *ngIf="filtroMovimientos.tipo_destino !== ''" class="bg-white my-3">
                 <p class="text-sm font-semibold"> Destino </p>
-                <select [(ngModel)]="filtroMovimientos.destino" name="destino" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroMovimientos.destino" name="destino" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     <option value=''> {{ filtroMovimientos.tipo_destino === 'Interno' ? 'Todos los internos' : 'Todos los externos' }} </option>
                     <option *ngFor="let destino of destinos" [value]="destino._id"> {{ destino.descripcion ? destino.descripcion : destino.razon_social }} </option>
                 </select>
             </div>
-            <div class="flex items-center mt-6">
-                <button (click)="buscar()" class="flex items-center focus:outline-none justify-center bg-gray-100 border border-gray-200 rounded p-2 w-1/2 hover:text-green-700">  
+            <div class="mt-6">
+                <button (click)="buscar()" class="flex items-center focus:outline-none justify-center bg-gray-100 border border-gray-200 rounded p-2 w-full hover:text-green-700">  
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>    
                     <span class="ml-1"> Buscar </span>
-                </button>
-                <button routerLink="/dashboard/reportes" class="flex items-center focus:outline-none justify-center bg-gray-100 border border-gray-200 rounded p-2 w-1/2 text-center ml-2 hover:text-green-700">  
-                    <span> Regresar </span>
                 </button>
             </div>
         </div>
@@ -164,42 +161,44 @@
                     <svg *ngIf="ordenar.direccion === 1" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
                 </span>
             </div>
-            <div (click)="modalDetalles(movimiento)" [ngClass]="{'border-yellow-500 hover:bg-yellow-100' : movimiento.cheque !== null }" class="border border-green-600 hover:bg-green-100 shadow p-2 m-2 cursor-pointer rounded border-l-8 text-sm" *ngFor="let movimiento of movimientos | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
-                <div class="px-1 py-2 lg:flex lg:items-center pb-2">
-                    <p> <span class="font-semibold"> Fecha de movimiento: </span> {{ movimiento.createdAt | fecha }} </p>
+            <div class="h-screen overflow-y-auto">
+                <div (click)="modalDetalles(movimiento)" [ngClass]="{'border-yellow-500 hover:bg-yellow-100' : movimiento.cheque !== null }" class="border border-green-600 hover:bg-green-100 shadow p-2 m-2 cursor-pointer rounded border-l-8 text-sm" *ngFor="let movimiento of movimientos | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                    <div class="px-1 py-2 lg:flex lg:items-center pb-2">
+                        <p> <span class="font-semibold"> Fecha de movimiento: </span> {{ movimiento.createdAt | fecha }} </p>
+                    </div>
+                    <p class="px-1 py-3 border-t"> <span class="font-semibold"> Tipo de movimiento: </span> {{ movimiento.tipo_movimiento.descripcion }} </p>
+                    <div class="border-t border-b pb-2 lg:flex lg:items-center pt-2">
+                        <p class="p-1"> <span class="font-semibold"> Origen: </span> {{ movimiento.origen_descripcion }} </p>
+                        <p *ngIf="movimiento.tipo_origen === 'Interno'" class="p-1 text-xs">
+                            <span class="bg-orange-100 py-1 px-2 rounded border flex items-center border-orange-200"> 
+                                {{ movimiento.origen_saldo_descripcion }} - ${{ movimiento.origen_monto_anterior | moneda }}
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right ml-1 mr-1"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>           
+                                ${{ movimiento.origen_monto_nuevo | moneda }}
+                            </span>
+                        </p>
+                        <p *ngIf="movimiento.tipo_origen === 'Externo'" class="p-1 text-xs">
+                            <span class="bg-orange-100 py-1 px-2 rounded border flex items-center border-orange-200"> 
+                                EXTERNO
+                            </span>
+                        </p>
+                    </div>
+                    <div class="border-t border-b lg:flex lg:items-center pb-2 pt-2">
+                        <p class="p-1"> <span class="font-semibold"> Destino: </span> {{ movimiento.destino_descripcion }} </p>
+                        <p *ngIf="movimiento.tipo_destino === 'Interno'" class="p-1 text-xs">
+                            <span class="bg-green-100 py-1 px-2 flex items-center rounded border border-green-200"> 
+                                {{ movimiento.destino_saldo_descripcion }} - ${{ movimiento.destino_monto_anterior | moneda }}
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right ml-1 mr-1"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                ${{ movimiento.destino_monto_nuevo | moneda }}
+                            </span>
+                        </p>
+                        <p *ngIf="movimiento.tipo_destino === 'Externo'" class="p-1 text-xs">
+                            <span class="bg-green-100 py-1 px-2 flex items-center rounded border border-green-200"> 
+                                EXTERNO
+                            </span>
+                        </p>
+                    </div>
+                    <p class="p-2 font-semibold"> Monto: ${{ movimiento.monto | moneda }} </p>
                 </div>
-                <p class="px-1 py-3 border-t"> <span class="font-semibold"> Tipo de movimiento: </span> {{ movimiento.tipo_movimiento.descripcion }} </p>
-                <div class="border-t border-b pb-2 lg:flex lg:items-center pt-2">
-                    <p class="p-1"> <span class="font-semibold"> Origen: </span> {{ movimiento.origen_descripcion }} </p>
-                    <p *ngIf="movimiento.tipo_origen === 'Interno'" class="p-1 text-xs">
-                        <span class="bg-orange-100 py-1 px-2 rounded border flex items-center border-orange-200"> 
-                            {{ movimiento.origen_saldo_descripcion }} - ${{ movimiento.origen_monto_anterior | moneda }}
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right ml-1 mr-1"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>           
-                            ${{ movimiento.origen_monto_nuevo | moneda }}
-                        </span>
-                    </p>
-                    <p *ngIf="movimiento.tipo_origen === 'Externo'" class="p-1 text-xs">
-                        <span class="bg-orange-100 py-1 px-2 rounded border flex items-center border-orange-200"> 
-                            EXTERNO
-                        </span>
-                    </p>
-                </div>
-                <div class="border-t border-b lg:flex lg:items-center pb-2 pt-2">
-                    <p class="p-1"> <span class="font-semibold"> Destino: </span> {{ movimiento.destino_descripcion }} </p>
-                    <p *ngIf="movimiento.tipo_destino === 'Interno'" class="p-1 text-xs">
-                        <span class="bg-green-100 py-1 px-2 flex items-center rounded border border-green-200"> 
-                            {{ movimiento.destino_saldo_descripcion }} - ${{ movimiento.destino_monto_anterior | moneda }}
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right ml-1 mr-1"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                            ${{ movimiento.destino_monto_nuevo | moneda }}
-                        </span>
-                    </p>
-                    <p *ngIf="movimiento.tipo_destino === 'Externo'" class="p-1 text-xs">
-                        <span class="bg-green-100 py-1 px-2 flex items-center rounded border border-green-200"> 
-                            EXTERNO
-                        </span>
-                    </p>
-                </div>
-                <p class="p-2 font-semibold"> Monto: ${{ movimiento.monto | moneda }} </p>
             </div>
         </div>
     </div>

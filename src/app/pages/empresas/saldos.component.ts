@@ -162,7 +162,7 @@ export class SaldosComponent implements OnInit {
     
     const verificacion = saldo._id == this.empresa.saldos_especiales.caja || saldo._id == this.empresa.saldos_especiales.cheques;
 
-    if(verificacion) return this.alertService.info('Este saldo no puede ser dado de baja');
+    if(verificacion) return this.alertService.info('Este saldo no se puede dar de baja');
 
     if(this.authService.usuario.role == 'ADMIN_ROLE'){
       const { _id, activo } = saldo;

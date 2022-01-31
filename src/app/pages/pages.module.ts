@@ -19,13 +19,13 @@ import { MovimientosComponent } from './movimientos/movimientos.component';
 import { TipoMovimientosComponent } from './tipo-movimientos/tipo-movimientos.component';
 import { CarteraChequesComponent } from './cartera-cheques/cartera-cheques.component';
 import { ChequesEmitidosComponent } from './cheques-emitidos/cheques-emitidos.component';
-import { ReportesComponent } from './reportes/reportes.component';
 import { ReportesMovimientosComponent } from './reportes/reportes-movimientos.component';
 import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-emitidos.component';
 import { ReportesEvolucionSaldosComponent } from './reportes/reportes-evolucion-saldos.component';
 import { CentrosCostosComponent } from './centros-costos/centros-costos.component';
 import { CuentasContablesComponent } from './cuentas-contables/cuentas-contables.component';
 import { CobrarChequeComponent } from './alertas/cobrar-cheque.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 
 @NgModule({
@@ -43,13 +43,13 @@ import { CobrarChequeComponent } from './alertas/cobrar-cheque.component';
     TipoMovimientosComponent,
     CarteraChequesComponent,
     ChequesEmitidosComponent,
-    ReportesComponent,
     ReportesMovimientosComponent,
     ReportesChequesEmitidosComponent,
     ReportesEvolucionSaldosComponent,
     CentrosCostosComponent,
     CuentasContablesComponent,
     CobrarChequeComponent,
+    PerfilComponent,
   ],
   imports: [
     CommonModule,

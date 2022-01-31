@@ -7,6 +7,8 @@ import { UsuariosService } from '../../../services/usuarios.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { DataService } from 'src/app/services/data.service';
 
+import gsap from 'gsap';
+
 @Component({
   selector: 'app-editar-usuario',
   templateUrl: './editar-usuario.component.html',
@@ -21,7 +23,8 @@ export class EditarUsuarioComponent implements OnInit {
     usuario: ['', Validators.required],
     apellido: ['', Validators.required],
     nombre: ['', Validators.required],
-    email: ['', Validators.email],
+    dni: ['', Validators.required],
+    email: [''],
     role: ['USER_ROLE', Validators.required],
     activo: ['true', Validators.required],
   });
@@ -34,16 +37,19 @@ export class EditarUsuarioComponent implements OnInit {
               private dataService: DataService) { }
 
   ngOnInit(): void {
-    this.dataService.ubicacionActual = 'Dashboard - Usuarios - Editando'
+    this.dataService.ubicacionActual = 'Dashboard - Usuarios - Editando';
+    gsap.from(".gsap-contenido", { duration: 0.2, y: 100, opacity: 0.2 });
     this.alertService.loading();
     this.activatedRoute.params.subscribe(({id}) => { this.id = id; });
     this.usuariosService.getUsuario(this.id).subscribe(usuarioRes => {
+      console.log(usuarioRes);
       this.usuario = usuarioRes;
-      const {usuario, apellido, nombre, email, role, activo} = this.usuario;
-      this.usuarioForm.setValue({
+      const {usuario, apellido, nombre, email, role, dni, activo} = this.usuario;
+      this.usuarioForm.patchValue({
         usuario,
         apellido,
         nombre,
+        dni,
         email,
         role,
         activo: String(activo)
@@ -55,13 +61,13 @@ export class EditarUsuarioComponent implements OnInit {
   // Editar usuario
   editarUsuario(): void | boolean{
       
-    const {usuario, apellido, nombre, email} = this.usuarioForm.value;
+    const {usuario, apellido, nombre, dni} = this.usuarioForm.value;
 
     // Se verifica que los campos no tengan un espacio vacio
     const campoVacio = usuario.trim() === '' || 
                        apellido.trim() === '' || 
-                       email.trim() === '' || 
-                       nombre.trim() === '';
+                       nombre.trim() === '' ||
+                       dni.trim() === '';
 
     // Se verifica que todos los campos esten rellenos
     if (this.usuarioForm.status === 'INVALID' || campoVacio){

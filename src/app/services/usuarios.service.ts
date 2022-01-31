@@ -28,6 +28,11 @@ export class UsuariosService {
     )
   } 
 
+  // Inicializar usuario
+  inicializarUsuario(): Observable<any>{
+    return this.http.get(`${base_url}/usuarios/init/admin`);
+  } 
+
   // Listar usuarios
   listarUsuarios( direccion : number = 1, columna: string = 'apellido' ): Observable<any>{
     return this.http.get(`${base_url}/usuarios`, {

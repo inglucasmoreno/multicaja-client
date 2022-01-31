@@ -84,7 +84,7 @@
 
             <div class="w-full">
                 <div class="bg-white my-2 flex">
-                    <input [(ngModel)]="filtroSaldos.fechaDesde" type="date" class="border rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                    <input [(ngModel)]="filtroSaldos.fechaDesde" type="date" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                 </div>
             </div>
 
@@ -95,13 +95,13 @@
 
             <div class="w-full">
                 <div class="bg-white my-2 flex">
-                    <input [(ngModel)]="filtroSaldos.fechaHasta" type="date" class="border rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
+                    <input [(ngModel)]="filtroSaldos.fechaHasta" type="date" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                 </div>
             </div>
 
             <div class="bg-white my-3">
                 <p class="text-sm font-semibold"> Empresa </p>
-                <select (change)="cambiarEmpresa()" [(ngModel)]="filtroSaldos.empresa" name="emisor" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select (change)="cambiarEmpresa()" [(ngModel)]="filtroSaldos.empresa" name="emisor" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     <option value=''> Debe elegir una empresa </option>
                     <option *ngFor="let empresa of empresas" [value]="empresa._id"> {{ empresa.razon_social }} </option>
                 </select>
@@ -109,19 +109,16 @@
 
             <div *ngIf="filtroSaldos.empresa !== ''" class="bg-white my-3">
                 <p class="text-sm font-semibold"> Saldos </p>
-                <select [(ngModel)]="filtroSaldos.saldo" name="tipo_destino" class="border bg-white rounded p-1 py-2 w-full shadow text-sm mt-2">
+                <select [(ngModel)]="filtroSaldos.saldo" name="tipo_destino" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                     <option value=''> Debe elegir un saldo </option>
                     <option *ngFor="let saldo of saldos" [value]='saldo._id'> {{ saldo.descripcion }} </option>
                 </select>
             </div>
 
-            <div class="flex items-center mt-6">
-                <button (click)="buscar()" class="flex items-center focus:outline-none justify-center bg-gray-100 border border-gray-200 rounded p-2 w-1/2 hover:text-green-700">  
+            <div class="mt-6">
+                <button (click)="buscar()" class="flex items-center focus:outline-none justify-center bg-gray-100 border border-gray-200 rounded p-2 w-full hover:text-green-700">  
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>    
                     <span class="ml-1"> Buscar </span>
-                </button>
-                <button routerLink="/dashboard/reportes" class="flex items-center focus:outline-none justify-center bg-gray-100 border border-gray-200 rounded p-2 w-1/2 text-center ml-2 hover:text-green-700">  
-                    <span> Regresar </span>
                 </button>
             </div>
 
@@ -147,25 +144,27 @@
                     <svg *ngIf="ordenar.direccion === 1" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
                 </span>
             </div>
-            <div (click)="detalleMovimiento(evolucion)" [ngClass]="{'border-red-600 hover:bg-red-100' : (evolucion.monto_actual < evolucion.monto_anterior)}" class="border hover:bg-green-100 cursor-pointer border-l-8 flex items-center justify-between border-green-600 rounded p-2 m-2"
-                *ngFor="let evolucion of evoluciones | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
-                <div>
-                    <p class="flex items-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        <span class="ml-1">
-                            Fecha: {{ evolucion.createdAt | fecha }} 
-                        </span>
-                    </p>
-                    <p [ngClass]="{'text-red-700' : (evolucion.monto_actual < evolucion.monto_anterior)}" class="text-green-700 py-1 flex items-center font-semibold mt-2">
-                        <svg *ngIf="evolucion.monto_actual >= evolucion.monto_anterior" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up text-white rounded-full bg-green-700"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
-                        <svg *ngIf="evolucion.monto_actual < evolucion.monto_anterior" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down text-white rounded-full bg-red-700"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-                        <span class="mr-1 ml-2"> ${{ evolucion.monto_anterior | moneda }}  </span>
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                        <span class="ml-1"> ${{ evolucion.monto_actual | moneda }}  </span>
-                    </p>
-                </div>
-                <div>
-                    <p class="font-semibold lg:text-lg"> ${{ evolucion.monto_actual | moneda }} </p>
+            <div class="h-screen overflow-y-auto">
+                <div (click)="detalleMovimiento(evolucion)" [ngClass]="{'border-red-600 hover:bg-red-100' : (evolucion.monto_actual < evolucion.monto_anterior)}" class="border hover:bg-green-100 cursor-pointer border-l-8 flex items-center justify-between border-green-600 rounded p-2 m-2"
+                    *ngFor="let evolucion of evoluciones | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
+                    <div>
+                        <p class="flex items-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span class="ml-1">
+                                Fecha: {{ evolucion.createdAt | fecha }} 
+                            </span>
+                        </p>
+                        <p [ngClass]="{'text-red-700' : (evolucion.monto_actual < evolucion.monto_anterior)}" class="text-green-700 py-1 flex items-center font-semibold mt-2">
+                            <svg *ngIf="evolucion.monto_actual >= evolucion.monto_anterior" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up text-white rounded-full bg-green-700"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                            <svg *ngIf="evolucion.monto_actual < evolucion.monto_anterior" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down text-white rounded-full bg-red-700"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                            <span class="mr-1 ml-2"> ${{ evolucion.monto_anterior | moneda }}  </span>
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            <span class="ml-1"> ${{ evolucion.monto_actual | moneda }}  </span>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-semibold lg:text-lg"> ${{ evolucion.monto_actual | moneda }} </p>
+                    </div>
                 </div>
             </div>
         </div>

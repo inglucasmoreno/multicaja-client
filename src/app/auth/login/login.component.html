@@ -1,41 +1,11 @@
-<!-- <div class="h-screen font-sans bg-background-800">
-    <div class="container animate__animated animate__zoomIn mx-auto h-full flex justify-center items-center">
-        <div class="w-11/12 md:w-1/2 lg:w-1/3">
-            <div class="font-hairline  rounded py-2 text-white mb-0 text-center border-green-500 text-xl">
-                <h1 class=" font-sans text-white"> Control de cajas multiples </h1>
-            </div>
-            <form class="border-secondary-500 border-t-8 mt-3 mb-6 rounded-lg shadow-lg px-5 pb-4 bt-2 bg-white" autocomplete="off" [formGroup]="loginForm" (submit)="login()">
-                <div class="mt-4 mb-4">
-                    <label for="usuario" class="flex font-semibold mb-2 text-gray-600">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <span class="ml-1"> Usuario </span>
-                    </label>
-                    <input type="text" id="usuario" placeholder="Ingresa tu usuario" formControlName="usuario" class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-300 px-2 py-2 rounded shadow focus:outline-none">
-                </div>
-                <div>
-                    <label for="password" class="flex font-semibold mb-2 text-gray-600">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="12" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                        <span class="ml-1"> Contraseña </span>
-                    </label>
-                    <input type="password" id="password" placeholder="Ingresar password" formControlName="password" class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-300 px-2 py-2 rounded shadow focus:outline-none">
-                </div>
-                <div class="flex items-center justify-between mt-4">
-                    <button class="text-white focus:outline-none bg-secondary-500 hover:bg-secondary-400 p-2 w-full rounded">
-                        <span> Ingresar al sistema </span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> -->
-
 <div>
     <img class="gsap-fondo fixed hidden lg:block inset-0 h-full" style="z-index: -1;" src="assets/img/login/wave.png">
     <div class="w-screen h-screen flex flex-col justify-center items-center lg:grid lg:grid-cols-2">
         <img class="hidden gsap-imagen lg:block w-1/2 transform mx-auto" src="assets/img/login/unlock.svg">
         <form autocomplete="off" [formGroup]="loginForm" (submit)="login()" class="gsap-formulario flex flex-col justify-center items-center w-1/2">
             <img class="w-32" src="assets/img/login/avatar.svg">
-            <h2 class="my-8 font-display font-semibold text-2xl text-gray-700 text-center"> Control de cajas multiples </h2>
+            <h2 class="font-display font-semibold text-2xl text-gray-700 text-center mt-4"> Ingreso al sistema </h2>
+            <p class="font-semibold text-gray-700 mt-2 mb-8"> Control de cajas multiples </p>
             <div class="relative">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user absolute text-primaryColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 <input type="text" formControlName="usuario" class="transition-all bg-gray-100 duration-500 pl-8 border-b-2 font-display outline-none focus:outline-none focus:border-green-600 text-lg" placeholder="Usuario" />
@@ -44,8 +14,7 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock absolute text-primaryColor"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 <input type="password" formControlName="password" class="transition-all bg-gray-100 duration-500 pl-8 border-b-2 font-display outline-none focus:outline-none focus:border-green-600 text-lg" placeholder="Contraseña" />
             </div>
-            <a href="#" class="self-end mt-4 text-gray-600 font-bold"> Recuperar contraseña</a>
-            <button class="py-3 px-20 bg-gray-700 rounded-full text-white font-bold uppercase text-lg mt-4 transform hover:translate-y-1 hover:bg-green-700 transition-all duration-500"> Ingresar </button>
+            <button class="py-3 px-20 bg-gray-700 rounded-full text-white font-bold uppercase text-lg mt-8 transform hover:translate-y-1 hover:bg-green-700 transition-all duration-500"> Ingresar </button>
         </form>
     </div>
 </div>

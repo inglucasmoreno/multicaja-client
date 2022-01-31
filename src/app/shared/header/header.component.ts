@@ -10,6 +10,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
+  public showAdminOptions = false;
+  public showReportesOptions = false;
 
   constructor( public authService: AuthService,
                public dataService: DataService ) { }

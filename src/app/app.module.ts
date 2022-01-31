@@ -11,11 +11,13 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AppComponent } from './app.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { SharedModule } from './shared/shared.module';
+import { InicializacionComponent } from './inicializacion/inicializacion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ErrorPageComponent,
+    InicializacionComponent,
   ],
   imports: [
     BrowserModule,

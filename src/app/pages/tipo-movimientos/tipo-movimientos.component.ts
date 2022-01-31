@@ -173,7 +173,7 @@ export class TipoMovimientosComponent implements OnInit {
             }
           });
     }else{
-      this.alertService.info('Este tipo no puede ser dado de baja');
+      this.alertService.info('Este tipo no se puede dar de baja');
     }
 
 

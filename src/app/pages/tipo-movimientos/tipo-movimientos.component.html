@@ -8,9 +8,7 @@
                     <div class="font-semibold bold mt-3 text-gray-600 text-sm">
                         <span class="text-red-500"> * </span> Descripción
                     </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input formControlName="descripcion" placeholder="Ej. Cheque" class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm">
-                    </div>
+                    <input formControlName="descripcion" placeholder="Ej. Cheque" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                 </div>
             </div>
             <div *ngIf="!flagEditando || (
@@ -25,20 +23,18 @@
                     <div class="font-semibold mt-3 text-gray-600 text-sm">
                         <span class="text-red-500"> * </span> Estado
                     </div>
-                    <div class="bg-white my-2 flex">
-                        <select formControlName="activo" class="border border-gray-300 bg-white rounded p-1 py-2 w-full shadow text-sm focus:outline-none">
-                            <option value=true> Activo </option>
-                            <option value=false> Inactivo </option>
-                        </select>
-                    </div>
+                    <select formControlName="activo" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
+                        <option value=true> Activo </option>
+                        <option value=false> Inactivo </option>
+                    </select>
                 </div>
                 <div class="w-full mx-2 flex-1"></div>
             </div>
         </form>
         <div class="lg:flex lg:items-center mt-6">
-            <button *ngIf="!flagEditando" (click)="nuevoTipo()" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Crear </button>
-            <button *ngIf="flagEditando" (click)="editarTipo(idTipo)" class="w-full lg:w-1/2 bg-secondary-600 hover:bg-secondary-500 text-white rounded shadow p-2"> Editar </button>
-            <button (click)="showModal= !showModal" class="w-full lg:w-1/2 bg-gray-600 hover:bg-gray-500 text-white rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
+            <button *ngIf="!flagEditando" (click)="nuevoTipo()" class="w-full lg:w-1/2 bg-gray-100 hover:text-green-700 focus:outline-none font-semibold border text-gray-900 rounded shadow p-2"> Crear </button>
+            <button *ngIf="flagEditando" (click)="editarTipo(idTipo)" class="w-full lg:w-1/2 bg-gray-100 hover:text-green-700 focus:outline-none font-semibold border text-gray-900 rounded shadow p-2"> Editar </button>
+            <button (click)="showModal= !showModal" class="w-full lg:w-1/2 bg-gray-100 hover:text-green-700 text-gray-900 focus:outline-none font-semibold border rounded shadow p-2 lg:ml-2 mt-2 lg:mt-0"> Cancelar </button>
         </div>
     </div>
 </app-modal>

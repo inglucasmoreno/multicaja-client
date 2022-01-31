@@ -6,6 +6,8 @@ import { DataService } from 'src/app/services/data.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { AlertService } from '../../../services/alert.service';
 
+import gsap from 'gsap';
+
 @Component({
   selector: 'app-editar-password',
   templateUrl: './editar-password.component.html',
@@ -20,6 +22,7 @@ export class EditarPasswordComponent implements OnInit {
     uid: '',
     usuario: '',
     apellido: '',
+    dni: '',
     nombre: '',
     email: '',
     role: ''
@@ -37,7 +40,8 @@ export class EditarPasswordComponent implements OnInit {
               private dataService: DataService) { }
 
   ngOnInit(): void {
-    this.dataService.ubicacionActual = 'Dashboard - Usuarios - Actualizando contraseña'
+    this.dataService.ubicacionActual = 'Dashboard - Usuarios - Actualizando contraseña';
+    gsap.from(".gsap-contenido", { duration: 0.2, y: 100, opacity: 0.2 });
     this.alertService.loading();
     this.activatedRoute.params.subscribe(({id}) => {
       this.id = id;

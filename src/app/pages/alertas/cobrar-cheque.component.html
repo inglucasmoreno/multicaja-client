@@ -1,8 +1,8 @@
 <!-- Modal: Detalles de cheque -->
 <app-modal [showModal]="showModalDetalles">
     <div class="bg-white rounded">
-        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
-            <h1 class="py-1 px-2"> Detalles de cheque </h1>
+        <div class="flex items-center rounded-t bg-gray-800 justify-between py-2 px-3  text-white">
+            <h1 class="text-xl"> Detalles de cheque </h1>
             <svg (click)="showModalDetalles = false" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
         <div *ngIf="chequeSeleccionado" class="p-2">
@@ -30,7 +30,7 @@
                 <p class="py-2 border-b border-l border-r bg-gray-100 flex items-center justify-between px-2"> <span class="font-semibold"> Importe </span> <span class="font-semibold"> ${{ chequeSeleccionado.importe | moneda }} </span> </p>
             </div>
             <div *ngIf="chequeSeleccionado.activo && authService.usuario.role =='ADMIN_ROLE'" class="flex items-center px-2">
-                <button (click)="modalCobrarCheque()" class="w-full p-1 focus:outline-none hover:text-green-700 font-semibold text-center border rounded bg-gray-100"> Cobrar cheque </button>
+                <button (click)="modalCobrarCheque()" class="w-full p-2 focus:outline-none hover:text-green-700 font-semibold shadow text-center border rounded bg-gray-100"> Cobrar cheque </button>
             </div>
         </div>
     </div>
@@ -39,8 +39,8 @@
 <!-- Modal: Cobrar cheque -->
 <app-modal [showModal]="showModalCobrarCheque">
     <div class="bg-white rounded">
-        <div class="flex items-center rounded-t bg-gray-800 justify-between text-white">
-            <h1 class="py-1 px-2"> Cobrando cheque </h1>
+        <div class="flex items-center rounded-t bg-gray-800 py-2 px-3 justify-between text-white">
+            <h1 class="text-xl"> Cobrando cheque </h1>
             <svg (click)="regresarDetalles()" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x mr-2 cursor-pointer"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
         <div *ngIf="chequeSeleccionado" class="p-2">
@@ -51,13 +51,13 @@
             </div>
         </div>
         <div class="px-2">
-            <h1 class="font-semibold border-b pb-1"> Datos de movimiento </h1>
+            <h1 class="font-semibold border bg-gray-100 rounded p-2"> Datos de movimiento </h1>
             <div class="lg:flex lg:items-center mt-2">
                 <div class="bg-white w-full lg:w-1/2">
                     <div class="font-semibold text-gray-800 text-sm">
                         Centro de costos
                     </div>
-                    <select [(ngModel)]="data.centro_costos" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm mt-2 focus:outline-none">
+                    <select [(ngModel)]="data.centro_costos" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                         <option *ngFor="let centro of centrosCostos" [value]="centro._id"> {{ centro.descripcion }} </option>
                     </select>
                 </div>
@@ -65,38 +65,38 @@
                     <div class="font-semibold text-gray-800 text-sm">
                         Cuenta contable
                     </div>
-                    <select [(ngModel)]="data.cuenta_contable" class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm mt-2 focus:outline-none">
+                    <select [(ngModel)]="data.cuenta_contable" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                         <option *ngFor="let cuenta of cuentasContables" [value]="cuenta._id"> {{ cuenta.descripcion }} </option>
                     </select>
                 </div>
             </div>
         </div>
         <div class="px-2 mt-2">
-            <h1 class="font-semibold border-b pb-1"> Datos de cheque </h1>
+            <h1 class="font-semibold border bg-gray-100 p-2 rounded"> Datos de cheque </h1>
             <div class="lg:flex lg:items-center">
                 <div class="w-full lg:w-1/2">
                     <div class="font-semibold text-gray-800 text-sm mt-2">
                         Fecha de cobro
                     </div>
                     <div>
-                        <div class="bg-whsite my-2 flex border border-gray-200 rounded shadow">
-                            <input type="date" [(ngModel)]="data.fecha_cobrado" class="p-1 px-1 appearance-none outline-none w-full text-gray-800 text-sm">
+                        <div class="bg-white my-1 flex">
+                            <input type="date" [(ngModel)]="data.fecha_cobrado" class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                         </div>
                     </div>
                 </div>
-                <div class="w-full lg:w-1/2 lg:ml-2">
+                <div class="w-full lg:w-1/2 lg:ml-2 mt-2">
                     <div class="font-semibold text-gray-800 text-sm">
                         Saldo destino
                     </div>
                     <div class="bg-white flex">
-                        <select [(ngModel)]="selectorSaldo" #txtSaldo class="border border-gray-200 bg-white rounded p-1 w-full shadow text-sm mt-2 focus:outline-none">
+                        <select [(ngModel)]="selectorSaldo" #txtSaldo class="px-2 transform duration-500 p-2 focus:border-green-700 border-b-2 bg-white outline-none w-full text-gray-800 text-sm">
                             <option value=""> Seleccionar saldo a impactar </option>
                             <option *ngFor="let saldo of saldos" [value]="saldo._id"> {{ saldo.descripcion }} - ${{ saldo.monto | moneda}} </option>
                         </select>
                     </div>
                 </div>
             </div>
-            <button (click)="cobrarCheque()" class="border p-1 w-full mt-4 rounded focus:outline-none hover:text-green-700 mb-2 bg-gray-100 font-semibold"> Cobrar cheque </button>
+            <button (click)="cobrarCheque()" class="border p-2 w-full mt-4 rounded shadow focus:outline-none hover:text-green-700 mb-2 bg-gray-100 font-semibold"> Cobrar cheque </button>
         </div>
     </div>
 </app-modal>

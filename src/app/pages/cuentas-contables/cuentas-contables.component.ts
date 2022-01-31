@@ -143,7 +143,7 @@ export class CuentasContablesComponent implements OnInit {
 
   // Actualizar estado Activo/Inactivo
   actualizarCuentaContable(cuenta: any): void {
-    if(cuenta.descripcion == 'SIN ESPECIFICAR') return this.alertService.info('Esta cuenta no puede ser dada de baja');
+    if(cuenta.descripcion == 'SIN ESPECIFICAR') return this.alertService.info('Esta cuenta no se puede dar de baja');
     const { _id, activo } = cuenta;
     this.alertService.question({ msg: '¿Quieres actualizar el estado?', buttonText: 'Actualizar' })
         .then(({isConfirmed}) => {  

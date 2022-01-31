@@ -18,13 +18,13 @@ import { MovimientosComponent } from './movimientos/movimientos.component';
 import { TipoMovimientosComponent } from './tipo-movimientos/tipo-movimientos.component';
 import { CarteraChequesComponent } from './cartera-cheques/cartera-cheques.component';
 import { ChequesEmitidosComponent } from './cheques-emitidos/cheques-emitidos.component';
-import { ReportesComponent } from './reportes/reportes.component';
 import { ReportesChequesEmitidosComponent } from './reportes/reportes-cheques-emitidos.component';
 import { ReportesMovimientosComponent } from './reportes/reportes-movimientos.component';
 import { ReportesEvolucionSaldosComponent } from './reportes/reportes-evolucion-saldos.component';
 import { CentrosCostosComponent } from './centros-costos/centros-costos.component';
 import { CuentasContablesComponent } from './cuentas-contables/cuentas-contables.component';
 import { CobrarChequeComponent } from './alertas/cobrar-cheque.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 const routes: Routes = [
     {
@@ -42,6 +42,9 @@ const routes: Routes = [
             { path: 'usuarios/editar/:id', canActivate: [AdminGuard], component: EditarUsuarioComponent },
             { path: 'usuarios/password/:id', canActivate: [AdminGuard], component: EditarPasswordComponent },
             
+            // Perfil de usuario
+            { path: 'perfil', component: PerfilComponent },
+
             // Empresas
             { path: 'empresas', component: EmpresasComponent },
             { path: 'empresas/saldos/:id', component: SaldosComponent },
@@ -66,7 +69,6 @@ const routes: Routes = [
             { path: 'cuentas-contables', canActivate: [AdminGuard], component: CuentasContablesComponent},
 
             // Reportes
-            { path: 'reportes', component:  ReportesComponent},
             { path: 'reportes/movimientos', component:  ReportesMovimientosComponent},
             { path: 'reportes/cheques-emitidos', component:  ReportesChequesEmitidosComponent},
             { path: 'reportes/evolucion-saldos', component:  ReportesEvolucionSaldosComponent},
